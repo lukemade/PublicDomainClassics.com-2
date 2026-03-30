@@ -6,7 +6,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        'aap-v-kennedy': resolve(__dirname, 'docs/aap-v-kennedy/index.html'),
+        frankenstein: resolve(__dirname, 'books/frankenstein/index.html'),
       },
     },
   },

@@ -1,160 +1,240 @@
 /* ============================================
-   GORGEOUS DOCS — Document Template JS
-   Side nav builder, scroll spy, accordion toggle
+   PUBLIC DOMAIN CLASSICS — Document Template JS
+   Breadcrumb chapter nav, scroll spy, back-to-top
    ============================================ */
 
-// Side nav — show after hero scrolls out of view
+// ── URL HASH ROUTING — unique URL per chapter ──
 (function () {
-  const nav = document.getElementById('side-nav');
-  if (!nav) return;
-  const hero = document.querySelector('.hero');
-  if (!hero) return;
-  const obs = new IntersectionObserver(([entry]) => {
-    nav.classList.toggle('nav-visible', !entry.isIntersecting);
-  }, { threshold: 0 });
-  obs.observe(hero);
+  var headings = document.querySelectorAll('h2.section-heading[id]');
+  if (!headings.length) return;
+
+  if (window.location.hash) {
+    var target = document.getElementById(window.location.hash.slice(1));
+    if (target) {
+      setTimeout(function () {
+        window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - 60);
+      }, 200);
+    }
+  }
+
+  var hashTimer = null;
+  var currentHashId = window.location.hash ? window.location.hash.slice(1) : null;
+
+  window._updateChapterHash = function (id) {
+    if (id === currentHashId) return;
+    currentHashId = id;
+    clearTimeout(hashTimer);
+    hashTimer = setTimeout(function () {
+      history.replaceState(null, '', '#' + id);
+    }, 300);
+  };
 })();
 
-// Side nav — build from h2 section headings + scroll spy
+// ── BREADCRUMB CHAPTER DROPDOWN + SCROLL SPY + PROGRESS ──
 (function () {
-  const nav = document.querySelector('#side-nav ul');
-  if (!nav) return;
+  var breadcrumbChapter = document.getElementById('breadcrumb-chapter');
+  var dropdownList = document.querySelector('.breadcrumb-dropdown-list');
+  if (!breadcrumbChapter || !dropdownList) return;
 
-  const headings = Array.from(document.querySelectorAll('h2.section-heading[id]'));
+  var headings = Array.from(document.querySelectorAll('h2.section-heading[id]'));
   if (!headings.length) return;
+  var total = headings.length;
 
   function cleanLabel(text) {
     return text.replace(/^[+\u2212]\s*/, '').trim();
   }
 
-  const h2Links = [];
+  // Progress counter next to the chapter label
+  var progressEl = document.createElement('span');
+  progressEl.className = 'breadcrumb-progress';
+  breadcrumbChapter.insertBefore(progressEl, breadcrumbChapter.querySelector('.breadcrumb-caret'));
 
-  headings.forEach(h2 => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
+  var dropdownLinks = [];
+
+  headings.forEach(function (h2) {
+    var li = document.createElement('li');
+    var a = document.createElement('a');
     a.href = '#' + h2.id;
-    const fullText = cleanLabel(h2.textContent);
-    const truncated = fullText.length > 38 ? fullText.slice(0, 35).trimEnd() + '\u2026' : fullText;
-    a.textContent = truncated;
-    if (fullText.length > 38) a.dataset.full = fullText;
+    a.textContent = cleanLabel(h2.textContent);
     a.dataset.id = h2.id;
     li.appendChild(a);
+    dropdownList.appendChild(li);
+    dropdownLinks.push(a);
 
-    // Build sub-nav from h3 headings inside the section body
-    let body = h2.nextElementSibling;
-    while (body && !body.classList.contains('section-body')) body = body.nextElementSibling;
-    if (body) {
-      const h3s = Array.from(body.querySelectorAll('h3[id]'));
-      if (h3s.length > 1) {
-        const subUl = document.createElement('ul');
-        subUl.className = 'sub-nav';
-        h3s.forEach(h3 => {
-          const subLi = document.createElement('li');
-          const subA = document.createElement('a');
-          subA.href = '#' + h3.id;
-          const subText = h3.textContent.trim();
-          subA.textContent = subText.length > 36 ? subText.slice(0, 33).trimEnd() + '\u2026' : subText;
-          subA.dataset.id = h3.id;
-          subA.addEventListener('click', e => {
-            e.preventDefault();
-            if (body.classList.contains('is-collapsed')) {
-              body.classList.remove('is-collapsed');
-              h2.classList.add('is-expanded');
-            }
-            setTimeout(() => h3.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-          });
-          subLi.appendChild(subA);
-          subUl.appendChild(subLi);
-        });
-        li.appendChild(subUl);
-      }
-    }
-
-    nav.appendChild(li);
-    h2Links.push(a);
-
-    // Click on h2 nav link — expand and scroll
-    a.addEventListener('click', e => {
+    a.addEventListener('click', function (e) {
       e.preventDefault();
-      let navBody = h2.nextElementSibling;
-      while (navBody && !navBody.classList.contains('section-body')) navBody = navBody.nextElementSibling;
-      if (navBody && navBody.classList.contains('is-collapsed')) {
-        navBody.classList.remove('is-collapsed');
-        h2.classList.add('is-expanded');
-      }
-      setTimeout(() => h2.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      breadcrumbChapter.closest('.breadcrumb-dropdown').classList.remove('is-open');
+      window.scrollTo(0, h2.getBoundingClientRect().top + window.scrollY - 60);
     });
   });
 
-  // Scroll spy — highlight active section in side nav
-  let activeId = null;
+  // Toggle dropdown
+  var dropdownWrap = breadcrumbChapter.closest('.breadcrumb-dropdown');
+  breadcrumbChapter.addEventListener('click', function (e) {
+    e.stopPropagation();
+    dropdownWrap.classList.toggle('is-open');
+  });
+  document.addEventListener('click', function (e) {
+    if (!dropdownWrap.contains(e.target)) dropdownWrap.classList.remove('is-open');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') dropdownWrap.classList.remove('is-open');
+  });
+
+  // Scroll spy
+  var activeId = null;
 
   function setActive(id) {
     if (id === activeId) return;
     activeId = id;
-    h2Links.forEach(a => {
-      const isActive = a.dataset.id === id;
-      a.classList.toggle('active', isActive);
-      // Show sub-nav for active section
-      const subNav = a.parentElement.querySelector('.sub-nav');
-      if (subNav) subNav.classList.toggle('is-visible', isActive);
+    var h2 = document.getElementById(id);
+    if (h2) {
+      var idx = headings.indexOf(h2);
+      if (idx < 0) idx = 0;
+      breadcrumbChapter.querySelector('.breadcrumb-chapter-label').textContent = cleanLabel(h2.textContent);
+      var pct = Math.round(((idx + 1) / total) * 100);
+      progressEl.textContent = pct + '%';
+    }
+    dropdownLinks.forEach(function (a) {
+      a.classList.toggle('active', a.dataset.id === id);
     });
+    if (window._updateChapterHash) window._updateChapterHash(id);
   }
 
-  const visible = new Map();
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
+  var visible = new Map();
+  var spyObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
       visible.set(e.target.id, e.isIntersecting ? e.boundingClientRect.top : Infinity);
     });
-    let best = null, bestTop = Infinity;
-    visible.forEach((top, id) => {
+    var best = null, bestTop = Infinity;
+    visible.forEach(function (top, id) {
       if (top >= 0 && top < bestTop) { bestTop = top; best = id; }
     });
     if (!best) {
-      let lastPast = null;
-      headings.forEach(h => {
+      var lastPast = null;
+      headings.forEach(function (h) {
         if (h.getBoundingClientRect().top < 60) lastPast = h.id;
       });
       best = lastPast;
     }
     if (best) setActive(best);
-  }, {
-    rootMargin: '-40px 0px -70% 0px',
-    threshold: 0
-  });
+  }, { rootMargin: '-40px 0px -70% 0px', threshold: 0 });
 
-  headings.forEach(h => observer.observe(h));
+  headings.forEach(function (h) { spyObserver.observe(h); });
+  setActive(headings[0].id);
 })();
 
-// Section accordion — toggle collapse on heading click
+// Section headings — no accordion
 document.querySelectorAll('h2.section-heading').forEach(function (h2) {
-  let body = h2.nextElementSibling;
-  while (body && !body.classList.contains('section-body')) body = body.nextElementSibling;
-  if (!body) return;
-
-  h2.addEventListener('click', function () {
-    const collapsed = body.classList.toggle('is-collapsed');
-    h2.classList.toggle('is-expanded', !collapsed);
-  });
+  h2.style.cursor = 'default';
 });
 
-// Footnote references — scroll to footnote on click, back on click
+// Footnote references
 document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   ref.addEventListener('click', function (e) {
     e.preventDefault();
-    const target = document.getElementById(ref.getAttribute('href').slice(1));
+    var target = document.getElementById(ref.getAttribute('href').slice(1));
     if (target) {
-      // Expand the section if collapsed
-      let parent = target.closest('.section-body');
-      if (parent && parent.classList.contains('is-collapsed')) {
-        parent.classList.remove('is-collapsed');
-        const h2 = parent.previousElementSibling;
-        if (h2) h2.classList.add('is-expanded');
-      }
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       target.style.background = '#fffde0';
-      setTimeout(() => { target.style.background = ''; }, 2000);
+      setTimeout(function () { target.style.background = ''; }, 2000);
     }
   });
 });
+
+// ── BACK TO TOP + TOP NAV IDLE FADE ──
+(function () {
+  var article = document.getElementById('main-content');
+  if (!article) return;
+
+  // Create floating action buttons container
+  var actions = document.createElement('div');
+  actions.className = 'floating-actions';
+  actions.id = 'floating-actions';
+
+  // Fullscreen toggle
+  var btnFs = document.createElement('button');
+  btnFs.className = 'floating-btn';
+  btnFs.title = 'Toggle fullscreen';
+  btnFs.setAttribute('aria-label', 'Toggle fullscreen');
+  var fsExpandIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+  var fsCollapseIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+  btnFs.innerHTML = fsExpandIcon;
+  actions.appendChild(btnFs);
+
+  btnFs.addEventListener('click', function () {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(function () {});
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  document.addEventListener('fullscreenchange', function () {
+    btnFs.innerHTML = document.fullscreenElement ? fsCollapseIcon : fsExpandIcon;
+    btnFs.title = document.fullscreenElement ? 'Exit fullscreen' : 'Toggle fullscreen';
+  });
+
+  // Back to top
+  var btn = document.createElement('button');
+  btn.className = 'floating-btn';
+  btn.title = 'Back to top';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
+  actions.appendChild(btn);
+
+  document.body.appendChild(actions);
+
+  btn.addEventListener('click', function () {
+    window.scrollTo(0, 0);
+  });
+
+  // Scroll handler — show/hide button + top nav on scroll-up only
+  var lastScrollY = 0;
+  var ticking = false;
+
+  function onScroll() {
+    var scrolled = window.scrollY - article.offsetTop;
+    var topNav = document.getElementById('top-nav');
+    var scrollingUp = window.scrollY < lastScrollY;
+    var nearTop = window.scrollY < 400;
+
+    // Show floating buttons when past the hero
+    if (scrolled > 200) {
+      actions.classList.add('is-visible');
+    } else {
+      actions.classList.remove('is-visible');
+    }
+
+    // Top nav: show on scroll up or near top, hide on scroll down
+    if (topNav) {
+      if (nearTop || scrollingUp) {
+        topNav.classList.add('is-active');
+        topNav.classList.remove('is-idle');
+      } else {
+        topNav.classList.remove('is-active');
+        topNav.classList.add('is-idle');
+      }
+    }
+
+    lastScrollY = window.scrollY;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+  }, { passive: true });
+
+  // Hover near top edge reveals nav
+  var topNav = document.getElementById('top-nav');
+  var topZone = document.createElement('div');
+  topZone.className = 'top-nav-hover-zone';
+  document.body.appendChild(topZone);
+  function showNav() {
+    if (topNav) { topNav.classList.add('is-active'); topNav.classList.remove('is-idle'); }
+  }
+  topZone.addEventListener('mouseenter', showNav);
+  if (topNav) topNav.addEventListener('mouseenter', showNav);
+
+  onScroll();
+})();

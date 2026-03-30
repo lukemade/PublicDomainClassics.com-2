@@ -3,11 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gorgeous Docs — Important documents, made beautiful</title>
-  <meta name="description" content="Public documents in the news, made beautifully readable and searchable. Currently in beta.">
+  <title>Public Domain Classics — Timeless literature, beautifully presented</title>
+  <meta name="description" content="Public domain literature from Project Gutenberg and other sources, presented as beautifully formatted, illustrated web pages.">
+  <meta property="og:title" content="Public Domain Classics — Timeless literature, beautifully presented">
+  <meta property="og:description" content="Public domain literature, presented as beautifully formatted, illustrated web pages.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://publicdomainclassics.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Public Domain Classics — Timeless literature, beautifully presented">
+  <meta name="twitter:description" content="Public domain literature, presented as beautifully formatted, illustrated web pages.">
+  <link rel="canonical" href="https://publicdomainclassics.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Franklin:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display+SC:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -16,9 +24,9 @@
     }
 
     body {
-      font-family: 'Atkinson Hyperlegible', Georgia, serif;
-      color: #1a1f2e;
-      background: #ffffff;
+      font-family: 'Libre Baskerville', 'Georgia', serif;
+      color: #2c2420;
+      background: #faf8f4;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
@@ -28,170 +36,213 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: #111111;
+      background: #1a1510;
       padding: 0 2rem;
       height: 52px;
       display: flex;
       align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .nav-brand {
-      font-family: 'Libre Franklin', sans-serif;
-      font-weight: 700;
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
-      color: #ffffff;
-      text-transform: uppercase;
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: #e8dfd0;
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
-    .nav-beta {
-      display: inline-block;
-      margin-left: 0.75rem;
-      padding: 0.15rem 0.5rem;
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.6rem;
+    .nav-brand:hover {
+      color: #ffffff;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      z-index: 9999;
+      padding: 0.5rem 1rem;
+      background: #6b3a2a;
+      color: #fff;
+      font-size: 0.875rem;
       font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #0033CC;
-      border: 1px solid #0033CC;
-      border-radius: 3px;
-      vertical-align: middle;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .skip-link:focus { top: 0.5rem; }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #6b3a2a;
+      outline-offset: 2px;
     }
 
     /* --- Hero --- */
     .hero {
-      background: #1a1f2e;
-      color: #ffffff;
-      padding: 6rem 2rem 5rem;
+      background: #1a1510;
+      color: #faf8f4;
+      padding: 7rem 2rem 6rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    .hero-beta {
-      display: inline-block;
-      margin-bottom: 1.5rem;
-      padding: 0.25rem 0.85rem;
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #a8b4d0;
-      border: 1px solid rgba(168, 180, 208, 0.35);
-      border-radius: 3px;
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(107, 58, 42, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 30%, rgba(139, 90, 43, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-ornament {
+      display: block;
+      margin: 0 auto 2rem;
+      font-size: 1.5rem;
+      color: rgba(232, 223, 208, 0.4);
+      letter-spacing: 0.5em;
     }
 
     .hero h1 {
-      font-family: 'Libre Franklin', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      line-height: 1.1;
-      margin-bottom: 1.25rem;
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 700;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.02em;
+      position: relative;
     }
 
     .hero-tagline {
-      font-family: 'Libre Franklin', sans-serif;
+      font-family: 'Libre Baskerville', serif;
       font-weight: 300;
-      font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-      color: #c4cde0;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      line-height: 1.5;
+      font-style: italic;
+      font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+      color: #c4b99a;
+      max-width: 550px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+    }
+
+    .hero-rule {
+      display: block;
+      width: 80px;
+      height: 1px;
+      background: rgba(196, 185, 154, 0.35);
+      margin: 0 auto 2.5rem;
+      border: none;
     }
 
     .hero-description {
-      font-size: 1rem;
-      color: #8a95b0;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.05rem;
+      color: #9a9080;
       max-width: 520px;
       margin: 0 auto;
-      line-height: 1.7;
+      line-height: 1.8;
     }
 
     /* --- Featured --- */
     .featured {
-      background: #F3F0E8;
+      background: #f0ece4;
       padding: 5rem 2rem;
+      position: relative;
+    }
+
+    .featured::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(107, 58, 42, 0.2), transparent);
     }
 
     .featured-inner {
-      max-width: 720px;
+      max-width: 680px;
       margin: 0 auto;
     }
 
     .featured-label {
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.7rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #0033CC;
-      margin-bottom: 1rem;
+      letter-spacing: 0.15em;
+      color: #6b3a2a;
+      margin-bottom: 0.75rem;
     }
 
     .featured h2 {
-      font-family: 'Libre Franklin', sans-serif;
-      font-weight: 700;
-      font-size: 1.6rem;
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: 1.8rem;
       margin-bottom: 2rem;
-      color: #1a1f2e;
+      color: #2c2420;
     }
 
-    .doc-card {
-      background: #ffffff;
-      border-radius: 8px;
-      padding: 2.25rem 2.5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
-      transition: box-shadow 0.2s ease;
+    .book-card {
+      background: #faf8f4;
+      border-radius: 4px;
+      padding: 2.5rem 2.75rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(107, 58, 42, 0.1);
+      transition: box-shadow 0.3s ease;
     }
 
-    .doc-card:hover {
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+    .book-card:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07), 0 8px 30px rgba(0, 0, 0, 0.05);
     }
 
-    .doc-card-meta {
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.75rem;
+    .book-card-meta {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
       font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #6b7280;
+      letter-spacing: 0.08em;
+      color: #8a7e6e;
       margin-bottom: 0.75rem;
     }
 
-    .doc-card h3 {
-      font-family: 'Libre Franklin', sans-serif;
-      font-weight: 700;
-      font-size: 1.25rem;
+    .book-card h3 {
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 600;
+      font-size: 1.5rem;
       line-height: 1.35;
-      color: #1a1f2e;
-      margin-bottom: 0.75rem;
+      color: #2c2420;
+      margin-bottom: 1rem;
     }
 
-    .doc-card-description {
-      font-size: 1rem;
-      color: #4b5563;
-      line-height: 1.65;
-      margin-bottom: 1.5rem;
+    .book-card-description {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.05rem;
+      color: #5a4f42;
+      line-height: 1.75;
+      margin-bottom: 1.75rem;
     }
 
-    .doc-card-link {
+    .book-card-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.9rem;
+      gap: 0.5rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1rem;
       font-weight: 600;
-      color: #0033CC;
+      letter-spacing: 0.06em;
+      color: #6b3a2a;
       text-decoration: none;
-      transition: gap 0.2s ease;
+      transition: gap 0.2s ease, color 0.2s ease;
     }
 
-    .doc-card-link:hover {
-      gap: 0.65rem;
+    .book-card-link:hover {
+      gap: 0.75rem;
+      color: #4a2518;
     }
 
-    .doc-card-link svg {
+    .book-card-link svg {
       width: 16px;
       height: 16px;
       stroke: currentColor;
@@ -203,57 +254,68 @@
 
     /* --- Footer --- */
     footer {
-      padding: 3rem 2rem;
+      padding: 3.5rem 2rem;
       text-align: center;
-      border-top: 1px solid #e5e7eb;
+      background: #faf8f4;
+      border-top: 1px solid rgba(107, 58, 42, 0.1);
+    }
+
+    .footer-ornament {
+      display: block;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      color: rgba(44, 36, 32, 0.2);
+      letter-spacing: 0.5em;
     }
 
     .footer-brand {
-      font-family: 'Libre Franklin', sans-serif;
-      font-weight: 700;
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #1a1f2e;
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: #2c2420;
       margin-bottom: 0.75rem;
     }
 
     .footer-note {
-      font-size: 0.85rem;
-      color: #6b7280;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: #8a7e6e;
       max-width: 480px;
       margin: 0 auto;
-      line-height: 1.6;
+      line-height: 1.7;
     }
   </style>
 </head>
 <body>
 
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
   <!-- Nav -->
-  <nav>
-    <a href="/" class="nav-brand">Gorgeous Docs</a>
-    <span class="nav-beta">Beta</span>
+  <nav aria-label="Main navigation">
+    <a href="/" class="nav-brand">Public Domain Classics</a>
   </nav>
 
   <!-- Hero -->
-  <section class="hero">
-    <div class="hero-beta">Beta</div>
-    <h1>Gorgeous Docs</h1>
-    <p class="hero-tagline">Important documents, made beautiful.<br>Searchable. Understandable.</p>
-    <p class="hero-description">Public documents in the news are often trapped in hard-to-read PDFs. We make them easy to read, search, and understand.</p>
+  <section id="main-content" class="hero">
+    <span class="hero-ornament" aria-hidden="true">&mdash; &loz; &mdash;</span>
+    <h1>Public Domain<br>Classics</h1>
+    <p class="hero-tagline">Timeless literature, beautifully presented.</p>
+    <hr class="hero-rule">
+    <p class="hero-description">Classic works from Project Gutenberg and other sources, presented as gorgeously formatted web pages with historical illustrations, clean typography, and structured navigation.</p>
   </section>
 
-  <!-- Featured Document -->
+  <!-- Featured Book -->
   <section class="featured">
     <div class="featured-inner">
-      <div class="featured-label">Featured Document</div>
+      <div class="featured-label">Featured Book</div>
       <h2>Start reading</h2>
-      <div class="doc-card">
-        <div class="doc-card-meta">U.S. District Court &middot; Preliminary Injunction &middot; 2026</div>
-        <h3>American Academy of Pediatrics v. Kennedy</h3>
-        <p class="doc-card-description">The preliminary injunction opinion in the landmark case challenging federal health agency actions. Formatted for readability with full-text search, structured navigation, and clean typography.</p>
-        <a href="/docs/aap-v-kennedy/" class="doc-card-link">
-          Read the full opinion
+      <div class="book-card">
+        <div class="book-card-meta">Gothic Fiction &middot; Mary Shelley &middot; 1818</div>
+        <h3>Frankenstein; or, The Modern Prometheus</h3>
+        <p class="book-card-description">Mary Shelley&rsquo;s groundbreaking tale of ambition, creation, and consequence&mdash;widely considered the first science fiction novel. Presented with historical illustrations from the 1831 edition.</p>
+        <a href="/books/frankenstein/" class="book-card-link">
+          Read the full text
           <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
@@ -262,8 +324,9 @@
 
   <!-- Footer -->
   <footer>
-    <div class="footer-brand">Gorgeous Docs &mdash; Beta</div>
-    <p class="footer-note">Documents are sourced from public court records and government publications. We aim for accuracy but recommend consulting original sources for legal or official purposes.</p>
+    <span class="footer-ornament" aria-hidden="true">&mdash; &loz; &mdash;</span>
+    <div class="footer-brand">Public Domain Classics</div>
+    <p class="footer-note">All texts are sourced from Project Gutenberg and other public domain collections. Original works are in the public domain in the United States.</p>
   </footer>
 
 </body>

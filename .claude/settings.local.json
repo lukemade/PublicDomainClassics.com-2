@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(sort -t- -k2 -n)",
+      "Bash(for n:*)",
+      "Bash(do echo:*)",
+      "Bash(grep -A5 \"id=\"\"fn-$n\"\"\" /c/Users/admin/gorgeous-docs/docs/aap-v-kennedy/index.html)",
+      "Bash(done)",
+      "Bash(curl -sL \"https://www.gutenberg.org/cache/epub/84/pg84.txt\" -o source-texts/frankenstein/gutenberg-raw.txt)",
+      "Bash(sed -n '71,80p' source-texts/frankenstein/gutenberg-raw.txt)",
+      "Bash(sed -n '195,210p' source-texts/frankenstein/gutenberg-raw.txt)",
+      "Bash(sed -n '320,335p' source-texts/frankenstein/gutenberg-raw.txt)",
+      "Bash(sed -n '365,385p' source-texts/frankenstein/gutenberg-raw.txt)",
+      "Bash(sed -n '648,665p' source-texts/frankenstein/gutenberg-raw.txt)",
+      "Bash(sed -n '2968,2985p' source-texts/frankenstein/gutenberg-raw.txt)",
+      "Bash(sed -n '5028,5045p' source-texts/frankenstein/gutenberg-raw.txt)",
+      "Bash(node scripts/gutenberg-to-html.mjs)",
+      "Bash(node scripts/build-frankenstein-page.mjs)",
+      "Bash(curl -sL \"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Frankenstein_1945_Universal_Picture.jpg/440px-Frankenstein_1945_Universal_Picture.jpg\" -o books/frankenstein/images/cover.jpg)",
+      "WebSearch",
+      "Bash(curl -sL \"https://digitalcollections.nypl.org/items/745b1060-01d6-0135-4825-0bd73a22949a\" -o /dev/null -w \"%{http_code}\")"
+    ]
+  }
+}
