@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Chapter 73. Stubb and Flask kill a Right Whale; and Then Have a Talk over Him. — Moby-Dick — Public Domain Classics</title>
+  <link rel="canonical" href="https://publicdomainclassics.com/books/moby-dick/chapter-73-stubb-and-flask-kill-a-right-whale-and-then-have-a-talk-over-him/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/css/document-template.css">
+  <style>
+    /* Chapter page: no hero, just reading */
+    .chapter-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #1a1510;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+      gap: 0;
+    }
+    .chapter-nav-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .chapter-nav-brand {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(232, 223, 208, 0.4);
+      text-decoration: none;
+      white-space: nowrap;
+      margin-right: auto;
+    }
+    .chapter-nav-brand:hover { color: rgba(232, 223, 208, 0.7); }
+    .chapter-nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-left: auto;
+    }
+    .chapter-prev, .chapter-next {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: rgba(232, 223, 208, 0.6);
+      text-decoration: none;
+      padding: 8px 12px;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .chapter-prev:hover, .chapter-next:hover { color: #e8dfd0; }
+    .chapter-prev[aria-disabled="true"],
+    .chapter-next[aria-disabled="true"] {
+      color: rgba(232, 223, 208, 0.15);
+      pointer-events: none;
+    }
+    .chapter-prev svg, .chapter-next svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      vertical-align: -2px;
+    }
+
+    /* Current chapter dropdown */
+    .chapter-current {
+      position: relative;
+    }
+    .chapter-current-btn {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: #e8dfd0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      max-width: 300px;
+    }
+    .chapter-current-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chapter-current-progress {
+      font-size: 0.6rem;
+      color: rgba(232, 223, 208, 0.35);
+      margin-left: 4px;
+    }
+    .chapter-current-caret {
+      width: 12px; height: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .chapter-current-caret::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-right: 1.5px solid rgba(232, 223, 208, 0.5);
+      border-bottom: 1.5px solid rgba(232, 223, 208, 0.5);
+      transform: rotate(45deg);
+      transition: transform 0.2s;
+    }
+    .chapter-current[open] .chapter-current-caret::after {
+      transform: rotate(-135deg);
+    }
+    .chapter-dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2a2520;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      max-height: 70vh;
+      overflow-y: auto;
+      min-width: 280px;
+      max-width: 400px;
+      z-index: 300;
+      padding: 4px 0;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      list-style: none;
+    }
+    .chapter-dropdown-list a {
+      display: block;
+      padding: 8px 16px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .chapter-dropdown-list a:hover { background: rgba(255, 255, 255, 0.06); }
+    .chapter-dropdown-list a.active {
+      color: #e8dfd0;
+      background: rgba(107, 58, 42, 0.3);
+    }
+
+    /* Compact hero for chapter pages */
+    .chapter-hero {
+      background: #1a1510;
+      padding: 36px 2rem 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .chapter-hero-bg {
+      position: absolute; inset: 0;
+      background: url('/books/moby-dick/images/default.jpg') center/cover no-repeat;
+      z-index: 0;
+    }
+    .chapter-hero-overlay {
+      position: absolute; inset: 0;
+      background: rgba(5, 15, 25, 0.88);
+      z-index: 0;
+    }
+    .chapter-hero-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .chapter-hero-cover {
+      width: 80px;
+      border-radius: 3px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      flex-shrink: 0;
+    }
+    .chapter-hero-text {
+      flex: 1; min-width: 0;
+    }
+    .chapter-hero-book {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(196, 185, 154, 0.5);
+      margin-bottom: 6px;
+    }
+    .chapter-hero-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #e8dfd0;
+      line-height: 1.25;
+    }
+    @media (max-width: 600px) {
+      .chapter-hero { padding: 24px 1.25rem 20px; }
+      .chapter-hero-cover { width: 56px; }
+      .chapter-hero-title { font-size: 1.15rem; }
+    }
+
+    /* Reading area */
+    .article-body {
+      margin-top: 0 !important;
+      border-radius: 0;
+    }
+
+    /* TOC page styles */
+    .toc-section {
+      background: var(--bg, #faf8f4);
+      padding: 3rem 2rem 4rem;
+    }
+    .toc-inner { max-width: 680px; margin: 0 auto; }
+    .toc-inner h2 {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.6rem; font-weight: 400;
+      color: var(--text, #2c2420);
+      margin-bottom: 1.5rem;
+    }
+    .toc-list { list-style: none; padding: 0; }
+    .toc-list li { border-bottom: 1px solid rgba(107, 58, 42, 0.1); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a {
+      display: block; padding: 0.75rem 0;
+      font-family: 'Libre Baskerville', serif; font-size: 0.95rem;
+      color: var(--text, #2c2420); text-decoration: none; transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--accent, #6b3a2a); }
+
+    /* Bottom chapter nav — prominent and centered */
+    .chapter-bottom-nav {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 1px;
+      max-width: 780px;
+      margin: 3rem auto 0;
+      padding: 0;
+      background: rgba(107, 58, 42, 0.12);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .chapter-bottom-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: var(--text, #2c2420);
+      text-decoration: none;
+      padding: 20px 16px;
+      background: var(--bg, #faf8f4);
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .chapter-bottom-nav a:hover {
+      background: var(--surface, #f0ece4);
+      color: var(--accent, #6b3a2a);
+    }
+    .chapter-bottom-nav a[aria-disabled="true"] {
+      color: rgba(90, 79, 66, 0.25);
+      pointer-events: none;
+    }
+    .chapter-bottom-nav .nav-direction {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(90, 79, 66, 0.5);
+    }
+    .chapter-bottom-nav svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    @media (max-width: 600px) {
+      .chapter-nav-brand { display: none; }
+      .chapter-current-btn { max-width: 180px; font-size: 0.65rem; }
+      .chapter-prev, .chapter-next { padding: 8px 8px; font-size: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <nav class="chapter-nav" aria-label="Chapter navigation">
+    <div class="chapter-nav-inner">
+      <a href="/books/moby-dick/" class="chapter-nav-brand">Moby-Dick</a>
+      <div class="chapter-nav-controls">
+        <a class="chapter-prev" href="/books/moby-dick/chapter-72-the-monkey-rope/"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Prev</a>
+        <details class="chapter-current">
+          <summary class="chapter-current-btn">
+            <span class="chapter-current-label">Chapter 73. Stubb and Flask kill a Right Whale; and Then Have a Talk over Him.</span>
+            <span class="chapter-current-progress">55%</span>
+            <span class="chapter-current-caret"></span>
+          </summary>
+          <ul class="chapter-dropdown-list">
+        <li><a href="/books/moby-dick/etymology/">Etymology</a></li>
+        <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
+        <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
+        <li><a href="/books/moby-dick/chapter-1-loomings/">Chapter 1. Loomings.</a></li>
+        <li><a href="/books/moby-dick/chapter-2-the-carpet-bag/">Chapter 2. The Carpet-Bag.</a></li>
+        <li><a href="/books/moby-dick/chapter-3-the-spouter-inn/">Chapter 3. The Spouter-Inn.</a></li>
+        <li><a href="/books/moby-dick/chapter-4-the-counterpane/">Chapter 4. The Counterpane.</a></li>
+        <li><a href="/books/moby-dick/chapter-5-breakfast/">Chapter 5. Breakfast.</a></li>
+        <li><a href="/books/moby-dick/chapter-6-the-street/">Chapter 6. The Street.</a></li>
+        <li><a href="/books/moby-dick/chapter-7-the-chapel/">Chapter 7. The Chapel.</a></li>
+        <li><a href="/books/moby-dick/chapter-8-the-pulpit/">Chapter 8. The Pulpit.</a></li>
+        <li><a href="/books/moby-dick/chapter-9-the-sermon/">Chapter 9. The Sermon.</a></li>
+        <li><a href="/books/moby-dick/chapter-10-a-bosom-friend/">Chapter 10. A Bosom Friend.</a></li>
+        <li><a href="/books/moby-dick/chapter-11-nightgown/">Chapter 11. Nightgown.</a></li>
+        <li><a href="/books/moby-dick/chapter-12-biographical/">Chapter 12. Biographical.</a></li>
+        <li><a href="/books/moby-dick/chapter-13-wheelbarrow/">Chapter 13. Wheelbarrow.</a></li>
+        <li><a href="/books/moby-dick/chapter-14-nantucket/">Chapter 14. Nantucket.</a></li>
+        <li><a href="/books/moby-dick/chapter-15-chowder/">Chapter 15. Chowder.</a></li>
+        <li><a href="/books/moby-dick/chapter-16-the-ship/">Chapter 16. The Ship.</a></li>
+        <li><a href="/books/moby-dick/chapter-17-the-ramadan/">Chapter 17. The Ramadan.</a></li>
+        <li><a href="/books/moby-dick/chapter-18-his-mark/">Chapter 18. His Mark.</a></li>
+        <li><a href="/books/moby-dick/chapter-19-the-prophet/">Chapter 19. The Prophet.</a></li>
+        <li><a href="/books/moby-dick/chapter-20-all-astir/">Chapter 20. All Astir.</a></li>
+        <li><a href="/books/moby-dick/chapter-21-going-aboard/">Chapter 21. Going Aboard.</a></li>
+        <li><a href="/books/moby-dick/chapter-22-merry-christmas/">Chapter 22. Merry Christmas.</a></li>
+        <li><a href="/books/moby-dick/chapter-23-the-lee-shore/">Chapter 23. The Lee Shore.</a></li>
+        <li><a href="/books/moby-dick/chapter-24-the-advocate/">Chapter 24. The Advocate.</a></li>
+        <li><a href="/books/moby-dick/chapter-25-postscript/">Chapter 25. Postscript.</a></li>
+        <li><a href="/books/moby-dick/chapter-26-knights-and-squires/">Chapter 26. Knights and Squires.</a></li>
+        <li><a href="/books/moby-dick/chapter-27-knights-and-squires/">Chapter 27. Knights and Squires.</a></li>
+        <li><a href="/books/moby-dick/chapter-28-ahab/">Chapter 28. Ahab.</a></li>
+        <li><a href="/books/moby-dick/chapter-29-enter-ahab-to-him-stubb/">Chapter 29. Enter Ahab; to Him, Stubb.</a></li>
+        <li><a href="/books/moby-dick/chapter-30-the-pipe/">Chapter 30. The Pipe.</a></li>
+        <li><a href="/books/moby-dick/chapter-31-queen-mab/">Chapter 31. Queen Mab.</a></li>
+        <li><a href="/books/moby-dick/chapter-32-cetology/">Chapter 32. Cetology.</a></li>
+        <li><a href="/books/moby-dick/chapter-33-the-specksnyder/">Chapter 33. The Specksnyder.</a></li>
+        <li><a href="/books/moby-dick/chapter-34-the-cabin-table/">Chapter 34. The Cabin-Table.</a></li>
+        <li><a href="/books/moby-dick/chapter-35-the-mast-head/">Chapter 35. The Mast-Head.</a></li>
+        <li><a href="/books/moby-dick/chapter-36-the-quarter-deck/">Chapter 36. The Quarter-Deck.</a></li>
+        <li><a href="/books/moby-dick/chapter-37-sunset/">Chapter 37. Sunset.</a></li>
+        <li><a href="/books/moby-dick/chapter-38-dusk/">Chapter 38. Dusk.</a></li>
+        <li><a href="/books/moby-dick/chapter-39-first-night-watch/">Chapter 39. First Night-Watch.</a></li>
+        <li><a href="/books/moby-dick/chapter-40-midnight-forecastle/">Chapter 40. Midnight, Forecastle.</a></li>
+        <li><a href="/books/moby-dick/chapter-41-moby-dick/">Chapter 41. Moby Dick.</a></li>
+        <li><a href="/books/moby-dick/chapter-42-the-whiteness-of-the-whale/">Chapter 42. The Whiteness of the Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-43-hark/">Chapter 43. Hark!</a></li>
+        <li><a href="/books/moby-dick/chapter-44-the-chart/">Chapter 44. The Chart.</a></li>
+        <li><a href="/books/moby-dick/chapter-45-the-affidavit/">Chapter 45. The Affidavit.</a></li>
+        <li><a href="/books/moby-dick/chapter-46-surmises/">Chapter 46. Surmises.</a></li>
+        <li><a href="/books/moby-dick/chapter-47-the-mat-maker/">Chapter 47. The Mat-Maker.</a></li>
+        <li><a href="/books/moby-dick/chapter-48-the-first-lowering/">Chapter 48. The First Lowering.</a></li>
+        <li><a href="/books/moby-dick/chapter-49-the-hyena/">Chapter 49. The Hyena.</a></li>
+        <li><a href="/books/moby-dick/chapter-50-ahabs-boat-and-crew-fedallah/">Chapter 50. Ahab’s Boat and Crew. Fedallah.</a></li>
+        <li><a href="/books/moby-dick/chapter-51-the-spirit-spout/">Chapter 51. The Spirit-Spout.</a></li>
+        <li><a href="/books/moby-dick/chapter-52-the-albatross/">Chapter 52. The Albatross.</a></li>
+        <li><a href="/books/moby-dick/chapter-53-the-gam/">Chapter 53. The Gam.</a></li>
+        <li><a href="/books/moby-dick/chapter-54-the-town-hos-story/">Chapter 54. The Town-Ho’s Story.</a></li>
+        <li><a href="/books/moby-dick/chapter-55-of-the-monstrous-pictures-of-whales/">Chapter 55. Of the Monstrous Pictures of Whales.</a></li>
+        <li><a href="/books/moby-dick/chapter-56-of-the-less-erroneous-pictures-of-whales-and-the-true-pictures-of-whaling-scenes/">Chapter 56. Of the Less Erroneous Pictures of Whales, and the True Pictures of Whaling Scenes.</a></li>
+        <li><a href="/books/moby-dick/chapter-57-of-whales-in-paint-in-teeth-in-wood-in-sheet-iron-in-stone-in-mountains-in-stars/">Chapter 57. Of Whales in Paint; in Teeth; in Wood; in Sheet-Iron; in Stone; in Mountains; in Stars.</a></li>
+        <li><a href="/books/moby-dick/chapter-58-brit/">Chapter 58. Brit.</a></li>
+        <li><a href="/books/moby-dick/chapter-59-squid/">Chapter 59. Squid.</a></li>
+        <li><a href="/books/moby-dick/chapter-60-the-line/">Chapter 60. The Line.</a></li>
+        <li><a href="/books/moby-dick/chapter-61-stubb-kills-a-whale/">Chapter 61. Stubb Kills a Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-62-the-dart/">Chapter 62. The Dart.</a></li>
+        <li><a href="/books/moby-dick/chapter-63-the-crotch/">Chapter 63. The Crotch.</a></li>
+        <li><a href="/books/moby-dick/chapter-64-stubbs-supper/">Chapter 64. Stubb’s Supper.</a></li>
+        <li><a href="/books/moby-dick/chapter-65-the-whale-as-a-dish/">Chapter 65. The Whale as a Dish.</a></li>
+        <li><a href="/books/moby-dick/chapter-66-the-shark-massacre/">Chapter 66. The Shark Massacre.</a></li>
+        <li><a href="/books/moby-dick/chapter-67-cutting-in/">Chapter 67. Cutting In.</a></li>
+        <li><a href="/books/moby-dick/chapter-68-the-blanket/">Chapter 68. The Blanket.</a></li>
+        <li><a href="/books/moby-dick/chapter-69-the-funeral/">Chapter 69. The Funeral.</a></li>
+        <li><a href="/books/moby-dick/chapter-70-the-sphynx/">Chapter 70. The Sphynx.</a></li>
+        <li><a href="/books/moby-dick/chapter-71-the-jeroboams-story/">Chapter 71. The Jeroboam’s Story.</a></li>
+        <li><a href="/books/moby-dick/chapter-72-the-monkey-rope/">Chapter 72. The Monkey-Rope.</a></li>
+        <li><a class="active" href="/books/moby-dick/chapter-73-stubb-and-flask-kill-a-right-whale-and-then-have-a-talk-over-him/">Chapter 73. Stubb and Flask kill a Right Whale; and Then Have a Talk over Him.</a></li>
+        <li><a href="/books/moby-dick/chapter-74-the-sperm-whales-headcontrasted-view/">Chapter 74. The Sperm Whale’s Head—Contrasted View.</a></li>
+        <li><a href="/books/moby-dick/chapter-75-the-right-whales-headcontrasted-view/">Chapter 75. The Right Whale’s Head—Contrasted View.</a></li>
+        <li><a href="/books/moby-dick/chapter-76-the-battering-ram/">Chapter 76. The Battering-Ram.</a></li>
+        <li><a href="/books/moby-dick/chapter-77-the-great-heidelburgh-tun/">Chapter 77. The Great Heidelburgh Tun.</a></li>
+        <li><a href="/books/moby-dick/chapter-78-cistern-and-buckets/">Chapter 78. Cistern and Buckets.</a></li>
+        <li><a href="/books/moby-dick/chapter-79-the-prairie/">Chapter 79. The Prairie.</a></li>
+        <li><a href="/books/moby-dick/chapter-80-the-nut/">Chapter 80. The Nut.</a></li>
+        <li><a href="/books/moby-dick/chapter-81-the-pequod-meets-the-virgin/">Chapter 81. The Pequod Meets The Virgin.</a></li>
+        <li><a href="/books/moby-dick/chapter-82-the-honor-and-glory-of-whaling/">Chapter 82. The Honor and Glory of Whaling.</a></li>
+        <li><a href="/books/moby-dick/chapter-83-jonah-historically-regarded/">Chapter 83. Jonah Historically Regarded.</a></li>
+        <li><a href="/books/moby-dick/chapter-84-pitchpoling/">Chapter 84. Pitchpoling.</a></li>
+        <li><a href="/books/moby-dick/chapter-85-the-fountain/">Chapter 85. The Fountain.</a></li>
+        <li><a href="/books/moby-dick/chapter-86-the-tail/">Chapter 86. The Tail.</a></li>
+        <li><a href="/books/moby-dick/chapter-87-the-grand-armada/">Chapter 87. The Grand Armada.</a></li>
+        <li><a href="/books/moby-dick/chapter-88-schools-and-schoolmasters/">Chapter 88. Schools and Schoolmasters.</a></li>
+        <li><a href="/books/moby-dick/chapter-89-fast-fish-and-loose-fish/">Chapter 89. Fast-Fish and Loose-Fish.</a></li>
+        <li><a href="/books/moby-dick/chapter-90-heads-or-tails/">Chapter 90. Heads or Tails.</a></li>
+        <li><a href="/books/moby-dick/chapter-91-the-pequod-meets-the-rose-bud/">Chapter 91. The Pequod Meets The Rose-Bud.</a></li>
+        <li><a href="/books/moby-dick/chapter-92-ambergris/">Chapter 92. Ambergris.</a></li>
+        <li><a href="/books/moby-dick/chapter-93-the-castaway/">Chapter 93. The Castaway.</a></li>
+        <li><a href="/books/moby-dick/chapter-94-a-squeeze-of-the-hand/">Chapter 94. A Squeeze of the Hand.</a></li>
+        <li><a href="/books/moby-dick/chapter-95-the-cassock/">Chapter 95. The Cassock.</a></li>
+        <li><a href="/books/moby-dick/chapter-96-the-try-works/">Chapter 96. The Try-Works.</a></li>
+        <li><a href="/books/moby-dick/chapter-97-the-lamp/">Chapter 97. The Lamp.</a></li>
+        <li><a href="/books/moby-dick/chapter-98-stowing-down-and-clearing-up/">Chapter 98. Stowing Down and Clearing Up.</a></li>
+        <li><a href="/books/moby-dick/chapter-99-the-doubloon/">Chapter 99. The Doubloon.</a></li>
+        <li><a href="/books/moby-dick/chapter-100-leg-and-arm/">Chapter 100. Leg and Arm.</a></li>
+        <li><a href="/books/moby-dick/chapter-101-the-decanter/">Chapter 101. The Decanter.</a></li>
+        <li><a href="/books/moby-dick/chapter-102-a-bower-in-the-arsacides/">Chapter 102. A Bower in the Arsacides.</a></li>
+        <li><a href="/books/moby-dick/chapter-103-measurement-of-the-whales-skeleton/">Chapter 103. Measurement of The Whale’s Skeleton.</a></li>
+        <li><a href="/books/moby-dick/chapter-104-the-fossil-whale/">Chapter 104. The Fossil Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-105-does-the-whales-magnitude-diminishwill-he-perish/">Chapter 105. Does the Whale’s Magnitude Diminish?—Will He Perish?</a></li>
+        <li><a href="/books/moby-dick/chapter-106-ahabs-leg/">Chapter 106. Ahab’s Leg.</a></li>
+        <li><a href="/books/moby-dick/chapter-107-the-carpenter/">Chapter 107. The Carpenter.</a></li>
+        <li><a href="/books/moby-dick/chapter-108-ahab-and-the-carpenter/">Chapter 108. Ahab and the Carpenter.</a></li>
+        <li><a href="/books/moby-dick/chapter-109-ahab-and-starbuck-in-the-cabin/">Chapter 109. Ahab and Starbuck in the Cabin.</a></li>
+        <li><a href="/books/moby-dick/chapter-110-queequeg-in-his-coffin/">Chapter 110. Queequeg in His Coffin.</a></li>
+        <li><a href="/books/moby-dick/chapter-111-the-pacific/">Chapter 111. The Pacific.</a></li>
+        <li><a href="/books/moby-dick/chapter-112-the-blacksmith/">Chapter 112. The Blacksmith.</a></li>
+        <li><a href="/books/moby-dick/chapter-113-the-forge/">Chapter 113. The Forge.</a></li>
+        <li><a href="/books/moby-dick/chapter-114-the-gilder/">Chapter 114. The Gilder.</a></li>
+        <li><a href="/books/moby-dick/chapter-115-the-pequod-meets-the-bachelor/">Chapter 115. The Pequod Meets The Bachelor.</a></li>
+        <li><a href="/books/moby-dick/chapter-116-the-dying-whale/">Chapter 116. The Dying Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-117-the-whale-watch/">Chapter 117. The Whale Watch.</a></li>
+        <li><a href="/books/moby-dick/chapter-118-the-quadrant/">Chapter 118. The Quadrant.</a></li>
+        <li><a href="/books/moby-dick/chapter-119-the-candles/">Chapter 119. The Candles.</a></li>
+        <li><a href="/books/moby-dick/chapter-120-the-deck-towards-the-end-of-the-first-night-watch/">Chapter 120. The Deck Towards the End of the First Night Watch.</a></li>
+        <li><a href="/books/moby-dick/chapter-121-midnightthe-forecastle-bulwarks/">Chapter 121. Midnight.—The Forecastle Bulwarks.</a></li>
+        <li><a href="/books/moby-dick/chapter-122-midnight-aloftthunder-and-lightning/">Chapter 122. Midnight Aloft.—Thunder and Lightning.</a></li>
+        <li><a href="/books/moby-dick/chapter-123-the-musket/">Chapter 123. The Musket.</a></li>
+        <li><a href="/books/moby-dick/chapter-124-the-needle/">Chapter 124. The Needle.</a></li>
+        <li><a href="/books/moby-dick/chapter-125-the-log-and-line/">Chapter 125. The Log and Line.</a></li>
+        <li><a href="/books/moby-dick/chapter-126-the-life-buoy/">Chapter 126. The Life-Buoy.</a></li>
+        <li><a href="/books/moby-dick/chapter-127-the-deck/">Chapter 127. The Deck.</a></li>
+        <li><a href="/books/moby-dick/chapter-128-the-pequod-meets-the-rachel/">Chapter 128. The Pequod Meets The Rachel.</a></li>
+        <li><a href="/books/moby-dick/chapter-129-the-cabin/">Chapter 129. The Cabin.</a></li>
+        <li><a href="/books/moby-dick/chapter-130-the-hat/">Chapter 130. The Hat.</a></li>
+        <li><a href="/books/moby-dick/chapter-131-the-pequod-meets-the-delight/">Chapter 131. The Pequod Meets The Delight.</a></li>
+        <li><a href="/books/moby-dick/chapter-132-the-symphony/">Chapter 132. The Symphony.</a></li>
+        <li><a href="/books/moby-dick/chapter-133-the-chasefirst-day/">Chapter 133. The Chase—First Day.</a></li>
+        <li><a href="/books/moby-dick/chapter-134-the-chasesecond-day/">Chapter 134. The Chase—Second Day.</a></li>
+        <li><a href="/books/moby-dick/chapter-135-the-chasethird-day/">Chapter 135. The Chase.—Third Day.</a></li>
+        <li><a href="/books/moby-dick/epilogue/">Epilogue</a></li>
+          </ul>
+        </details>
+        <a class="chapter-next" href="/books/moby-dick/chapter-74-the-sperm-whales-headcontrasted-view/">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="chapter-hero">
+    <div class="chapter-hero-bg" aria-hidden="true"></div>
+    <div class="chapter-hero-overlay" aria-hidden="true"></div>
+    <div class="chapter-hero-inner">
+      <img class="chapter-hero-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="eager">
+      <div class="chapter-hero-text">
+        <div class="chapter-hero-book">Moby-Dick; or, The Whale &mdash; Herman Melville</div>
+        <h1 class="chapter-hero-title">Chapter 73. Stubb and Flask kill a Right Whale; and Then Have a Talk over Him.</h1>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="article-body">
+<h2 class="section-heading" id="chapter-73-stubb-and-flask-kill-a-right-whale-and-then-have-a-talk-over-him">Chapter 73. Stubb and Flask kill a Right Whale; and Then Have a Talk over Him.</h2>
+    <div class="section-body">
+      <p class="drop-cap">It must be borne in mind that all this time we have a Sperm Whale&rsquo;s prodigious head hanging to the Pequod&rsquo;s side. But we must let it continue hanging there a while till we can get a chance to attend to it. For the present other matters press, and the best we can do now for the head, is to pray heaven the tackles may hold.</p>
+      <p>Now, during the past night and forenoon, the Pequod had gradually drifted into a sea, which, by its occasional patches of yellow brit, gave unusual tokens of the vicinity of Right Whales, a species of the Leviathan that but few supposed to be at this particular time lurking anywhere near. And though all hands commonly disdained the capture of those inferior creatures; and though the Pequod was not commissioned to cruise for them at all, and though she had passed numbers of them near the Crozetts without lowering a boat; yet now that a Sperm Whale had been brought alongside and beheaded, to the surprise of all, the announcement was made that a Right Whale should be captured that day, if opportunity offered.</p>
+      <p>Nor was this long wanting. Tall spouts were seen to leeward; and two boats, Stubb&rsquo;s and Flask&rsquo;s, were detached in pursuit. Pulling further and further away, they at last became almost invisible to the men at the mast-head. But suddenly in the distance, they saw a great heap of tumultuous white water, and soon after news came from aloft that one or both the boats must be fast. An interval passed and the boats were in plain sight, in the act of being dragged right towards the ship by the towing whale. So close did the monster come to the hull, that at first it seemed as if he meant it malice; but suddenly going down in a maelstrom, within three rods of the planks, he wholly disappeared from view, as if diving under the keel. &ldquo;Cut, cut!&rdquo; was the cry from the ship to the boats, which, for one instant, seemed on the point of being brought with a deadly dash against the vessel&rsquo;s side. But having plenty of line yet in the tubs, and the whale not sounding very rapidly, they paid out abundance of rope, and at the same time pulled with all their might so as to get ahead of the ship. For a few minutes the struggle was intensely critical; for while they still slacked out the tightened line in one direction, and still plied their oars in another, the contending strain threatened to take them under. But it was only a few feet advance they sought to gain. And they stuck to it till they did gain it; when instantly, a swift tremor was felt running like lightning along the keel, as the strained line, scraping beneath the ship, suddenly rose to view under her bows, snapping and quivering; and so flinging off its drippings, that the drops fell like bits of broken glass on the water, while the whale beyond also rose to sight, and once more the boats were free to fly. But the fagged whale abated his speed, and blindly altering his course, went round the stern of the ship towing the two boats after him, so that they performed a complete circuit.</p>
+      <p>Meantime, they hauled more and more upon their lines, till close flanking him on both sides, Stubb answered Flask with lance for lance; and thus round and round the Pequod the battle went, while the multitudes of sharks that had before swum round the Sperm Whale&rsquo;s body, rushed to the fresh blood that was spilled, thirstily drinking at every new gash, as the eager Israelites did at the new bursting fountains that poured from the smitten rock.</p>
+      <p>At last his spout grew thick, and with a frightful roll and vomit, he turned upon his back a corpse.</p>
+      <p>While the two headsmen were engaged in making fast cords to his flukes, and in other ways getting the mass in readiness for towing, some conversation ensued between them.</p>
+      <p>&ldquo;I wonder what the old man wants with this lump of foul lard,&rdquo; said Stubb, not without some disgust at the thought of having to do with so ignoble a leviathan.</p>
+      <p>&ldquo;Wants with it?&rdquo; said Flask, coiling some spare line in the boat&rsquo;s bow, &ldquo;did you never hear that the ship which but once has a Sperm Whale&rsquo;s head hoisted on her starboard side, and at the same time a Right Whale&rsquo;s on the larboard; did you never hear, Stubb, that that ship can never afterwards capsize?&rdquo;</p>
+      <p>&ldquo;Why not?</p>
+      <p>&ldquo;I don&rsquo;t know, but I heard that gamboge ghost of a Fedallah saying so, and he seems to know all about ships&rsquo; charms. But I sometimes think he&rsquo;ll charm the ship to no good at last. I don&rsquo;t half like that chap, Stubb. Did you ever notice how that tusk of his is a sort of carved into a snake&rsquo;s head, Stubb?&rdquo;</p>
+      <p>&ldquo;Sink him! I never look at him at all; but if ever I get a chance of a dark night, and he standing hard by the bulwarks, and no one by; look down there, Flask&rdquo;&mdash;pointing into the sea with a peculiar motion of both hands&mdash;&ldquo;Aye, will I! Flask, I take that Fedallah to be the devil in disguise. Do you believe that cock and bull story about his having been stowed away on board ship? He&rsquo;s the devil, I say. The reason why you don&rsquo;t see his tail, is because he tucks it up out of sight; he carries it coiled away in his pocket, I guess. Blast him! now that I think of it, he&rsquo;s always wanting oakum to stuff into the toes of his boots.&rdquo;</p>
+      <p>&ldquo;He sleeps in his boots, don&rsquo;t he? He hasn&rsquo;t got any hammock; but I&rsquo;ve seen him lay of nights in a coil of rigging.&rdquo;</p>
+      <p>&ldquo;No doubt, and it&rsquo;s because of his cursed tail; he coils it down, do ye see, in the eye of the rigging.&rdquo;</p>
+      <p>&ldquo;What&rsquo;s the old man have so much to do with him for?&rdquo;</p>
+      <p>&ldquo;Striking up a swap or a bargain, I suppose.&rdquo;</p>
+      <p>&ldquo;Bargain?&mdash;about what?&rdquo;</p>
+      <p>&ldquo;Why, do ye see, the old man is hard bent after that White Whale, and the devil there is trying to come round him, and get him to swap away his silver watch, or his soul, or something of that sort, and then he&rsquo;ll surrender Moby Dick.&rdquo;</p>
+      <p>&ldquo;Pooh! Stubb, you are skylarking; how can Fedallah do that?&rdquo;</p>
+      <p>&ldquo;I don&rsquo;t know, Flask, but the devil is a curious chap, and a wicked one, I tell ye. Why, they say as how he went a sauntering into the old flag-ship once, switching his tail about devilish easy and gentlemanlike, and inquiring if the old governor was at home. Well, he was at home, and asked the devil what he wanted. The devil, switching his hoofs, up and says, &lsquo;I want John.&rsquo; &lsquo;What for?&rsquo; says the old governor. &lsquo;What business is that of yours,&rsquo; says the devil, getting mad,&mdash;&lsquo;I want to use him.&rsquo; &lsquo;Take him,&rsquo; says the governor&mdash;and by the Lord, Flask, if the devil didn&rsquo;t give John the Asiatic cholera before he got through with him, I&rsquo;ll eat this whale in one mouthful. But look sharp&mdash;ain&rsquo;t you all ready there? Well, then, pull ahead, and let&rsquo;s get the whale alongside.&rdquo;</p>
+      <p>&ldquo;I think I remember some such story as you were telling,&rdquo; said Flask, when at last the two boats were slowly advancing with their burden towards the ship, &ldquo;but I can&rsquo;t remember where.&rdquo;</p>
+      <p>&ldquo;Three Spaniards? Adventures of those three bloody-minded soldadoes? Did ye read it there, Flask? I guess ye did?&rdquo;</p>
+      <p>&ldquo;No: never saw such a book; heard of it, though. But now, tell me, Stubb, do you suppose that that devil you was speaking of just now, was the same you say is now on board the Pequod?&rdquo;</p>
+      <p>&ldquo;Am I the same man that helped kill this whale? Doesn&rsquo;t the devil live for ever; who ever heard that the devil was dead? Did you ever see any parson a wearing mourning for the devil? And if the devil has a latch-key to get into the admiral&rsquo;s cabin, don&rsquo;t you suppose he can crawl into a porthole? Tell me that, Mr. Flask?&rdquo;</p>
+      <p>&ldquo;How old do you suppose Fedallah is, Stubb?&rdquo;</p>
+      <p>&ldquo;Do you see that mainmast there?&rdquo; pointing to the ship; &ldquo;well, that&rsquo;s the figure one; now take all the hoops in the Pequod&rsquo;s hold, and string along in a row with that mast, for oughts, do you see; well, that wouldn&rsquo;t begin to be Fedallah&rsquo;s age. Nor all the coopers in creation couldn&rsquo;t show hoops enough to make oughts enough.&rdquo;</p>
+      <p>&ldquo;But see here, Stubb, I thought you a little boasted just now, that you meant to give Fedallah a sea-toss, if you got a good chance. Now, if he&rsquo;s so old as all those hoops of yours come to, and if he is going to live for ever, what good will it do to pitch him overboard&mdash;tell me that?</p>
+      <p>&ldquo;Give him a good ducking, anyhow.&rdquo;</p>
+      <p>&ldquo;But he&rsquo;d crawl back.&rdquo;</p>
+      <p>&ldquo;Duck him again; and keep ducking him.&rdquo;</p>
+      <p>&ldquo;Suppose he should take it into his head to duck you, though&mdash;yes, and drown you&mdash;what then?&rdquo;</p>
+      <p>&ldquo;I should like to see him try it; I&rsquo;d give him such a pair of black eyes that he wouldn&rsquo;t dare to show his face in the admiral&rsquo;s cabin again for a long while, let alone down in the orlop there, where he lives, and hereabouts on the upper decks where he sneaks so much. Damn the devil, Flask; so you suppose I&rsquo;m afraid of the devil? Who&rsquo;s afraid of him, except the old governor who daresn&rsquo;t catch him and put him in double-darbies, as he deserves, but lets him go about kidnapping people; aye, and signed a bond with him, that all the people the devil kidnapped, he&rsquo;d roast for him? There&rsquo;s a governor!&rdquo;</p>
+      <p>&ldquo;Do you suppose Fedallah wants to kidnap Captain Ahab?&rdquo;</p>
+      <p>&ldquo;Do I suppose it? You&rsquo;ll know it before long, Flask. But I am going now to keep a sharp look-out on him; and if I see anything very suspicious going on, I&rsquo;ll just take him by the nape of his neck, and say&mdash;Look here, Beelzebub, you don&rsquo;t do it; and if he makes any fuss, by the Lord I&rsquo;ll make a grab into his pocket for his tail, take it to the capstan, and give him such a wrenching and heaving, that his tail will come short off at the stump&mdash;do you see; and then, I rather guess when he finds himself docked in that queer fashion, he&rsquo;ll sneak off without the poor satisfaction of feeling his tail between his legs.&rdquo;</p>
+      <p>&ldquo;And what will you do with the tail, Stubb?&rdquo;</p>
+      <p>&ldquo;Do with it? Sell it for an ox whip when we get home;&mdash;what else?&rdquo;</p>
+      <p>&ldquo;Now, do you mean what you say, and have been saying all along, Stubb?&rdquo;</p>
+      <p>&ldquo;Mean or not mean, here we are at the ship.&rdquo;</p>
+      <p>The boats were here hailed, to tow the whale on the larboard side, where fluke chains and other necessaries were already prepared for securing him.</p>
+      <p>&ldquo;Didn&rsquo;t I tell you so?&rdquo; said Flask; &ldquo;yes, you&rsquo;ll soon see this right whale&rsquo;s head hoisted up opposite that parmacetti&rsquo;s.&rdquo;</p>
+      <p>In good time, Flask&rsquo;s saying proved true. As before, the Pequod steeply leaned over towards the sperm whale&rsquo;s head, now, by the counterpoise of both heads, she regained her even keel; though sorely strained, you may well believe. So, when on one side you hoist in Locke&rsquo;s head, you go over that way; but now, on the other side, hoist in Kant&rsquo;s and you come back again; but in very poor plight. Thus, some minds for ever keep trimming boat. Oh, ye foolish! throw all these thunder-heads overboard, and then you will float light and right.</p>
+      <p>In disposing of the body of a right whale, when brought alongside the ship, the same preliminary proceedings commonly take place as in the case of a sperm whale; only, in the latter instance, the head is cut off whole, but in the former the lips and tongue are separately removed and hoisted on deck, with all the well known black bone attached to what is called the crown-piece. But nothing like this, in the present case, had been done. The carcases of both whales had dropped astern; and the head-laden ship not a little resembled a mule carrying a pair of overburdening panniers.</p>
+      <p>Meantime, Fedallah was calmly eyeing the right whale&rsquo;s head, and ever and anon glancing from the deep wrinkles there to the lines in his own hand. And Ahab chanced so to stand, that the Parsee occupied his shadow; while, if the Parsee&rsquo;s shadow was there at all it seemed only to blend with, and lengthen Ahab&rsquo;s. As the crew toiled on, Laplandish speculations were bandied among them, concerning all these passing things.</p>
+    </div>
+
+    
+
+    <div class="chapter-bottom-nav">
+      <a href="/books/moby-dick/chapter-72-the-monkey-rope/"><span class="nav-direction"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Previous Chapter</span>Chapter 72. The Monkey-Rope.</a>
+      <a href="/books/moby-dick/chapter-74-the-sperm-whales-headcontrasted-view/"><span class="nav-direction">Next Chapter <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>Chapter 74. The Sperm Whale’s Head—Contrasted View.</a>
+    </div>
+  </main>
+
+  <footer class="doc-footer">
+    <div class="brand">Public Domain Classics</div>
+    <p class="disclaimer">
+      This text is sourced from <a href="https://www.gutenberg.org/ebooks/2701">Project Gutenberg</a>
+      and is in the public domain in the United States.
+      <br>Formatted for readability &mdash; original text preserved verbatim.
+    </p>
+  </footer>
+</body>
+</html>

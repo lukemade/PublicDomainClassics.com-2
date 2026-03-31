@@ -68,6 +68,14 @@ for (let i = 0; i < lines.length; i++) {
 }
 if (currentSection) sections.push(currentSection);
 
+// The Etymology and Extracts sections are entirely indented with 2 spaces
+// in the Gutenberg source. Strip this indentation so prose isn't treated as poetry.
+for (const sec of sections) {
+  if (sec.title === 'Etymology' || sec.title === 'Extracts') {
+    sec.lines = sec.lines.map(line => line.replace(/^  /, ''));
+  }
+}
+
 function escapeHtml(text) {
   return text
     .replace(/&/g, '&amp;')

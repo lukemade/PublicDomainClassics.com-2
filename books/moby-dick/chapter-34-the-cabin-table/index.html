@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Chapter 34. The Cabin-Table. — Moby-Dick — Public Domain Classics</title>
+  <link rel="canonical" href="https://publicdomainclassics.com/books/moby-dick/chapter-34-the-cabin-table/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/css/document-template.css">
+  <style>
+    /* Chapter page: no hero, just reading */
+    .chapter-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #1a1510;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+      gap: 0;
+    }
+    .chapter-nav-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .chapter-nav-brand {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(232, 223, 208, 0.4);
+      text-decoration: none;
+      white-space: nowrap;
+      margin-right: auto;
+    }
+    .chapter-nav-brand:hover { color: rgba(232, 223, 208, 0.7); }
+    .chapter-nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-left: auto;
+    }
+    .chapter-prev, .chapter-next {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: rgba(232, 223, 208, 0.6);
+      text-decoration: none;
+      padding: 8px 12px;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .chapter-prev:hover, .chapter-next:hover { color: #e8dfd0; }
+    .chapter-prev[aria-disabled="true"],
+    .chapter-next[aria-disabled="true"] {
+      color: rgba(232, 223, 208, 0.15);
+      pointer-events: none;
+    }
+    .chapter-prev svg, .chapter-next svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      vertical-align: -2px;
+    }
+
+    /* Current chapter dropdown */
+    .chapter-current {
+      position: relative;
+    }
+    .chapter-current-btn {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: #e8dfd0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      max-width: 300px;
+    }
+    .chapter-current-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chapter-current-progress {
+      font-size: 0.6rem;
+      color: rgba(232, 223, 208, 0.35);
+      margin-left: 4px;
+    }
+    .chapter-current-caret {
+      width: 12px; height: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .chapter-current-caret::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-right: 1.5px solid rgba(232, 223, 208, 0.5);
+      border-bottom: 1.5px solid rgba(232, 223, 208, 0.5);
+      transform: rotate(45deg);
+      transition: transform 0.2s;
+    }
+    .chapter-current[open] .chapter-current-caret::after {
+      transform: rotate(-135deg);
+    }
+    .chapter-dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2a2520;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      max-height: 70vh;
+      overflow-y: auto;
+      min-width: 280px;
+      max-width: 400px;
+      z-index: 300;
+      padding: 4px 0;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      list-style: none;
+    }
+    .chapter-dropdown-list a {
+      display: block;
+      padding: 8px 16px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .chapter-dropdown-list a:hover { background: rgba(255, 255, 255, 0.06); }
+    .chapter-dropdown-list a.active {
+      color: #e8dfd0;
+      background: rgba(107, 58, 42, 0.3);
+    }
+
+    /* Compact hero for chapter pages */
+    .chapter-hero {
+      background: #1a1510;
+      padding: 36px 2rem 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .chapter-hero-bg {
+      position: absolute; inset: 0;
+      background: url('/books/moby-dick/images/default.jpg') center/cover no-repeat;
+      z-index: 0;
+    }
+    .chapter-hero-overlay {
+      position: absolute; inset: 0;
+      background: rgba(5, 15, 25, 0.88);
+      z-index: 0;
+    }
+    .chapter-hero-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .chapter-hero-cover {
+      width: 80px;
+      border-radius: 3px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      flex-shrink: 0;
+    }
+    .chapter-hero-text {
+      flex: 1; min-width: 0;
+    }
+    .chapter-hero-book {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(196, 185, 154, 0.5);
+      margin-bottom: 6px;
+    }
+    .chapter-hero-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #e8dfd0;
+      line-height: 1.25;
+    }
+    @media (max-width: 600px) {
+      .chapter-hero { padding: 24px 1.25rem 20px; }
+      .chapter-hero-cover { width: 56px; }
+      .chapter-hero-title { font-size: 1.15rem; }
+    }
+
+    /* Reading area */
+    .article-body {
+      margin-top: 0 !important;
+      border-radius: 0;
+    }
+
+    /* TOC page styles */
+    .toc-section {
+      background: var(--bg, #faf8f4);
+      padding: 3rem 2rem 4rem;
+    }
+    .toc-inner { max-width: 680px; margin: 0 auto; }
+    .toc-inner h2 {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.6rem; font-weight: 400;
+      color: var(--text, #2c2420);
+      margin-bottom: 1.5rem;
+    }
+    .toc-list { list-style: none; padding: 0; }
+    .toc-list li { border-bottom: 1px solid rgba(107, 58, 42, 0.1); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a {
+      display: block; padding: 0.75rem 0;
+      font-family: 'Libre Baskerville', serif; font-size: 0.95rem;
+      color: var(--text, #2c2420); text-decoration: none; transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--accent, #6b3a2a); }
+
+    /* Bottom chapter nav — prominent and centered */
+    .chapter-bottom-nav {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 1px;
+      max-width: 780px;
+      margin: 3rem auto 0;
+      padding: 0;
+      background: rgba(107, 58, 42, 0.12);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .chapter-bottom-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: var(--text, #2c2420);
+      text-decoration: none;
+      padding: 20px 16px;
+      background: var(--bg, #faf8f4);
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .chapter-bottom-nav a:hover {
+      background: var(--surface, #f0ece4);
+      color: var(--accent, #6b3a2a);
+    }
+    .chapter-bottom-nav a[aria-disabled="true"] {
+      color: rgba(90, 79, 66, 0.25);
+      pointer-events: none;
+    }
+    .chapter-bottom-nav .nav-direction {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(90, 79, 66, 0.5);
+    }
+    .chapter-bottom-nav svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    @media (max-width: 600px) {
+      .chapter-nav-brand { display: none; }
+      .chapter-current-btn { max-width: 180px; font-size: 0.65rem; }
+      .chapter-prev, .chapter-next { padding: 8px 8px; font-size: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <nav class="chapter-nav" aria-label="Chapter navigation">
+    <div class="chapter-nav-inner">
+      <a href="/books/moby-dick/" class="chapter-nav-brand">Moby-Dick</a>
+      <div class="chapter-nav-controls">
+        <a class="chapter-prev" href="/books/moby-dick/chapter-33-the-specksnyder/"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Prev</a>
+        <details class="chapter-current">
+          <summary class="chapter-current-btn">
+            <span class="chapter-current-label">Chapter 34. The Cabin-Table.</span>
+            <span class="chapter-current-progress">27%</span>
+            <span class="chapter-current-caret"></span>
+          </summary>
+          <ul class="chapter-dropdown-list">
+        <li><a href="/books/moby-dick/etymology/">Etymology</a></li>
+        <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
+        <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
+        <li><a href="/books/moby-dick/chapter-1-loomings/">Chapter 1. Loomings.</a></li>
+        <li><a href="/books/moby-dick/chapter-2-the-carpet-bag/">Chapter 2. The Carpet-Bag.</a></li>
+        <li><a href="/books/moby-dick/chapter-3-the-spouter-inn/">Chapter 3. The Spouter-Inn.</a></li>
+        <li><a href="/books/moby-dick/chapter-4-the-counterpane/">Chapter 4. The Counterpane.</a></li>
+        <li><a href="/books/moby-dick/chapter-5-breakfast/">Chapter 5. Breakfast.</a></li>
+        <li><a href="/books/moby-dick/chapter-6-the-street/">Chapter 6. The Street.</a></li>
+        <li><a href="/books/moby-dick/chapter-7-the-chapel/">Chapter 7. The Chapel.</a></li>
+        <li><a href="/books/moby-dick/chapter-8-the-pulpit/">Chapter 8. The Pulpit.</a></li>
+        <li><a href="/books/moby-dick/chapter-9-the-sermon/">Chapter 9. The Sermon.</a></li>
+        <li><a href="/books/moby-dick/chapter-10-a-bosom-friend/">Chapter 10. A Bosom Friend.</a></li>
+        <li><a href="/books/moby-dick/chapter-11-nightgown/">Chapter 11. Nightgown.</a></li>
+        <li><a href="/books/moby-dick/chapter-12-biographical/">Chapter 12. Biographical.</a></li>
+        <li><a href="/books/moby-dick/chapter-13-wheelbarrow/">Chapter 13. Wheelbarrow.</a></li>
+        <li><a href="/books/moby-dick/chapter-14-nantucket/">Chapter 14. Nantucket.</a></li>
+        <li><a href="/books/moby-dick/chapter-15-chowder/">Chapter 15. Chowder.</a></li>
+        <li><a href="/books/moby-dick/chapter-16-the-ship/">Chapter 16. The Ship.</a></li>
+        <li><a href="/books/moby-dick/chapter-17-the-ramadan/">Chapter 17. The Ramadan.</a></li>
+        <li><a href="/books/moby-dick/chapter-18-his-mark/">Chapter 18. His Mark.</a></li>
+        <li><a href="/books/moby-dick/chapter-19-the-prophet/">Chapter 19. The Prophet.</a></li>
+        <li><a href="/books/moby-dick/chapter-20-all-astir/">Chapter 20. All Astir.</a></li>
+        <li><a href="/books/moby-dick/chapter-21-going-aboard/">Chapter 21. Going Aboard.</a></li>
+        <li><a href="/books/moby-dick/chapter-22-merry-christmas/">Chapter 22. Merry Christmas.</a></li>
+        <li><a href="/books/moby-dick/chapter-23-the-lee-shore/">Chapter 23. The Lee Shore.</a></li>
+        <li><a href="/books/moby-dick/chapter-24-the-advocate/">Chapter 24. The Advocate.</a></li>
+        <li><a href="/books/moby-dick/chapter-25-postscript/">Chapter 25. Postscript.</a></li>
+        <li><a href="/books/moby-dick/chapter-26-knights-and-squires/">Chapter 26. Knights and Squires.</a></li>
+        <li><a href="/books/moby-dick/chapter-27-knights-and-squires/">Chapter 27. Knights and Squires.</a></li>
+        <li><a href="/books/moby-dick/chapter-28-ahab/">Chapter 28. Ahab.</a></li>
+        <li><a href="/books/moby-dick/chapter-29-enter-ahab-to-him-stubb/">Chapter 29. Enter Ahab; to Him, Stubb.</a></li>
+        <li><a href="/books/moby-dick/chapter-30-the-pipe/">Chapter 30. The Pipe.</a></li>
+        <li><a href="/books/moby-dick/chapter-31-queen-mab/">Chapter 31. Queen Mab.</a></li>
+        <li><a href="/books/moby-dick/chapter-32-cetology/">Chapter 32. Cetology.</a></li>
+        <li><a href="/books/moby-dick/chapter-33-the-specksnyder/">Chapter 33. The Specksnyder.</a></li>
+        <li><a class="active" href="/books/moby-dick/chapter-34-the-cabin-table/">Chapter 34. The Cabin-Table.</a></li>
+        <li><a href="/books/moby-dick/chapter-35-the-mast-head/">Chapter 35. The Mast-Head.</a></li>
+        <li><a href="/books/moby-dick/chapter-36-the-quarter-deck/">Chapter 36. The Quarter-Deck.</a></li>
+        <li><a href="/books/moby-dick/chapter-37-sunset/">Chapter 37. Sunset.</a></li>
+        <li><a href="/books/moby-dick/chapter-38-dusk/">Chapter 38. Dusk.</a></li>
+        <li><a href="/books/moby-dick/chapter-39-first-night-watch/">Chapter 39. First Night-Watch.</a></li>
+        <li><a href="/books/moby-dick/chapter-40-midnight-forecastle/">Chapter 40. Midnight, Forecastle.</a></li>
+        <li><a href="/books/moby-dick/chapter-41-moby-dick/">Chapter 41. Moby Dick.</a></li>
+        <li><a href="/books/moby-dick/chapter-42-the-whiteness-of-the-whale/">Chapter 42. The Whiteness of the Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-43-hark/">Chapter 43. Hark!</a></li>
+        <li><a href="/books/moby-dick/chapter-44-the-chart/">Chapter 44. The Chart.</a></li>
+        <li><a href="/books/moby-dick/chapter-45-the-affidavit/">Chapter 45. The Affidavit.</a></li>
+        <li><a href="/books/moby-dick/chapter-46-surmises/">Chapter 46. Surmises.</a></li>
+        <li><a href="/books/moby-dick/chapter-47-the-mat-maker/">Chapter 47. The Mat-Maker.</a></li>
+        <li><a href="/books/moby-dick/chapter-48-the-first-lowering/">Chapter 48. The First Lowering.</a></li>
+        <li><a href="/books/moby-dick/chapter-49-the-hyena/">Chapter 49. The Hyena.</a></li>
+        <li><a href="/books/moby-dick/chapter-50-ahabs-boat-and-crew-fedallah/">Chapter 50. Ahab’s Boat and Crew. Fedallah.</a></li>
+        <li><a href="/books/moby-dick/chapter-51-the-spirit-spout/">Chapter 51. The Spirit-Spout.</a></li>
+        <li><a href="/books/moby-dick/chapter-52-the-albatross/">Chapter 52. The Albatross.</a></li>
+        <li><a href="/books/moby-dick/chapter-53-the-gam/">Chapter 53. The Gam.</a></li>
+        <li><a href="/books/moby-dick/chapter-54-the-town-hos-story/">Chapter 54. The Town-Ho’s Story.</a></li>
+        <li><a href="/books/moby-dick/chapter-55-of-the-monstrous-pictures-of-whales/">Chapter 55. Of the Monstrous Pictures of Whales.</a></li>
+        <li><a href="/books/moby-dick/chapter-56-of-the-less-erroneous-pictures-of-whales-and-the-true-pictures-of-whaling-scenes/">Chapter 56. Of the Less Erroneous Pictures of Whales, and the True Pictures of Whaling Scenes.</a></li>
+        <li><a href="/books/moby-dick/chapter-57-of-whales-in-paint-in-teeth-in-wood-in-sheet-iron-in-stone-in-mountains-in-stars/">Chapter 57. Of Whales in Paint; in Teeth; in Wood; in Sheet-Iron; in Stone; in Mountains; in Stars.</a></li>
+        <li><a href="/books/moby-dick/chapter-58-brit/">Chapter 58. Brit.</a></li>
+        <li><a href="/books/moby-dick/chapter-59-squid/">Chapter 59. Squid.</a></li>
+        <li><a href="/books/moby-dick/chapter-60-the-line/">Chapter 60. The Line.</a></li>
+        <li><a href="/books/moby-dick/chapter-61-stubb-kills-a-whale/">Chapter 61. Stubb Kills a Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-62-the-dart/">Chapter 62. The Dart.</a></li>
+        <li><a href="/books/moby-dick/chapter-63-the-crotch/">Chapter 63. The Crotch.</a></li>
+        <li><a href="/books/moby-dick/chapter-64-stubbs-supper/">Chapter 64. Stubb’s Supper.</a></li>
+        <li><a href="/books/moby-dick/chapter-65-the-whale-as-a-dish/">Chapter 65. The Whale as a Dish.</a></li>
+        <li><a href="/books/moby-dick/chapter-66-the-shark-massacre/">Chapter 66. The Shark Massacre.</a></li>
+        <li><a href="/books/moby-dick/chapter-67-cutting-in/">Chapter 67. Cutting In.</a></li>
+        <li><a href="/books/moby-dick/chapter-68-the-blanket/">Chapter 68. The Blanket.</a></li>
+        <li><a href="/books/moby-dick/chapter-69-the-funeral/">Chapter 69. The Funeral.</a></li>
+        <li><a href="/books/moby-dick/chapter-70-the-sphynx/">Chapter 70. The Sphynx.</a></li>
+        <li><a href="/books/moby-dick/chapter-71-the-jeroboams-story/">Chapter 71. The Jeroboam’s Story.</a></li>
+        <li><a href="/books/moby-dick/chapter-72-the-monkey-rope/">Chapter 72. The Monkey-Rope.</a></li>
+        <li><a href="/books/moby-dick/chapter-73-stubb-and-flask-kill-a-right-whale-and-then-have-a-talk-over-him/">Chapter 73. Stubb and Flask kill a Right Whale; and Then Have a Talk over Him.</a></li>
+        <li><a href="/books/moby-dick/chapter-74-the-sperm-whales-headcontrasted-view/">Chapter 74. The Sperm Whale’s Head—Contrasted View.</a></li>
+        <li><a href="/books/moby-dick/chapter-75-the-right-whales-headcontrasted-view/">Chapter 75. The Right Whale’s Head—Contrasted View.</a></li>
+        <li><a href="/books/moby-dick/chapter-76-the-battering-ram/">Chapter 76. The Battering-Ram.</a></li>
+        <li><a href="/books/moby-dick/chapter-77-the-great-heidelburgh-tun/">Chapter 77. The Great Heidelburgh Tun.</a></li>
+        <li><a href="/books/moby-dick/chapter-78-cistern-and-buckets/">Chapter 78. Cistern and Buckets.</a></li>
+        <li><a href="/books/moby-dick/chapter-79-the-prairie/">Chapter 79. The Prairie.</a></li>
+        <li><a href="/books/moby-dick/chapter-80-the-nut/">Chapter 80. The Nut.</a></li>
+        <li><a href="/books/moby-dick/chapter-81-the-pequod-meets-the-virgin/">Chapter 81. The Pequod Meets The Virgin.</a></li>
+        <li><a href="/books/moby-dick/chapter-82-the-honor-and-glory-of-whaling/">Chapter 82. The Honor and Glory of Whaling.</a></li>
+        <li><a href="/books/moby-dick/chapter-83-jonah-historically-regarded/">Chapter 83. Jonah Historically Regarded.</a></li>
+        <li><a href="/books/moby-dick/chapter-84-pitchpoling/">Chapter 84. Pitchpoling.</a></li>
+        <li><a href="/books/moby-dick/chapter-85-the-fountain/">Chapter 85. The Fountain.</a></li>
+        <li><a href="/books/moby-dick/chapter-86-the-tail/">Chapter 86. The Tail.</a></li>
+        <li><a href="/books/moby-dick/chapter-87-the-grand-armada/">Chapter 87. The Grand Armada.</a></li>
+        <li><a href="/books/moby-dick/chapter-88-schools-and-schoolmasters/">Chapter 88. Schools and Schoolmasters.</a></li>
+        <li><a href="/books/moby-dick/chapter-89-fast-fish-and-loose-fish/">Chapter 89. Fast-Fish and Loose-Fish.</a></li>
+        <li><a href="/books/moby-dick/chapter-90-heads-or-tails/">Chapter 90. Heads or Tails.</a></li>
+        <li><a href="/books/moby-dick/chapter-91-the-pequod-meets-the-rose-bud/">Chapter 91. The Pequod Meets The Rose-Bud.</a></li>
+        <li><a href="/books/moby-dick/chapter-92-ambergris/">Chapter 92. Ambergris.</a></li>
+        <li><a href="/books/moby-dick/chapter-93-the-castaway/">Chapter 93. The Castaway.</a></li>
+        <li><a href="/books/moby-dick/chapter-94-a-squeeze-of-the-hand/">Chapter 94. A Squeeze of the Hand.</a></li>
+        <li><a href="/books/moby-dick/chapter-95-the-cassock/">Chapter 95. The Cassock.</a></li>
+        <li><a href="/books/moby-dick/chapter-96-the-try-works/">Chapter 96. The Try-Works.</a></li>
+        <li><a href="/books/moby-dick/chapter-97-the-lamp/">Chapter 97. The Lamp.</a></li>
+        <li><a href="/books/moby-dick/chapter-98-stowing-down-and-clearing-up/">Chapter 98. Stowing Down and Clearing Up.</a></li>
+        <li><a href="/books/moby-dick/chapter-99-the-doubloon/">Chapter 99. The Doubloon.</a></li>
+        <li><a href="/books/moby-dick/chapter-100-leg-and-arm/">Chapter 100. Leg and Arm.</a></li>
+        <li><a href="/books/moby-dick/chapter-101-the-decanter/">Chapter 101. The Decanter.</a></li>
+        <li><a href="/books/moby-dick/chapter-102-a-bower-in-the-arsacides/">Chapter 102. A Bower in the Arsacides.</a></li>
+        <li><a href="/books/moby-dick/chapter-103-measurement-of-the-whales-skeleton/">Chapter 103. Measurement of The Whale’s Skeleton.</a></li>
+        <li><a href="/books/moby-dick/chapter-104-the-fossil-whale/">Chapter 104. The Fossil Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-105-does-the-whales-magnitude-diminishwill-he-perish/">Chapter 105. Does the Whale’s Magnitude Diminish?—Will He Perish?</a></li>
+        <li><a href="/books/moby-dick/chapter-106-ahabs-leg/">Chapter 106. Ahab’s Leg.</a></li>
+        <li><a href="/books/moby-dick/chapter-107-the-carpenter/">Chapter 107. The Carpenter.</a></li>
+        <li><a href="/books/moby-dick/chapter-108-ahab-and-the-carpenter/">Chapter 108. Ahab and the Carpenter.</a></li>
+        <li><a href="/books/moby-dick/chapter-109-ahab-and-starbuck-in-the-cabin/">Chapter 109. Ahab and Starbuck in the Cabin.</a></li>
+        <li><a href="/books/moby-dick/chapter-110-queequeg-in-his-coffin/">Chapter 110. Queequeg in His Coffin.</a></li>
+        <li><a href="/books/moby-dick/chapter-111-the-pacific/">Chapter 111. The Pacific.</a></li>
+        <li><a href="/books/moby-dick/chapter-112-the-blacksmith/">Chapter 112. The Blacksmith.</a></li>
+        <li><a href="/books/moby-dick/chapter-113-the-forge/">Chapter 113. The Forge.</a></li>
+        <li><a href="/books/moby-dick/chapter-114-the-gilder/">Chapter 114. The Gilder.</a></li>
+        <li><a href="/books/moby-dick/chapter-115-the-pequod-meets-the-bachelor/">Chapter 115. The Pequod Meets The Bachelor.</a></li>
+        <li><a href="/books/moby-dick/chapter-116-the-dying-whale/">Chapter 116. The Dying Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-117-the-whale-watch/">Chapter 117. The Whale Watch.</a></li>
+        <li><a href="/books/moby-dick/chapter-118-the-quadrant/">Chapter 118. The Quadrant.</a></li>
+        <li><a href="/books/moby-dick/chapter-119-the-candles/">Chapter 119. The Candles.</a></li>
+        <li><a href="/books/moby-dick/chapter-120-the-deck-towards-the-end-of-the-first-night-watch/">Chapter 120. The Deck Towards the End of the First Night Watch.</a></li>
+        <li><a href="/books/moby-dick/chapter-121-midnightthe-forecastle-bulwarks/">Chapter 121. Midnight.—The Forecastle Bulwarks.</a></li>
+        <li><a href="/books/moby-dick/chapter-122-midnight-aloftthunder-and-lightning/">Chapter 122. Midnight Aloft.—Thunder and Lightning.</a></li>
+        <li><a href="/books/moby-dick/chapter-123-the-musket/">Chapter 123. The Musket.</a></li>
+        <li><a href="/books/moby-dick/chapter-124-the-needle/">Chapter 124. The Needle.</a></li>
+        <li><a href="/books/moby-dick/chapter-125-the-log-and-line/">Chapter 125. The Log and Line.</a></li>
+        <li><a href="/books/moby-dick/chapter-126-the-life-buoy/">Chapter 126. The Life-Buoy.</a></li>
+        <li><a href="/books/moby-dick/chapter-127-the-deck/">Chapter 127. The Deck.</a></li>
+        <li><a href="/books/moby-dick/chapter-128-the-pequod-meets-the-rachel/">Chapter 128. The Pequod Meets The Rachel.</a></li>
+        <li><a href="/books/moby-dick/chapter-129-the-cabin/">Chapter 129. The Cabin.</a></li>
+        <li><a href="/books/moby-dick/chapter-130-the-hat/">Chapter 130. The Hat.</a></li>
+        <li><a href="/books/moby-dick/chapter-131-the-pequod-meets-the-delight/">Chapter 131. The Pequod Meets The Delight.</a></li>
+        <li><a href="/books/moby-dick/chapter-132-the-symphony/">Chapter 132. The Symphony.</a></li>
+        <li><a href="/books/moby-dick/chapter-133-the-chasefirst-day/">Chapter 133. The Chase—First Day.</a></li>
+        <li><a href="/books/moby-dick/chapter-134-the-chasesecond-day/">Chapter 134. The Chase—Second Day.</a></li>
+        <li><a href="/books/moby-dick/chapter-135-the-chasethird-day/">Chapter 135. The Chase.—Third Day.</a></li>
+        <li><a href="/books/moby-dick/epilogue/">Epilogue</a></li>
+          </ul>
+        </details>
+        <a class="chapter-next" href="/books/moby-dick/chapter-35-the-mast-head/">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="chapter-hero">
+    <div class="chapter-hero-bg" aria-hidden="true"></div>
+    <div class="chapter-hero-overlay" aria-hidden="true"></div>
+    <div class="chapter-hero-inner">
+      <img class="chapter-hero-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="eager">
+      <div class="chapter-hero-text">
+        <div class="chapter-hero-book">Moby-Dick; or, The Whale &mdash; Herman Melville</div>
+        <h1 class="chapter-hero-title">Chapter 34. The Cabin-Table.</h1>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="article-body">
+<h2 class="section-heading" id="chapter-34-the-cabin-table">Chapter 34. The Cabin-Table.</h2>
+    <div class="section-body">
+      <p class="drop-cap">It is noon; and Dough-Boy, the steward, thrusting his pale loaf-of-bread face from the cabin-scuttle, announces dinner to his lord and master; who, sitting in the lee quarter-boat, has just been taking an observation of the sun; and is now mutely reckoning the latitude on the smooth, medallion-shaped tablet, reserved for that daily purpose on the upper part of his ivory leg. From his complete inattention to the tidings, you would think that moody Ahab had not heard his menial. But presently, catching hold of the mizen shrouds, he swings himself to the deck, and in an even, unexhilarated voice, saying, &ldquo;Dinner, Mr. Starbuck,&rdquo; disappears into the cabin.</p>
+      <p>When the last echo of his sultan&rsquo;s step has died away, and Starbuck, the first Emir, has every reason to suppose that he is seated, then Starbuck rouses from his quietude, takes a few turns along the planks, and, after a grave peep into the binnacle, says, with some touch of pleasantness, &ldquo;Dinner, Mr. Stubb,&rdquo; and descends the scuttle. The second Emir lounges about the rigging awhile, and then slightly shaking the main brace, to see whether it will be all right with that important rope, he likewise takes up the old burden, and with a rapid &ldquo;Dinner, Mr. Flask,&rdquo; follows after his predecessors.</p>
+      <p>But the third Emir, now seeing himself all alone on the quarter-deck, seems to feel relieved from some curious restraint; for, tipping all sorts of knowing winks in all sorts of directions, and kicking off his shoes, he strikes into a sharp but noiseless squall of a hornpipe right over the Grand Turk&rsquo;s head; and then, by a dexterous sleight, pitching his cap up into the mizentop for a shelf, he goes down rollicking so far at least as he remains visible from the deck, reversing all other processions, by bringing up the rear with music. But ere stepping into the cabin doorway below, he pauses, ships a new face altogether, and, then, independent, hilarious little Flask enters King Ahab&rsquo;s presence, in the character of Abjectus, or the Slave.</p>
+      <p>It is not the least among the strange things bred by the intense artificialness of sea-usages, that while in the open air of the deck some officers will, upon provocation, bear themselves boldly and defyingly enough towards their commander; yet, ten to one, let those very officers the next moment go down to their customary dinner in that same commander&rsquo;s cabin, and straightway their inoffensive, not to say deprecatory and humble air towards him, as he sits at the head of the table; this is marvellous, sometimes most comical. Wherefore this difference? A problem? Perhaps not. To have been Belshazzar, King of Babylon; and to have been Belshazzar, not haughtily but courteously, therein certainly must have been some touch of mundane grandeur. But he who in the rightly regal and intelligent spirit presides over his own private dinner-table of invited guests, that man&rsquo;s unchallenged power and dominion of individual influence for the time; that man&rsquo;s royalty of state transcends Belshazzar&rsquo;s, for Belshazzar was not the greatest. Who has but once dined his friends, has tasted what it is to be Cæsar. It is a witchery of social czarship which there is no withstanding. Now, if to this consideration you superadd the official supremacy of a ship-master, then, by inference, you will derive the cause of that peculiarity of sea-life just mentioned.</p>
+      <p>Over his ivory-inlaid table, Ahab presided like a mute, maned sea-lion on the white coral beach, surrounded by his warlike but still deferential cubs. In his own proper turn, each officer waited to be served. They were as little children before Ahab; and yet, in Ahab, there seemed not to lurk the smallest social arrogance. With one mind, their intent eyes all fastened upon the old man&rsquo;s knife, as he carved the chief dish before him. I do not suppose that for the world they would have profaned that moment with the slightest observation, even upon so neutral a topic as the weather. No! And when reaching out his knife and fork, between which the slice of beef was locked, Ahab thereby motioned Starbuck&rsquo;s plate towards him, the mate received his meat as though receiving alms; and cut it tenderly; and a little started if, perchance, the knife grazed against the plate; and chewed it noiselessly; and swallowed it, not without circumspection. For, like the Coronation banquet at Frankfort, where the German Emperor profoundly dines with the seven Imperial Electors, so these cabin meals were somehow solemn meals, eaten in awful silence; and yet at table old Ahab forbade not conversation; only he himself was dumb. What a relief it was to choking Stubb, when a rat made a sudden racket in the hold below. And poor little Flask, he was the youngest son, and little boy of this weary family party. His were the shinbones of the saline beef; his would have been the drumsticks. For Flask to have presumed to help himself, this must have seemed to him tantamount to larceny in the first degree. Had he helped himself at that table, doubtless, never more would he have been able to hold his head up in this honest world; nevertheless, strange to say, Ahab never forbade him. And had Flask helped himself, the chances were Ahab had never so much as noticed it. Least of all, did Flask presume to help himself to butter. Whether he thought the owners of the ship denied it to him, on account of its clotting his clear, sunny complexion; or whether he deemed that, on so long a voyage in such marketless waters, butter was at a premium, and therefore was not for him, a subaltern; however it was, Flask, alas! was a butterless man!</p>
+      <p>Another thing. Flask was the last person down at the dinner, and Flask is the first man up. Consider! For hereby Flask&rsquo;s dinner was badly jammed in point of time. Starbuck and Stubb both had the start of him; and yet they also have the privilege of lounging in the rear. If Stubb even, who is but a peg higher than Flask, happens to have but a small appetite, and soon shows symptoms of concluding his repast, then Flask must bestir himself, he will not get more than three mouthfuls that day; for it is against holy usage for Stubb to precede Flask to the deck. Therefore it was that Flask once admitted in private, that ever since he had arisen to the dignity of an officer, from that moment he had never known what it was to be otherwise than hungry, more or less. For what he ate did not so much relieve his hunger, as keep it immortal in him. Peace and satisfaction, thought Flask, have for ever departed from my stomach. I am an officer; but, how I wish I could fish a bit of old-fashioned beef in the forecastle, as I used to when I was before the mast. There&rsquo;s the fruits of promotion now; there&rsquo;s the vanity of glory: there&rsquo;s the insanity of life! Besides, if it were so that any mere sailor of the Pequod had a grudge against Flask in Flask&rsquo;s official capacity, all that sailor had to do, in order to obtain ample vengeance, was to go aft at dinner-time, and get a peep at Flask through the cabin sky-light, sitting silly and dumfoundered before awful Ahab.</p>
+      <p>Now, Ahab and his three mates formed what may be called the first table in the Pequod&rsquo;s cabin. After their departure, taking place in inverted order to their arrival, the canvas cloth was cleared, or rather was restored to some hurried order by the pallid steward. And then the three harpooneers were bidden to the feast, they being its residuary legatees. They made a sort of temporary servants&rsquo; hall of the high and mighty cabin.</p>
+      <p>In strange contrast to the hardly tolerable constraint and nameless invisible domineerings of the captain&rsquo;s table, was the entire care-free license and ease, the almost frantic democracy of those inferior fellows the harpooneers. While their masters, the mates, seemed afraid of the sound of the hinges of their own jaws, the harpooneers chewed their food with such a relish that there was a report to it. They dined like lords; they filled their bellies like Indian ships all day loading with spices. Such portentous appetites had Queequeg and Tashtego, that to fill out the vacancies made by the previous repast, often the pale Dough-Boy was fain to bring on a great baron of salt-junk, seemingly quarried out of the solid ox. And if he were not lively about it, if he did not go with a nimble hop-skip-and-jump, then Tashtego had an ungentlemanly way of accelerating him by darting a fork at his back, harpoon-wise. And once Daggoo, seized with a sudden humor, assisted Dough-Boy&rsquo;s memory by snatching him up bodily, and thrusting his head into a great empty wooden trencher, while Tashtego, knife in hand, began laying out the circle preliminary to scalping him. He was naturally a very nervous, shuddering sort of little fellow, this bread-faced steward; the progeny of a bankrupt baker and a hospital nurse. And what with the standing spectacle of the black terrific Ahab, and the periodical tumultuous visitations of these three savages, Dough-Boy&rsquo;s whole life was one continual lip-quiver. Commonly, after seeing the harpooneers furnished with all things they demanded, he would escape from their clutches into his little pantry adjoining, and fearfully peep out at them through the blinds of its door, till all was over.</p>
+      <p>It was a sight to see Queequeg seated over against Tashtego, opposing his filed teeth to the Indian&rsquo;s: crosswise to them, Daggoo seated on the floor, for a bench would have brought his hearse-plumed head to the low carlines; at every motion of his colossal limbs, making the low cabin framework to shake, as when an African elephant goes passenger in a ship. But for all this, the great negro was wonderfully abstemious, not to say dainty. It seemed hardly possible that by such comparatively small mouthfuls he could keep up the vitality diffused through so broad, baronial, and superb a person. But, doubtless, this noble savage fed strong and drank deep of the abounding element of air; and through his dilated nostrils snuffed in the sublime life of the worlds. Not by beef or by bread, are giants made or nourished. But Queequeg, he had a mortal, barbaric smack of the lip in eating&mdash;an ugly sound enough&mdash;so much so, that the trembling Dough-Boy almost looked to see whether any marks of teeth lurked in his own lean arms. And when he would hear Tashtego singing out for him to produce himself, that his bones might be picked, the simple-witted steward all but shattered the crockery hanging round him in the pantry, by his sudden fits of the palsy. Nor did the whetstone which the harpooneers carried in their pockets, for their lances and other weapons; and with which whetstones, at dinner, they would ostentatiously sharpen their knives; that grating sound did not at all tend to tranquillize poor Dough-Boy. How could he forget that in his Island days, Queequeg, for one, must certainly have been guilty of some murderous, convivial indiscretions. Alas! Dough-Boy! hard fares the white waiter who waits upon cannibals. Not a napkin should he carry on his arm, but a buckler. In good time, though, to his great delight, the three salt-sea warriors would rise and depart; to his credulous, fable-mongering ears, all their martial bones jingling in them at every step, like Moorish scimetars in scabbards.</p>
+      <p>But, though these barbarians dined in the cabin, and nominally lived there; still, being anything but sedentary in their habits, they were scarcely ever in it except at mealtimes, and just before sleeping-time, when they passed through it to their own peculiar quarters.</p>
+      <p>In this one matter, Ahab seemed no exception to most American whale captains, who, as a set, rather incline to the opinion that by rights the ship&rsquo;s cabin belongs to them; and that it is by courtesy alone that anybody else is, at any time, permitted there. So that, in real truth, the mates and harpooneers of the Pequod might more properly be said to have lived out of the cabin than in it. For when they did enter it, it was something as a street-door enters a house; turning inwards for a moment, only to be turned out the next; and, as a permanent thing, residing in the open air. Nor did they lose much hereby; in the cabin was no companionship; socially, Ahab was inaccessible. Though nominally included in the census of Christendom, he was still an alien to it. He lived in the world, as the last of the Grisly Bears lived in settled Missouri. And as when Spring and Summer had departed, that wild Logan of the woods, burying himself in the hollow of a tree, lived out the winter there, sucking his own paws; so, in his inclement, howling old age, Ahab&rsquo;s soul, shut up in the caved trunk of his body, there fed upon the sullen paws of its gloom!</p>
+    </div>
+
+    
+
+    <div class="chapter-bottom-nav">
+      <a href="/books/moby-dick/chapter-33-the-specksnyder/"><span class="nav-direction"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Previous Chapter</span>Chapter 33. The Specksnyder.</a>
+      <a href="/books/moby-dick/chapter-35-the-mast-head/"><span class="nav-direction">Next Chapter <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>Chapter 35. The Mast-Head.</a>
+    </div>
+  </main>
+
+  <footer class="doc-footer">
+    <div class="brand">Public Domain Classics</div>
+    <p class="disclaimer">
+      This text is sourced from <a href="https://www.gutenberg.org/ebooks/2701">Project Gutenberg</a>
+      and is in the public domain in the United States.
+      <br>Formatted for readability &mdash; original text preserved verbatim.
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Chapter 40. Midnight, Forecastle. — Moby-Dick — Public Domain Classics</title>
+  <link rel="canonical" href="https://publicdomainclassics.com/books/moby-dick/chapter-40-midnight-forecastle/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/css/document-template.css">
+  <style>
+    /* Chapter page: no hero, just reading */
+    .chapter-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #1a1510;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+      gap: 0;
+    }
+    .chapter-nav-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .chapter-nav-brand {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(232, 223, 208, 0.4);
+      text-decoration: none;
+      white-space: nowrap;
+      margin-right: auto;
+    }
+    .chapter-nav-brand:hover { color: rgba(232, 223, 208, 0.7); }
+    .chapter-nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-left: auto;
+    }
+    .chapter-prev, .chapter-next {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: rgba(232, 223, 208, 0.6);
+      text-decoration: none;
+      padding: 8px 12px;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .chapter-prev:hover, .chapter-next:hover { color: #e8dfd0; }
+    .chapter-prev[aria-disabled="true"],
+    .chapter-next[aria-disabled="true"] {
+      color: rgba(232, 223, 208, 0.15);
+      pointer-events: none;
+    }
+    .chapter-prev svg, .chapter-next svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      vertical-align: -2px;
+    }
+
+    /* Current chapter dropdown */
+    .chapter-current {
+      position: relative;
+    }
+    .chapter-current-btn {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: #e8dfd0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      max-width: 300px;
+    }
+    .chapter-current-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chapter-current-progress {
+      font-size: 0.6rem;
+      color: rgba(232, 223, 208, 0.35);
+      margin-left: 4px;
+    }
+    .chapter-current-caret {
+      width: 12px; height: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .chapter-current-caret::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-right: 1.5px solid rgba(232, 223, 208, 0.5);
+      border-bottom: 1.5px solid rgba(232, 223, 208, 0.5);
+      transform: rotate(45deg);
+      transition: transform 0.2s;
+    }
+    .chapter-current[open] .chapter-current-caret::after {
+      transform: rotate(-135deg);
+    }
+    .chapter-dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2a2520;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      max-height: 70vh;
+      overflow-y: auto;
+      min-width: 280px;
+      max-width: 400px;
+      z-index: 300;
+      padding: 4px 0;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      list-style: none;
+    }
+    .chapter-dropdown-list a {
+      display: block;
+      padding: 8px 16px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .chapter-dropdown-list a:hover { background: rgba(255, 255, 255, 0.06); }
+    .chapter-dropdown-list a.active {
+      color: #e8dfd0;
+      background: rgba(107, 58, 42, 0.3);
+    }
+
+    /* Compact hero for chapter pages */
+    .chapter-hero {
+      background: #1a1510;
+      padding: 36px 2rem 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .chapter-hero-bg {
+      position: absolute; inset: 0;
+      background: url('/books/moby-dick/images/default.jpg') center/cover no-repeat;
+      z-index: 0;
+    }
+    .chapter-hero-overlay {
+      position: absolute; inset: 0;
+      background: rgba(5, 15, 25, 0.88);
+      z-index: 0;
+    }
+    .chapter-hero-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .chapter-hero-cover {
+      width: 80px;
+      border-radius: 3px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      flex-shrink: 0;
+    }
+    .chapter-hero-text {
+      flex: 1; min-width: 0;
+    }
+    .chapter-hero-book {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(196, 185, 154, 0.5);
+      margin-bottom: 6px;
+    }
+    .chapter-hero-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #e8dfd0;
+      line-height: 1.25;
+    }
+    @media (max-width: 600px) {
+      .chapter-hero { padding: 24px 1.25rem 20px; }
+      .chapter-hero-cover { width: 56px; }
+      .chapter-hero-title { font-size: 1.15rem; }
+    }
+
+    /* Reading area */
+    .article-body {
+      margin-top: 0 !important;
+      border-radius: 0;
+    }
+
+    /* TOC page styles */
+    .toc-section {
+      background: var(--bg, #faf8f4);
+      padding: 3rem 2rem 4rem;
+    }
+    .toc-inner { max-width: 680px; margin: 0 auto; }
+    .toc-inner h2 {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.6rem; font-weight: 400;
+      color: var(--text, #2c2420);
+      margin-bottom: 1.5rem;
+    }
+    .toc-list { list-style: none; padding: 0; }
+    .toc-list li { border-bottom: 1px solid rgba(107, 58, 42, 0.1); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a {
+      display: block; padding: 0.75rem 0;
+      font-family: 'Libre Baskerville', serif; font-size: 0.95rem;
+      color: var(--text, #2c2420); text-decoration: none; transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--accent, #6b3a2a); }
+
+    /* Bottom chapter nav — prominent and centered */
+    .chapter-bottom-nav {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 1px;
+      max-width: 780px;
+      margin: 3rem auto 0;
+      padding: 0;
+      background: rgba(107, 58, 42, 0.12);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .chapter-bottom-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: var(--text, #2c2420);
+      text-decoration: none;
+      padding: 20px 16px;
+      background: var(--bg, #faf8f4);
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .chapter-bottom-nav a:hover {
+      background: var(--surface, #f0ece4);
+      color: var(--accent, #6b3a2a);
+    }
+    .chapter-bottom-nav a[aria-disabled="true"] {
+      color: rgba(90, 79, 66, 0.25);
+      pointer-events: none;
+    }
+    .chapter-bottom-nav .nav-direction {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(90, 79, 66, 0.5);
+    }
+    .chapter-bottom-nav svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    @media (max-width: 600px) {
+      .chapter-nav-brand { display: none; }
+      .chapter-current-btn { max-width: 180px; font-size: 0.65rem; }
+      .chapter-prev, .chapter-next { padding: 8px 8px; font-size: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <nav class="chapter-nav" aria-label="Chapter navigation">
+    <div class="chapter-nav-inner">
+      <a href="/books/moby-dick/" class="chapter-nav-brand">Moby-Dick</a>
+      <div class="chapter-nav-controls">
+        <a class="chapter-prev" href="/books/moby-dick/chapter-39-first-night-watch/"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Prev</a>
+        <details class="chapter-current">
+          <summary class="chapter-current-btn">
+            <span class="chapter-current-label">Chapter 40. Midnight, Forecastle.</span>
+            <span class="chapter-current-progress">31%</span>
+            <span class="chapter-current-caret"></span>
+          </summary>
+          <ul class="chapter-dropdown-list">
+        <li><a href="/books/moby-dick/etymology/">Etymology</a></li>
+        <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
+        <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
+        <li><a href="/books/moby-dick/chapter-1-loomings/">Chapter 1. Loomings.</a></li>
+        <li><a href="/books/moby-dick/chapter-2-the-carpet-bag/">Chapter 2. The Carpet-Bag.</a></li>
+        <li><a href="/books/moby-dick/chapter-3-the-spouter-inn/">Chapter 3. The Spouter-Inn.</a></li>
+        <li><a href="/books/moby-dick/chapter-4-the-counterpane/">Chapter 4. The Counterpane.</a></li>
+        <li><a href="/books/moby-dick/chapter-5-breakfast/">Chapter 5. Breakfast.</a></li>
+        <li><a href="/books/moby-dick/chapter-6-the-street/">Chapter 6. The Street.</a></li>
+        <li><a href="/books/moby-dick/chapter-7-the-chapel/">Chapter 7. The Chapel.</a></li>
+        <li><a href="/books/moby-dick/chapter-8-the-pulpit/">Chapter 8. The Pulpit.</a></li>
+        <li><a href="/books/moby-dick/chapter-9-the-sermon/">Chapter 9. The Sermon.</a></li>
+        <li><a href="/books/moby-dick/chapter-10-a-bosom-friend/">Chapter 10. A Bosom Friend.</a></li>
+        <li><a href="/books/moby-dick/chapter-11-nightgown/">Chapter 11. Nightgown.</a></li>
+        <li><a href="/books/moby-dick/chapter-12-biographical/">Chapter 12. Biographical.</a></li>
+        <li><a href="/books/moby-dick/chapter-13-wheelbarrow/">Chapter 13. Wheelbarrow.</a></li>
+        <li><a href="/books/moby-dick/chapter-14-nantucket/">Chapter 14. Nantucket.</a></li>
+        <li><a href="/books/moby-dick/chapter-15-chowder/">Chapter 15. Chowder.</a></li>
+        <li><a href="/books/moby-dick/chapter-16-the-ship/">Chapter 16. The Ship.</a></li>
+        <li><a href="/books/moby-dick/chapter-17-the-ramadan/">Chapter 17. The Ramadan.</a></li>
+        <li><a href="/books/moby-dick/chapter-18-his-mark/">Chapter 18. His Mark.</a></li>
+        <li><a href="/books/moby-dick/chapter-19-the-prophet/">Chapter 19. The Prophet.</a></li>
+        <li><a href="/books/moby-dick/chapter-20-all-astir/">Chapter 20. All Astir.</a></li>
+        <li><a href="/books/moby-dick/chapter-21-going-aboard/">Chapter 21. Going Aboard.</a></li>
+        <li><a href="/books/moby-dick/chapter-22-merry-christmas/">Chapter 22. Merry Christmas.</a></li>
+        <li><a href="/books/moby-dick/chapter-23-the-lee-shore/">Chapter 23. The Lee Shore.</a></li>
+        <li><a href="/books/moby-dick/chapter-24-the-advocate/">Chapter 24. The Advocate.</a></li>
+        <li><a href="/books/moby-dick/chapter-25-postscript/">Chapter 25. Postscript.</a></li>
+        <li><a href="/books/moby-dick/chapter-26-knights-and-squires/">Chapter 26. Knights and Squires.</a></li>
+        <li><a href="/books/moby-dick/chapter-27-knights-and-squires/">Chapter 27. Knights and Squires.</a></li>
+        <li><a href="/books/moby-dick/chapter-28-ahab/">Chapter 28. Ahab.</a></li>
+        <li><a href="/books/moby-dick/chapter-29-enter-ahab-to-him-stubb/">Chapter 29. Enter Ahab; to Him, Stubb.</a></li>
+        <li><a href="/books/moby-dick/chapter-30-the-pipe/">Chapter 30. The Pipe.</a></li>
+        <li><a href="/books/moby-dick/chapter-31-queen-mab/">Chapter 31. Queen Mab.</a></li>
+        <li><a href="/books/moby-dick/chapter-32-cetology/">Chapter 32. Cetology.</a></li>
+        <li><a href="/books/moby-dick/chapter-33-the-specksnyder/">Chapter 33. The Specksnyder.</a></li>
+        <li><a href="/books/moby-dick/chapter-34-the-cabin-table/">Chapter 34. The Cabin-Table.</a></li>
+        <li><a href="/books/moby-dick/chapter-35-the-mast-head/">Chapter 35. The Mast-Head.</a></li>
+        <li><a href="/books/moby-dick/chapter-36-the-quarter-deck/">Chapter 36. The Quarter-Deck.</a></li>
+        <li><a href="/books/moby-dick/chapter-37-sunset/">Chapter 37. Sunset.</a></li>
+        <li><a href="/books/moby-dick/chapter-38-dusk/">Chapter 38. Dusk.</a></li>
+        <li><a href="/books/moby-dick/chapter-39-first-night-watch/">Chapter 39. First Night-Watch.</a></li>
+        <li><a class="active" href="/books/moby-dick/chapter-40-midnight-forecastle/">Chapter 40. Midnight, Forecastle.</a></li>
+        <li><a href="/books/moby-dick/chapter-41-moby-dick/">Chapter 41. Moby Dick.</a></li>
+        <li><a href="/books/moby-dick/chapter-42-the-whiteness-of-the-whale/">Chapter 42. The Whiteness of the Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-43-hark/">Chapter 43. Hark!</a></li>
+        <li><a href="/books/moby-dick/chapter-44-the-chart/">Chapter 44. The Chart.</a></li>
+        <li><a href="/books/moby-dick/chapter-45-the-affidavit/">Chapter 45. The Affidavit.</a></li>
+        <li><a href="/books/moby-dick/chapter-46-surmises/">Chapter 46. Surmises.</a></li>
+        <li><a href="/books/moby-dick/chapter-47-the-mat-maker/">Chapter 47. The Mat-Maker.</a></li>
+        <li><a href="/books/moby-dick/chapter-48-the-first-lowering/">Chapter 48. The First Lowering.</a></li>
+        <li><a href="/books/moby-dick/chapter-49-the-hyena/">Chapter 49. The Hyena.</a></li>
+        <li><a href="/books/moby-dick/chapter-50-ahabs-boat-and-crew-fedallah/">Chapter 50. Ahab’s Boat and Crew. Fedallah.</a></li>
+        <li><a href="/books/moby-dick/chapter-51-the-spirit-spout/">Chapter 51. The Spirit-Spout.</a></li>
+        <li><a href="/books/moby-dick/chapter-52-the-albatross/">Chapter 52. The Albatross.</a></li>
+        <li><a href="/books/moby-dick/chapter-53-the-gam/">Chapter 53. The Gam.</a></li>
+        <li><a href="/books/moby-dick/chapter-54-the-town-hos-story/">Chapter 54. The Town-Ho’s Story.</a></li>
+        <li><a href="/books/moby-dick/chapter-55-of-the-monstrous-pictures-of-whales/">Chapter 55. Of the Monstrous Pictures of Whales.</a></li>
+        <li><a href="/books/moby-dick/chapter-56-of-the-less-erroneous-pictures-of-whales-and-the-true-pictures-of-whaling-scenes/">Chapter 56. Of the Less Erroneous Pictures of Whales, and the True Pictures of Whaling Scenes.</a></li>
+        <li><a href="/books/moby-dick/chapter-57-of-whales-in-paint-in-teeth-in-wood-in-sheet-iron-in-stone-in-mountains-in-stars/">Chapter 57. Of Whales in Paint; in Teeth; in Wood; in Sheet-Iron; in Stone; in Mountains; in Stars.</a></li>
+        <li><a href="/books/moby-dick/chapter-58-brit/">Chapter 58. Brit.</a></li>
+        <li><a href="/books/moby-dick/chapter-59-squid/">Chapter 59. Squid.</a></li>
+        <li><a href="/books/moby-dick/chapter-60-the-line/">Chapter 60. The Line.</a></li>
+        <li><a href="/books/moby-dick/chapter-61-stubb-kills-a-whale/">Chapter 61. Stubb Kills a Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-62-the-dart/">Chapter 62. The Dart.</a></li>
+        <li><a href="/books/moby-dick/chapter-63-the-crotch/">Chapter 63. The Crotch.</a></li>
+        <li><a href="/books/moby-dick/chapter-64-stubbs-supper/">Chapter 64. Stubb’s Supper.</a></li>
+        <li><a href="/books/moby-dick/chapter-65-the-whale-as-a-dish/">Chapter 65. The Whale as a Dish.</a></li>
+        <li><a href="/books/moby-dick/chapter-66-the-shark-massacre/">Chapter 66. The Shark Massacre.</a></li>
+        <li><a href="/books/moby-dick/chapter-67-cutting-in/">Chapter 67. Cutting In.</a></li>
+        <li><a href="/books/moby-dick/chapter-68-the-blanket/">Chapter 68. The Blanket.</a></li>
+        <li><a href="/books/moby-dick/chapter-69-the-funeral/">Chapter 69. The Funeral.</a></li>
+        <li><a href="/books/moby-dick/chapter-70-the-sphynx/">Chapter 70. The Sphynx.</a></li>
+        <li><a href="/books/moby-dick/chapter-71-the-jeroboams-story/">Chapter 71. The Jeroboam’s Story.</a></li>
+        <li><a href="/books/moby-dick/chapter-72-the-monkey-rope/">Chapter 72. The Monkey-Rope.</a></li>
+        <li><a href="/books/moby-dick/chapter-73-stubb-and-flask-kill-a-right-whale-and-then-have-a-talk-over-him/">Chapter 73. Stubb and Flask kill a Right Whale; and Then Have a Talk over Him.</a></li>
+        <li><a href="/books/moby-dick/chapter-74-the-sperm-whales-headcontrasted-view/">Chapter 74. The Sperm Whale’s Head—Contrasted View.</a></li>
+        <li><a href="/books/moby-dick/chapter-75-the-right-whales-headcontrasted-view/">Chapter 75. The Right Whale’s Head—Contrasted View.</a></li>
+        <li><a href="/books/moby-dick/chapter-76-the-battering-ram/">Chapter 76. The Battering-Ram.</a></li>
+        <li><a href="/books/moby-dick/chapter-77-the-great-heidelburgh-tun/">Chapter 77. The Great Heidelburgh Tun.</a></li>
+        <li><a href="/books/moby-dick/chapter-78-cistern-and-buckets/">Chapter 78. Cistern and Buckets.</a></li>
+        <li><a href="/books/moby-dick/chapter-79-the-prairie/">Chapter 79. The Prairie.</a></li>
+        <li><a href="/books/moby-dick/chapter-80-the-nut/">Chapter 80. The Nut.</a></li>
+        <li><a href="/books/moby-dick/chapter-81-the-pequod-meets-the-virgin/">Chapter 81. The Pequod Meets The Virgin.</a></li>
+        <li><a href="/books/moby-dick/chapter-82-the-honor-and-glory-of-whaling/">Chapter 82. The Honor and Glory of Whaling.</a></li>
+        <li><a href="/books/moby-dick/chapter-83-jonah-historically-regarded/">Chapter 83. Jonah Historically Regarded.</a></li>
+        <li><a href="/books/moby-dick/chapter-84-pitchpoling/">Chapter 84. Pitchpoling.</a></li>
+        <li><a href="/books/moby-dick/chapter-85-the-fountain/">Chapter 85. The Fountain.</a></li>
+        <li><a href="/books/moby-dick/chapter-86-the-tail/">Chapter 86. The Tail.</a></li>
+        <li><a href="/books/moby-dick/chapter-87-the-grand-armada/">Chapter 87. The Grand Armada.</a></li>
+        <li><a href="/books/moby-dick/chapter-88-schools-and-schoolmasters/">Chapter 88. Schools and Schoolmasters.</a></li>
+        <li><a href="/books/moby-dick/chapter-89-fast-fish-and-loose-fish/">Chapter 89. Fast-Fish and Loose-Fish.</a></li>
+        <li><a href="/books/moby-dick/chapter-90-heads-or-tails/">Chapter 90. Heads or Tails.</a></li>
+        <li><a href="/books/moby-dick/chapter-91-the-pequod-meets-the-rose-bud/">Chapter 91. The Pequod Meets The Rose-Bud.</a></li>
+        <li><a href="/books/moby-dick/chapter-92-ambergris/">Chapter 92. Ambergris.</a></li>
+        <li><a href="/books/moby-dick/chapter-93-the-castaway/">Chapter 93. The Castaway.</a></li>
+        <li><a href="/books/moby-dick/chapter-94-a-squeeze-of-the-hand/">Chapter 94. A Squeeze of the Hand.</a></li>
+        <li><a href="/books/moby-dick/chapter-95-the-cassock/">Chapter 95. The Cassock.</a></li>
+        <li><a href="/books/moby-dick/chapter-96-the-try-works/">Chapter 96. The Try-Works.</a></li>
+        <li><a href="/books/moby-dick/chapter-97-the-lamp/">Chapter 97. The Lamp.</a></li>
+        <li><a href="/books/moby-dick/chapter-98-stowing-down-and-clearing-up/">Chapter 98. Stowing Down and Clearing Up.</a></li>
+        <li><a href="/books/moby-dick/chapter-99-the-doubloon/">Chapter 99. The Doubloon.</a></li>
+        <li><a href="/books/moby-dick/chapter-100-leg-and-arm/">Chapter 100. Leg and Arm.</a></li>
+        <li><a href="/books/moby-dick/chapter-101-the-decanter/">Chapter 101. The Decanter.</a></li>
+        <li><a href="/books/moby-dick/chapter-102-a-bower-in-the-arsacides/">Chapter 102. A Bower in the Arsacides.</a></li>
+        <li><a href="/books/moby-dick/chapter-103-measurement-of-the-whales-skeleton/">Chapter 103. Measurement of The Whale’s Skeleton.</a></li>
+        <li><a href="/books/moby-dick/chapter-104-the-fossil-whale/">Chapter 104. The Fossil Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-105-does-the-whales-magnitude-diminishwill-he-perish/">Chapter 105. Does the Whale’s Magnitude Diminish?—Will He Perish?</a></li>
+        <li><a href="/books/moby-dick/chapter-106-ahabs-leg/">Chapter 106. Ahab’s Leg.</a></li>
+        <li><a href="/books/moby-dick/chapter-107-the-carpenter/">Chapter 107. The Carpenter.</a></li>
+        <li><a href="/books/moby-dick/chapter-108-ahab-and-the-carpenter/">Chapter 108. Ahab and the Carpenter.</a></li>
+        <li><a href="/books/moby-dick/chapter-109-ahab-and-starbuck-in-the-cabin/">Chapter 109. Ahab and Starbuck in the Cabin.</a></li>
+        <li><a href="/books/moby-dick/chapter-110-queequeg-in-his-coffin/">Chapter 110. Queequeg in His Coffin.</a></li>
+        <li><a href="/books/moby-dick/chapter-111-the-pacific/">Chapter 111. The Pacific.</a></li>
+        <li><a href="/books/moby-dick/chapter-112-the-blacksmith/">Chapter 112. The Blacksmith.</a></li>
+        <li><a href="/books/moby-dick/chapter-113-the-forge/">Chapter 113. The Forge.</a></li>
+        <li><a href="/books/moby-dick/chapter-114-the-gilder/">Chapter 114. The Gilder.</a></li>
+        <li><a href="/books/moby-dick/chapter-115-the-pequod-meets-the-bachelor/">Chapter 115. The Pequod Meets The Bachelor.</a></li>
+        <li><a href="/books/moby-dick/chapter-116-the-dying-whale/">Chapter 116. The Dying Whale.</a></li>
+        <li><a href="/books/moby-dick/chapter-117-the-whale-watch/">Chapter 117. The Whale Watch.</a></li>
+        <li><a href="/books/moby-dick/chapter-118-the-quadrant/">Chapter 118. The Quadrant.</a></li>
+        <li><a href="/books/moby-dick/chapter-119-the-candles/">Chapter 119. The Candles.</a></li>
+        <li><a href="/books/moby-dick/chapter-120-the-deck-towards-the-end-of-the-first-night-watch/">Chapter 120. The Deck Towards the End of the First Night Watch.</a></li>
+        <li><a href="/books/moby-dick/chapter-121-midnightthe-forecastle-bulwarks/">Chapter 121. Midnight.—The Forecastle Bulwarks.</a></li>
+        <li><a href="/books/moby-dick/chapter-122-midnight-aloftthunder-and-lightning/">Chapter 122. Midnight Aloft.—Thunder and Lightning.</a></li>
+        <li><a href="/books/moby-dick/chapter-123-the-musket/">Chapter 123. The Musket.</a></li>
+        <li><a href="/books/moby-dick/chapter-124-the-needle/">Chapter 124. The Needle.</a></li>
+        <li><a href="/books/moby-dick/chapter-125-the-log-and-line/">Chapter 125. The Log and Line.</a></li>
+        <li><a href="/books/moby-dick/chapter-126-the-life-buoy/">Chapter 126. The Life-Buoy.</a></li>
+        <li><a href="/books/moby-dick/chapter-127-the-deck/">Chapter 127. The Deck.</a></li>
+        <li><a href="/books/moby-dick/chapter-128-the-pequod-meets-the-rachel/">Chapter 128. The Pequod Meets The Rachel.</a></li>
+        <li><a href="/books/moby-dick/chapter-129-the-cabin/">Chapter 129. The Cabin.</a></li>
+        <li><a href="/books/moby-dick/chapter-130-the-hat/">Chapter 130. The Hat.</a></li>
+        <li><a href="/books/moby-dick/chapter-131-the-pequod-meets-the-delight/">Chapter 131. The Pequod Meets The Delight.</a></li>
+        <li><a href="/books/moby-dick/chapter-132-the-symphony/">Chapter 132. The Symphony.</a></li>
+        <li><a href="/books/moby-dick/chapter-133-the-chasefirst-day/">Chapter 133. The Chase—First Day.</a></li>
+        <li><a href="/books/moby-dick/chapter-134-the-chasesecond-day/">Chapter 134. The Chase—Second Day.</a></li>
+        <li><a href="/books/moby-dick/chapter-135-the-chasethird-day/">Chapter 135. The Chase.—Third Day.</a></li>
+        <li><a href="/books/moby-dick/epilogue/">Epilogue</a></li>
+          </ul>
+        </details>
+        <a class="chapter-next" href="/books/moby-dick/chapter-41-moby-dick/">Next <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="chapter-hero">
+    <div class="chapter-hero-bg" aria-hidden="true"></div>
+    <div class="chapter-hero-overlay" aria-hidden="true"></div>
+    <div class="chapter-hero-inner">
+      <img class="chapter-hero-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="eager">
+      <div class="chapter-hero-text">
+        <div class="chapter-hero-book">Moby-Dick; or, The Whale &mdash; Herman Melville</div>
+        <h1 class="chapter-hero-title">Chapter 40. Midnight, Forecastle.</h1>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="article-body">
+<h2 class="section-heading" id="chapter-40-midnight-forecastle">Chapter 40. Midnight, Forecastle.</h2>
+    <div class="section-body">
+      <p class="drop-cap">HARPOONEERS AND SAILORS.</p>
+      <p>(<em>Foresail rises and discovers the watch standing, lounging, leaning, and lying in various attitudes, all singing in chorus</em>.)</p>
+      <div class="poetry-block">
+        <p class="poetry-line">Farewell and adieu to you, Spanish ladies! Farewell and adieu to you,</p>
+        <p class="poetry-line">ladies of Spain! Our captain&rsquo;s commanded.&mdash;</p>
+      </div>
+      <p>1ST NANTUCKET SAILOR. Oh, boys, don&rsquo;t be sentimental; it&rsquo;s bad for the digestion! Take a tonic, follow me!</p>
+      <p>(<em>Sings, and all follow.</em>)</p>
+      <p>Our captain stood upon the deck, A spy-glass in his hand, A viewing of those gallant whales That blew at every strand. Oh, your tubs in your boats, my boys, And by your braces stand, And we&rsquo;ll have one of those fine whales, Hand, boys, over hand! So, be cheery, my lads! may your hearts never fail! While the bold harpooner is striking the whale!</p>
+      <p>MATE&rsquo;S VOICE FROM THE QUARTER-DECK. Eight bells there, forward!</p>
+      <p>2ND NANTUCKET SAILOR. Avast the chorus! Eight bells there! d&rsquo;ye hear, bell-boy? Strike the bell eight, thou Pip! thou blackling! and let me call the watch. I&rsquo;ve the sort of mouth for that&mdash;the hogshead mouth. So, so, (<em>thrusts his head down the scuttle</em>,) Star-bo-l-e-e-n-s, a-h-o-y! Eight bells there below! Tumble up!</p>
+      <p>DUTCH SAILOR. Grand snoozing to-night, maty; fat night for that. I mark this in our old Mogul&rsquo;s wine; it&rsquo;s quite as deadening to some as filliping to others. We sing; they sleep&mdash;aye, lie down there, like ground-tier butts. At &rsquo;em again! There, take this copper-pump, and hail &rsquo;em through it. Tell &rsquo;em to avast dreaming of their lasses. Tell &rsquo;em it&rsquo;s the resurrection; they must kiss their last, and come to judgment. That&rsquo;s the way&mdash;<em>that&rsquo;s</em> it; thy throat ain&rsquo;t spoiled with eating Amsterdam butter.</p>
+      <p>FRENCH SAILOR. Hist, boys! let&rsquo;s have a jig or two before we ride to anchor in Blanket Bay. What say ye? There comes the other watch. Stand by all legs! Pip! little Pip! hurrah with your tambourine!</p>
+      <p>PIP. (<em>Sulky and sleepy.</em>) Don&rsquo;t know where it is.</p>
+      <p>FRENCH SAILOR. Beat thy belly, then, and wag thy ears. Jig it, men, I say; merry&rsquo;s the word; hurrah! Damn me, won&rsquo;t you dance? Form, now, Indian-file, and gallop into the double-shuffle? Throw yourselves! Legs! legs!</p>
+      <p>ICELAND SAILOR. I don&rsquo;t like your floor, maty; it&rsquo;s too springy to my taste. I&rsquo;m used to ice-floors. I&rsquo;m sorry to throw cold water on the subject; but excuse me.</p>
+      <p>MALTESE SAILOR. Me too; where&rsquo;s your girls? Who but a fool would take his left hand by his right, and say to himself, how d&rsquo;ye do? Partners! I must have partners!</p>
+      <p>SICILIAN SAILOR. Aye; girls and a green!&mdash;then I&rsquo;ll hop with ye; yea, turn grasshopper!</p>
+      <p>LONG-ISLAND SAILOR. Well, well, ye sulkies, there&rsquo;s plenty more of us. Hoe corn when you may, say I. All legs go to harvest soon. Ah! here comes the music; now for it!</p>
+      <p>AZORE SAILOR. (<em>Ascending, and pitching the tambourine up the scuttle</em>.) Here you are, Pip; and there&rsquo;s the windlass-bitts; up you mount! Now, boys! (<em>The half of them dance to the tambourine; some go below; some sleep or lie among the coils of rigging. Oaths a-plenty</em>.)</p>
+      <p>AZORE SAILOR. (<em>Dancing</em>) Go it, Pip! Bang it, bell-boy! Rig it, dig it, stig it, quig it, bell-boy! Make fire-flies; break the jinglers!</p>
+      <p>PIP. Jinglers, you say?&mdash;there goes another, dropped off; I pound it so.</p>
+      <p>CHINA SAILOR. Rattle thy teeth, then, and pound away; make a pagoda of thyself.</p>
+      <p>FRENCH SAILOR. Merry-mad! Hold up thy hoop, Pip, till I jump through it! Split jibs! tear yourselves!</p>
+      <p>TASHTEGO. (<em>Quietly smoking.</em>) That&rsquo;s a white man; he calls that fun: humph! I save my sweat.</p>
+      <p>OLD MANX SAILOR. I wonder whether those jolly lads bethink them of what they are dancing over. I&rsquo;ll dance over your grave, I will&mdash;that&rsquo;s the bitterest threat of your night-women, that beat head-winds round corners. O Christ! to think of the green navies and the green-skulled crews! Well, well; belike the whole world&rsquo;s a ball, as you scholars have it; and so &rsquo;tis right to make one ballroom of it. Dance on, lads, you&rsquo;re young; I was once.</p>
+      <p>3D NANTUCKET SAILOR. Spell oh!&mdash;whew! this is worse than pulling after whales in a calm&mdash;give us a whiff, Tash.</p>
+      <p>(<em>They cease dancing, and gather in clusters. Meantime the sky darkens&mdash;the wind rises</em>.)</p>
+      <p>LASCAR SAILOR. By Brahma! boys, it&rsquo;ll be douse sail soon. The sky-born, high-tide Ganges turned to wind! Thou showest thy black brow, Seeva!</p>
+      <p>MALTESE SAILOR. (<em>Reclining and shaking his cap</em>.) It&rsquo;s the waves&mdash;the snow&rsquo;s caps turn to jig it now. They&rsquo;ll shake their tassels soon. Now would all the waves were women, then I&rsquo;d go drown, and chassee with them evermore! There&rsquo;s naught so sweet on earth&mdash;heaven may not match it!&mdash;as those swift glances of warm, wild bosoms in the dance, when the over-arboring arms hide such ripe, bursting grapes.</p>
+      <p>SICILIAN SAILOR. (<em>Reclining</em>.) Tell me not of it! Hark ye, lad&mdash;fleet interlacings of the limbs&mdash;lithe swayings&mdash;coyings&mdash;flutterings! lip! heart! hip! all graze: unceasing touch and go! not taste, observe ye, else come satiety. Eh, Pagan? (<em>Nudging</em>.)</p>
+      <p>TAHITAN SAILOR. (<em>Reclining on a mat</em>.) Hail, holy nakedness of our dancing girls!&mdash;the Heeva-Heeva! Ah! low veiled, high palmed Tahiti! I still rest me on thy mat, but the soft soil has slid! I saw thee woven in the wood, my mat! green the first day I brought ye thence; now worn and wilted quite. Ah me!&mdash;not thou nor I can bear the change! How then, if so be transplanted to yon sky? Hear I the roaring streams from Pirohitee&rsquo;s peak of spears, when they leap down the crags and drown the villages?&mdash;The blast! the blast! Up, spine, and meet it! (<em>Leaps to his feet</em>.)</p>
+      <p>PORTUGUESE SAILOR. How the sea rolls swashing &rsquo;gainst the side! Stand by for reefing, hearties! the winds are just crossing swords, pell-mell they&rsquo;ll go lunging presently.</p>
+      <p>DANISH SAILOR. Crack, crack, old ship! so long as thou crackest, thou holdest! Well done! The mate there holds ye to it stiffly. He&rsquo;s no more afraid than the isle fort at Cattegat, put there to fight the Baltic with storm-lashed guns, on which the sea-salt cakes!</p>
+      <p>4TH NANTUCKET SAILOR. He has his orders, mind ye that. I heard old Ahab tell him he must always kill a squall, something as they burst a waterspout with a pistol&mdash;fire your ship right into it!</p>
+      <p>ENGLISH SAILOR. Blood! but that old man&rsquo;s a grand old cove! We are the lads to hunt him up his whale!</p>
+      <p>ALL. Aye! aye!</p>
+      <p>OLD MANX SAILOR. How the three pines shake! Pines are the hardest sort of tree to live when shifted to any other soil, and here there&rsquo;s none but the crew&rsquo;s cursed clay. Steady, helmsman! steady. This is the sort of weather when brave hearts snap ashore, and keeled hulls split at sea. Our captain has his birthmark; look yonder, boys, there&rsquo;s another in the sky&mdash;lurid-like, ye see, all else pitch black.</p>
+      <p>DAGGOO. What of that? Who&rsquo;s afraid of black&rsquo;s afraid of me! I&rsquo;m quarried out of it!</p>
+      <p>SPANISH SAILOR. (<em>Aside</em>.) He wants to bully, ah!&mdash;the old grudge makes me touchy (<em>Advancing</em>.) Aye, harpooneer, thy race is the undeniable dark side of mankind&mdash;devilish dark at that. No offence.</p>
+      <p>DAGGOO (<em>grimly</em>). None.</p>
+      <p>ST. JAGO&rsquo;S SAILOR. That Spaniard&rsquo;s mad or drunk. But that can&rsquo;t be, or else in his one case our old Mogul&rsquo;s fire-waters are somewhat long in working.</p>
+      <p>5TH NANTUCKET SAILOR. What&rsquo;s that I saw&mdash;lightning? Yes.</p>
+      <p>SPANISH SAILOR. No; Daggoo showing his teeth.</p>
+      <p>DAGGOO (<em>springing</em>). Swallow thine, mannikin! White skin, white liver!</p>
+      <p>SPANISH SAILOR (<em>meeting him</em>). Knife thee heartily! big frame, small spirit!</p>
+      <p>ALL. A row! a row! a row!</p>
+      <p>TASHTEGO (<em>with a whiff</em>). A row a&rsquo;low, and a row aloft&mdash;Gods and men&mdash;both brawlers! Humph!</p>
+      <p>BELFAST SAILOR. A row! arrah a row! The Virgin be blessed, a row! Plunge in with ye!</p>
+      <p>ENGLISH SAILOR. Fair play! Snatch the Spaniard&rsquo;s knife! A ring, a ring!</p>
+      <p>OLD MANX SAILOR. Ready formed. There! the ringed horizon. In that ring Cain struck Abel. Sweet work, right work! No? Why then, God, mad&rsquo;st thou the ring?</p>
+      <p>MATE&rsquo;S VOICE FROM THE QUARTER-DECK. Hands by the halyards! in top-gallant sails! Stand by to reef topsails!</p>
+      <p>ALL. The squall! the squall! jump, my jollies! (<em>They scatter</em>.)</p>
+      <p>PIP (<em>shrinking under the windlass</em>). Jollies? Lord help such jollies! Crish, crash! there goes the jib-stay! Blang-whang! God! Duck lower, Pip, here comes the royal yard! It&rsquo;s worse than being in the whirled woods, the last day of the year! Who&rsquo;d go climbing after chestnuts now? But there they go, all cursing, and here I don&rsquo;t. Fine prospects to &rsquo;em; they&rsquo;re on the road to heaven. Hold on hard! Jimmini, what a squall! But those chaps there are worse yet&mdash;they are your white squalls, they. White squalls? white whale, shirr! shirr! Here have I heard all their chat just now, and the white whale&mdash;shirr! shirr!&mdash;but spoken of once! and only this evening&mdash;it makes me jingle all over like my tambourine&mdash;that anaconda of an old man swore &rsquo;em in to hunt him! Oh, thou big white God aloft there somewhere in yon darkness, have mercy on this small black boy down here; preserve him from all men that have no bowels to feel fear!</p>
+    </div>
+
+    
+
+    <div class="chapter-bottom-nav">
+      <a href="/books/moby-dick/chapter-39-first-night-watch/"><span class="nav-direction"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Previous Chapter</span>Chapter 39. First Night-Watch.</a>
+      <a href="/books/moby-dick/chapter-41-moby-dick/"><span class="nav-direction">Next Chapter <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>Chapter 41. Moby Dick.</a>
+    </div>
+  </main>
+
+  <footer class="doc-footer">
+    <div class="brand">Public Domain Classics</div>
+    <p class="disclaimer">
+      This text is sourced from <a href="https://www.gutenberg.org/ebooks/2701">Project Gutenberg</a>
+      and is in the public domain in the United States.
+      <br>Formatted for readability &mdash; original text preserved verbatim.
+    </p>
+  </footer>
+</body>
+</html>
