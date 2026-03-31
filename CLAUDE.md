@@ -1,64 +1,161 @@
-# Gorgeous Docs
+# Public Domain Classics
 
-Public documents in the news (court opinions, indictments, government reports), converted into readable, searchable HTML.
+Beautiful, readable editions of public domain classic texts. Every word matches the Project Gutenberg source verbatim.
+
+## Repository
+
+GitHub: https://github.com/lukemade/PublicDomainClassics.com-2
 
 ## Project structure
 
-- `index.html` — Homepage (standalone, styles inlined)
-- `docs/<slug>/index.html` — Individual document pages (e.g. `docs/aap-v-kennedy/`)
-- `src/css/document-template.css` — Shared styles for document pages
-- `src/js/document-template.js` — Shared JS for document pages (side nav, scroll spy, accordion)
-- `source-docs/` — Original PDFs and extracted text used as source material
-- `scripts/` — Verification tooling (e.g. `verify-accuracy.mjs` compares HTML against source PDFs)
-- `vite.config.js` — Multi-page Vite build; each document page is a separate entry
+```
+source-texts/<slug>/
+  gutenberg-raw.txt        — Raw downloaded Gutenberg plain text (never edit)
+  content.html             — Generated HTML fragment (output of gutenberg-to-html script)
+
+books/<slug>/
+  index.html               — Full assembled page (output of build script)
+  images/                  — Cover art and other images
+
+src/
+  css/document-template.css  — Shared styles for all book pages
+  js/document-template.js    — Shared JS (side nav, scroll spy, breadcrumb chapter dropdown)
+
+scripts/
+  gutenberg-to-html.mjs      — Converts Gutenberg raw text → HTML content fragment
+  build-<slug>-page.mjs      — Assembles head + content fragment + foot → books/<slug>/index.html
+  verify-<slug>.mjs          — Verifies HTML text matches Gutenberg source word-for-word
+
+index.html                 — Homepage (standalone, styles inlined)
+vite.config.js             — Multi-page Vite build; each book page is a separate entry
+```
 
 ## Dev commands
 
-- `npm run dev` — Start Vite dev server (port 5174 via launch.json)
+- `npm run dev` — Start Vite dev server (port 5174)
 - `npm run build` — Production build to `dist/`
-- `node scripts/verify-accuracy.mjs` — Compare HTML output against source PDF text
+- `node scripts/gutenberg-to-html.mjs` — Regenerate HTML fragment from source text
+- `node scripts/build-frankenstein-page.mjs` — Assemble full book page
+- `node scripts/verify-frankenstein.mjs` — Run accuracy verification
 
-## Document accuracy (CRITICAL)
+## Pipeline for a new book
 
-Every word in the HTML must match the source PDF. This is non-negotiable — these are legal documents where a missing word or changed phrase can change the meaning.
+Follow these steps in order. Do not skip steps.
 
-### Pipeline for new documents
+1. **Get the source text** — Download the Gutenberg plain text file and save it to `source-texts/<slug>/gutenberg-raw.txt`. Never edit this file. It is the canonical source of truth.
 
-1. **Source PDF** — Place the original PDF in `source-docs/<slug>.pdf`.
-2. **Extract text** — Run `python scripts/verify-accuracy.py` (uses `pdfplumber`) or `node scripts/verify-accuracy.mjs` (uses `pdf-parse`). Both extract text from the PDF and save it to `source-docs/<slug>-extracted.txt`.
-3. **Write HTML** — Convert the extracted text into a document page at `docs/<slug>/index.html` using the shared template. Preserve every word, footnote, citation, and cross-reference from the source.
-4. **Verify** — Run verification again. It compares the HTML text against the PDF text and produces `source-docs/verification-report.json`.
+2. **Write a conversion script** — Create `scripts/gutenberg-to-html.mjs`. It must:
+   - Strip the Gutenberg header and footer (everything outside `*** START OF THE PROJECT GUTENBERG EBOOK ***` and `*** END OF THE PROJECT GUTENBERG EBOOK ***`)
+   - Strip the table of contents and title block (non-narrative content before the first chapter/letter)
+   - Parse the remaining content into structured blocks: chapters/letters, paragraphs, poetry, salutations, datelines, attributions
+   - Output a clean HTML fragment to `source-texts/<slug>/content.html`
+   - Be deterministic: same input always produces the same output
 
-### What verification checks
+3. **Run the conversion** — `node scripts/gutenberg-to-html.mjs`
 
-- **Footnotes** — All footnotes defined (`id="fn-N"`) have matching references (`href="#fn-N"`), numbering is sequential with no gaps, and the count matches the PDF.
-- **Sections** — All heading IDs are unique, no duplicate IDs exist, heading hierarchy is correct.
-- **Key phrases** — Critical legal terms (party names, legal standards, statute names) appear in both PDF and HTML.
-- **Legal citations** — Case citations (e.g. `F.3d`, `F. Supp.`) and statutory references (`U.S.C. §`) are present in both.
-- **Cross-references** — `see supra` and `see infra` references are noted for manual review.
-- **Sentence-level comparison** — Each PDF sentence is matched against the HTML using `SequenceMatcher`. Sentences with <70% similarity are flagged.
-- **Word-level stats** — Jaccard similarity between PDF and HTML word sets.
+4. **Write a build script** — Create `scripts/build-<slug>-page.mjs`. It assembles the full page: `<head>` + nav + hero + content fragment + footer + script tags → `books/<slug>/index.html`. Model it on `build-frankenstein-page.mjs`.
 
-### Accuracy rules when editing document HTML
+5. **Run the build** — `node scripts/build-<slug>-page.mjs`
 
-- **Never paraphrase, summarize, or reword** any part of the document text. Copy it verbatim.
-- **Footnotes** must use `id="fn-N"` for definitions and `href="#fn-N"` for in-text references. Numbers must be sequential starting from 1.
-- **Legal citations** must preserve exact formatting: case names in italics, volume/reporter/page numbers intact, parenthetical descriptions unchanged.
-- **Quotation marks** — Use proper curly quotes (`&ldquo;`/`&rdquo;`, `&lsquo;`/`&rsquo;`) matching the source. Internal quotations within blockquotes must be preserved.
-- **Special characters** — Preserve section symbols (`&sect;`), paragraph symbols (`&para;`), em dashes (`&mdash;`), en dashes (`&ndash;`), and non-breaking spaces exactly.
-- **Page headers/footers** from the PDF (e.g. docket numbers, "Page X of Y") should be stripped — they are not part of the document content.
-- Non-document elements (nav, sidebar, footer, accuracy widget, source banner) are excluded from verification and do not need to match the PDF.
-- After any edit to document text, run verification and check for regressions.
+6. **Write a verification script** — Create `scripts/verify-<slug>.mjs`. See **Verification** section below for what it must check.
 
-### Verification output
+7. **Run verification** — `node scripts/verify-<slug>.mjs`. The report must show `PASS` before the book page is considered complete. A `NEEDS_REVIEW` result means you must find and fix the discrepancies.
 
-The report JSON at `source-docs/verification-report.json` has a top-level `status` field: `"PASS"` or `"NEEDS_REVIEW"`. Low-similarity sentences in `missing_from_html` are usually caused by PDF extraction artifacts (line breaks splitting sentences, footnote text interleaved with body text) rather than actual content errors — but each must be manually reviewed.
+8. **Add to Vite config** — Add an entry to `vite.config.js` under `build.rollupOptions.input`.
 
-## Key conventions
+9. **Add to homepage** — Add the book card to `index.html`.
 
-- Document pages use the shared template (`src/css/document-template.css` + `src/js/document-template.js`). The homepage has its own inlined styles.
-- CSS uses custom properties defined in `:root` (see `--bg`, `--text`, `--accent`, `--surface`, etc.).
-- Fonts: Atkinson Hyperlegible (body), Libre Franklin (headings/UI), loaded from Google Fonts.
-- Accent color: `#0033CC`. Surface/card background: `#F3F0E8`.
-- New document pages must be added as entries in `vite.config.js` `build.rollupOptions.input`.
+## Verification (CRITICAL)
+
+Every word in the HTML must match the Gutenberg source text. This is non-negotiable.
+
+### What the verification script must do
+
+The verification script compares two text sources:
+
+**Source A — Gutenberg canonical text:**
+1. Read `source-texts/<slug>/gutenberg-raw.txt`
+2. Strip BOM and normalize line endings (`\r\n` → `\n`)
+3. Extract content between `*** START OF THE PROJECT GUTENBERG EBOOK ***` and `*** END OF THE PROJECT GUTENBERG EBOOK ***`
+4. Strip the table of contents / title block (everything before the first narrative section heading, e.g. "Letter 1" or "Chapter 1")
+5. Apply text normalization (see below)
+
+**Source B — HTML extracted text:**
+1. Read `books/<slug>/index.html`
+2. Remove all non-content elements: `<nav>`, `<header>`, `<footer>`, `<aside>`, `.source-banner`, `.accuracy-widget`, `<script>`, `<style>`
+3. Strip all remaining HTML tags
+4. Decode HTML entities back to their Unicode equivalents
+5. Apply the same text normalization
+
+**Normalization (applied identically to both sources):**
+- Decode/normalize quotes: `"` `"` → `"`, `'` `'` → `'`
+- Normalize dashes: `—` `–` → `-`
+- Collapse all whitespace to single spaces
+- Trim
+- Lowercase
+
+**Checks the script must perform:**
+
+1. **Word count comparison** — Report total word count for both sources. A difference of more than 10 words is a hard failure.
+
+2. **Exact word sequence diff (LCS)** — Compute the Longest Common Subsequence of the word arrays from both sources. Report:
+   - Words present in source but missing from HTML (`source_only`) — these are omissions and are always errors
+   - Words present in HTML but not in source (`html_only`) — these are additions and are always errors
+   - Overall similarity as a percentage
+
+3. **Section heading check** — Extract all chapter/letter headings from the Gutenberg source (lines that are exactly "Letter N" or "Chapter N"). Verify each one appears as a heading in the HTML with matching text.
+
+4. **Pass/fail verdict** — The report's top-level `status` field must be:
+   - `"PASS"` — zero omissions, zero additions, all section headings present
+   - `"NEEDS_REVIEW"` — any discrepancy found
+
+5. **Save reports** — Write `source-texts/<slug>/gutenberg-extracted.txt` (the normalized Gutenberg text), `source-texts/<slug>/html-extracted.txt` (the normalized HTML text), and `source-texts/<slug>/verification-report.json`.
+
+### Accuracy rules when editing book HTML
+
+- **Never paraphrase, reorder, or add words.** The text in the HTML must be verbatim from the Gutenberg source.
+- **Formatting is not content.** You may wrap text in `<em>`, `<strong>`, `<p>`, `<div>`, etc. freely — these tags are stripped during verification. What matters is the text content.
+- **HTML entities for special characters are fine.** `&mdash;` for —, `&ldquo;` for ", `&rsquo;` for ', etc. The verification normalizes these before comparing.
+- **The content fragment (`source-texts/<slug>/content.html`) is generated.** Never hand-edit it. If the output is wrong, fix the conversion script and regenerate.
+- **After any edit to the build or conversion scripts, rerun both scripts and then verification.**
+
+### What counts as a verification failure
+
+- Any word from the Gutenberg source missing from the HTML
+- Any word in the HTML not present in the Gutenberg source
+- A section heading in the Gutenberg source that is absent or renamed in the HTML
+- Word count difference greater than 10 words
+
+### What does NOT count as a failure
+
+- Whitespace differences (all whitespace is normalized)
+- Quote style differences (all quotes are normalized)
+- Dash style differences (all dashes are normalized)
+- Case differences (comparison is lowercased)
+- HTML structural elements (nav, hero, footer) not matching — these are excluded from verification
+
+## Coding conventions
+
+- **Three-script pipeline per book:** `gutenberg-to-html` → `build-<slug>-page` → `verify-<slug>`. Each is a standalone Node.js ESM script (`import`/`export`, `.mjs` extension).
+- **Scripts are self-contained.** They use only Node.js built-ins (`fs`, `path`, `url`). No npm dependencies for the pipeline scripts.
+- **Deterministic output.** Given the same `gutenberg-raw.txt`, the conversion and build scripts must always produce byte-identical output.
+- **Source text is read-only.** `gutenberg-raw.txt` is never modified by any script.
+- CSS uses custom properties defined in `:root`:
+  - `--bg: #faf8f4` — warm off-white page background
+  - `--text: #2c2420` — dark warm brown body text
+  - `--accent: #6b3a2a` — reddish-brown (drop caps, links, borders)
+  - `--muted: #5a4f42`
+  - `--nav-bg: #1a1510` — near-black nav and footer background
+  - `--surface: #f0ece4` — slightly darker card/surface background
+- Fonts (loaded from Google Fonts):
+  - **Libre Baskerville** — body prose, hero meta, footer, poetry body text
+  - **Rubik Wet Paint** — drop caps (`.drop-cap::first-letter`)
+  - **IM Fell French Canon** — hero book title (`.hero-title`)
+  - **IM Fell English SC** — hero author name, "first published" label, footer brand, salutations, datelines
+  - **IM Fell DW Pica SC** — hero meta field labels (Author, Genre, Source, etc.)
+  - **IM Fell English** — epigraph / blockquote italic, poetry attribution
+  - **Libre Franklin** — top nav and breadcrumb UI elements
+- Google Fonts link for book pages (as of Frankenstein build):
+  `Libre+Baskerville:ital,wght@0,400;0,700;1,400&Rubik+Wet+Paint&IM+Fell+English:ital@0;1&IM+Fell+English+SC&IM+Fell+French+Canon:ital@0;1&IM+Fell+DW+Pica+SC`
 - Accessibility: skip links, ARIA labels, focus-visible outlines, WCAG AA contrast.
+- New book pages must be added as entries in `vite.config.js` under `build.rollupOptions.input`.

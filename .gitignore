@@ -6,3 +6,4 @@ raw-text.txt
 *.pdf
 .DS_Store
 Thumbs.db
+.claude/
