@@ -22,7 +22,9 @@
       "Bash(curl -sL \"https://digitalcollections.nypl.org/items/745b1060-01d6-0135-4825-0bd73a22949a\" -o /dev/null -w \"%{http_code}\")",
       "WebFetch(domain:fonts.google.com)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh auth:*)"
     ]
   }
 }
