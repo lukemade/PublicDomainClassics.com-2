@@ -34,36 +34,46 @@ vite.config.js             — Multi-page Vite build; each book page is a separa
 
 - `npm run dev` — Start Vite dev server (port 5174)
 - `npm run build` — Production build to `dist/`
-- `node scripts/gutenberg-to-html.mjs` — Regenerate HTML fragment from source text
-- `node scripts/build-frankenstein-page.mjs` — Assemble full book page
-- `node scripts/verify-frankenstein.mjs` — Run accuracy verification
+- `node scripts/gutenberg-to-html-<slug>.mjs` — Regenerate HTML fragment from source text
+- `node scripts/build-<slug>-page.mjs` — Assemble full book page
+- `node scripts/verify-<slug>.mjs` — Run accuracy verification
+
+## Adding a new book (quick reference)
+
+To add a new book, the user only needs to provide:
+1. A **Gutenberg URL** (e.g., `https://www.gutenberg.org/ebooks/2701`)
+2. A **cover image** (public domain book cover or historical illustration)
+
+Claude will then follow the full pipeline below to generate the book page, verify accuracy, and add it to the site.
 
 ## Pipeline for a new book
 
 Follow these steps in order. Do not skip steps.
 
-1. **Get the source text** — Download the Gutenberg plain text file and save it to `source-texts/<slug>/gutenberg-raw.txt`. Never edit this file. It is the canonical source of truth.
+1. **Get the source text** — Download the Gutenberg plain text file (usually at `https://www.gutenberg.org/files/<id>/<id>-0.txt`) and save it to `source-texts/<slug>/gutenberg-raw.txt`. Never edit this file. It is the canonical source of truth.
 
-2. **Write a conversion script** — Create `scripts/gutenberg-to-html.mjs`. It must:
+2. **Get a cover image** — Find or receive a public domain cover image. Save it to `books/<slug>/images/default.jpg`. This is used in the hero background and as the cover thumbnail.
+
+3. **Write a conversion script** — Create `scripts/gutenberg-to-html-<slug>.mjs`. It must:
    - Strip the Gutenberg header and footer (everything outside `*** START OF THE PROJECT GUTENBERG EBOOK ***` and `*** END OF THE PROJECT GUTENBERG EBOOK ***`)
    - Strip the table of contents and title block (non-narrative content before the first chapter/letter)
    - Parse the remaining content into structured blocks: chapters/letters, paragraphs, poetry, salutations, datelines, attributions
    - Output a clean HTML fragment to `source-texts/<slug>/content.html`
    - Be deterministic: same input always produces the same output
 
-3. **Run the conversion** — `node scripts/gutenberg-to-html.mjs`
+4. **Run the conversion** — `node scripts/gutenberg-to-html-<slug>.mjs`
 
-4. **Write a build script** — Create `scripts/build-<slug>-page.mjs`. It assembles the full page: `<head>` + nav + hero + content fragment + footer + script tags → `books/<slug>/index.html`. Model it on `build-frankenstein-page.mjs`.
+5. **Write a build script** — Create `scripts/build-<slug>-page.mjs`. It assembles the full page: `<head>` + nav + hero + content fragment + footer + script tags → `books/<slug>/index.html`. Model it on `build-frankenstein-page.mjs` or `build-moby-dick-page.mjs`.
 
-5. **Run the build** — `node scripts/build-<slug>-page.mjs`
+6. **Run the build** — `node scripts/build-<slug>-page.mjs`
 
-6. **Write a verification script** — Create `scripts/verify-<slug>.mjs`. See **Verification** section below for what it must check.
+7. **Write a verification script** — Create `scripts/verify-<slug>.mjs`. See **Verification** section below for what it must check. Model it on `verify-moby-dick.mjs`.
 
-7. **Run verification** — `node scripts/verify-<slug>.mjs`. The report must show `PASS` before the book page is considered complete. A `NEEDS_REVIEW` result means you must find and fix the discrepancies.
+8. **Run verification** — `node scripts/verify-<slug>.mjs`. The report must show `PASS` before the book page is considered complete. A `NEEDS_REVIEW` result means you must find and fix the discrepancies.
 
-8. **Add to Vite config** — Add an entry to `vite.config.js` under `build.rollupOptions.input`.
+9. **Add to Vite config** — Add an entry to `vite.config.js` under `build.rollupOptions.input`.
 
-9. **Add to homepage** — Add the book card to `index.html`.
+10. **Add to homepage** — Add a book card to `index.html` with cover image, title, author, genre, and year. Replace a "Coming Soon" placeholder card.
 
 ## Verification (CRITICAL)
 
@@ -149,13 +159,13 @@ The verification script compares two text sources:
   - `--surface: #f0ece4` — slightly darker card/surface background
 - Fonts (loaded from Google Fonts):
   - **Libre Baskerville** — body prose, hero meta, footer, poetry body text
-  - **Rubik Wet Paint** — drop caps (`.drop-cap::first-letter`)
+  - **Cormorant Unicase** — drop caps (`.drop-cap::first-letter`), blockquotes
   - **IM Fell French Canon** — hero book title (`.hero-title`)
   - **IM Fell English SC** — hero author name, "first published" label, footer brand, salutations, datelines
   - **IM Fell DW Pica SC** — hero meta field labels (Author, Genre, Source, etc.)
   - **IM Fell English** — epigraph / blockquote italic, poetry attribution
   - **Libre Franklin** — top nav and breadcrumb UI elements
 - Google Fonts link for book pages (as of Frankenstein build):
-  `Libre+Baskerville:ital,wght@0,400;0,700;1,400&Rubik+Wet+Paint&IM+Fell+English:ital@0;1&IM+Fell+English+SC&IM+Fell+French+Canon:ital@0;1&IM+Fell+DW+Pica+SC`
+  `Libre+Baskerville:ital,wght@0,400;0,700;1,400&Cormorant+Unicase:wght@300;400;500;600;700&IM+Fell+English:ital@0;1&IM+Fell+English+SC&IM+Fell+French+Canon:ital@0;1&IM+Fell+DW+Pica+SC`
 - Accessibility: skip links, ARIA labels, focus-visible outlines, WCAG AA contrast.
 - New book pages must be added as entries in `vite.config.js` under `build.rollupOptions.input`.

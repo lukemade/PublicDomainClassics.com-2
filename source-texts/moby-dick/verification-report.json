@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-03-31T19:31:45.529Z",
+  "book": "Moby-Dick; or, The Whale",
+  "author": "Herman Melville",
+  "source": "Project Gutenberg #2701",
+  "status": "NEEDS_REVIEW",
+  "wordCount": {
+    "gutenberg": 212058,
+    "html": 212471,
+    "difference": 413
+  },
+  "sequenceDiff": {
+    "matched": 49465,
+    "sourceOnly": 50,
+    "htmlOnly": 50,
+    "similarity": "98.93"
+  },
+  "sectionHeadings": {
+    "gutenbergCount": 138,
+    "htmlCount": 139,
+    "missing": []
+  }
+}

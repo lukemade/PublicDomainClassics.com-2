@@ -1,7 +1,7 @@
 /**
- * build-frankenstein-page.mjs
- * Assembles the full Frankenstein book page from the generated content fragment.
- * Usage: node scripts/build-frankenstein-page.mjs
+ * build-moby-dick-page.mjs
+ * Assembles the full Moby-Dick book page from the generated content fragment.
+ * Usage: node scripts/build-moby-dick-page.mjs
  */
 
 import { readFileSync, writeFileSync } from 'fs';
@@ -9,21 +9,22 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const content = readFileSync(resolve(__dirname, '../source-texts/frankenstein/content.html'), 'utf-8');
+const content = readFileSync(resolve(__dirname, '../source-texts/moby-dick/content.html'), 'utf-8');
 
 const head = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Frankenstein; or, The Modern Prometheus — Public Domain Classics</title>
-  <meta name="description" content="Mary Shelley's Frankenstein (1831 edition), beautifully formatted with clean typography and structured navigation.">
-  <meta property="og:title" content="Frankenstein; or, The Modern Prometheus — Public Domain Classics">
-  <meta property="og:description" content="Mary Shelley's groundbreaking novel, beautifully formatted for the modern reader.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Moby-Dick; or, The Whale &mdash; Public Domain Classics</title>
+  <meta name="description" content="Herman Melville's Moby-Dick (1851), beautifully formatted with clean typography and structured navigation.">
+  <meta property="og:title" content="Moby-Dick; or, The Whale &mdash; Public Domain Classics">
+  <meta property="og:description" content="Herman Melville's epic tale of Captain Ahab's obsessive quest for the white whale, beautifully formatted for the modern reader.">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://publicdomainclassics.com/books/frankenstein/">
+  <meta property="og:url" content="https://publicdomainclassics.com/books/moby-dick/">
   <meta name="twitter:card" content="summary">
-  <link rel="canonical" href="https://publicdomainclassics.com/books/frankenstein/">
+  <link rel="canonical" href="https://publicdomainclassics.com/books/moby-dick/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
@@ -36,13 +37,13 @@ const head = `<!DOCTYPE html>
     .hero-bg-image {
       position: fixed;
       inset: 0;
-      background: url('/books/frankenstein/images/default.jpg') center/cover no-repeat;
+      background: url('/books/moby-dick/images/default.jpg') center/cover no-repeat;
       z-index: 0;
     }
     .hero-bg-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(10, 7, 3, 0.82);
+      background: rgba(5, 15, 25, 0.82);
       z-index: 0;
     }
     .hero::before { opacity: 0.2; z-index: 1; }
@@ -107,11 +108,11 @@ const head = `<!DOCTYPE html>
       <ol class="breadcrumb" aria-label="Breadcrumb">
         <li><a href="/">Home</a></li>
         <li><span class="breadcrumb-sep" aria-hidden="true">&rsaquo;</span></li>
-        <li><span class="breadcrumb-title">Frankenstein; or, The Modern Prometheus</span></li>
+        <li><span class="breadcrumb-title">Moby-Dick; or, The Whale</span></li>
         <li><span class="breadcrumb-sep" aria-hidden="true">&rsaquo;</span></li>
         <li class="breadcrumb-dropdown">
           <button id="breadcrumb-chapter" aria-expanded="false" aria-haspopup="listbox">
-            <span class="breadcrumb-chapter-label">Letter 1</span>
+            <span class="breadcrumb-chapter-label">Etymology</span>
             <span class="breadcrumb-caret" aria-hidden="true"></span>
           </button>
           <ul class="breadcrumb-dropdown-list" role="listbox"></ul>
@@ -138,25 +139,17 @@ const head = `<!DOCTYPE html>
     <div class="hero-line"></div>
     <div class="hero-inner">
       <div class="hero-content">
-        <div class="hero-court">Mary Wollstonecraft Shelley</div>
-        <h1 class="hero-title">Frankenstein;<br>or, The Modern<br>Prometheus</h1>
-        <div class="hero-label">First published 1818 &middot; Revised edition 1831</div>
+        <div class="hero-court">Herman Melville</div>
+        <h1 class="hero-title">Moby-Dick;<br>or, The Whale</h1>
+        <div class="hero-label">First published 1851</div>
       </div>
       <div class="hero-thumbnail-wrap">
-        <img class="hero-cover" src="/books/frankenstein/images/default.jpg" alt="Frankenstein book cover, Lion Books 1953 edition" loading="eager">
+        <img class="hero-cover" src="/books/moby-dick/images/default.jpg" alt="Moby-Dick book cover" loading="eager">
       </div>
     </div>
   </header>
 
   <main id="main-content" class="article-body">
-    <div class="section-intro">
-      <blockquote class="epigraph">
-        Did I request thee, Maker, from my clay<br>
-        To mould me Man, did I solicit thee<br>
-        From darkness to promote me?
-        <span class="epigraph-attribution">&mdash; John Milton, <em>Paradise Lost</em> (X. 743&ndash;45)</span>
-      </blockquote>
-    </div>
 `;
 
 const foot = `
@@ -165,7 +158,7 @@ const foot = `
   <footer class="doc-footer">
     <div class="brand">Public Domain Classics</div>
     <p class="disclaimer">
-      This text is sourced from <a href="https://www.gutenberg.org/ebooks/84">Project Gutenberg</a>
+      This text is sourced from <a href="https://www.gutenberg.org/ebooks/2701">Project Gutenberg</a>
       and is in the public domain in the United States.
       <br>Formatted for readability &mdash; original text preserved verbatim.
     </p>
@@ -176,6 +169,6 @@ const foot = `
 </html>`;
 
 const page = head + content + foot;
-writeFileSync(resolve(__dirname, '../books/frankenstein/index.html'), page, 'utf-8');
-console.log('Built books/frankenstein/index.html');
+writeFileSync(resolve(__dirname, '../books/moby-dick/index.html'), page, 'utf-8');
+console.log('Built books/moby-dick/index.html');
 console.log('Size:', (Buffer.byteLength(page) / 1024).toFixed(0), 'KB');
