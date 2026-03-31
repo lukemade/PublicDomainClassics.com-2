@@ -8,7 +8,7 @@
   var headings = document.querySelectorAll('h2.section-heading[id]');
   if (!headings.length) return;
 
-  if (window.location.hash) {
+  if (window.location.hash && window.location.hash.indexOf('#sentence/') !== 0) {
     var target = document.getElementById(window.location.hash.slice(1));
     if (target) {
       setTimeout(function () {
@@ -21,6 +21,7 @@
   var currentHashId = window.location.hash ? window.location.hash.slice(1) : null;
 
   window._updateChapterHash = function (id) {
+    if (window._suppressHashUpdate) return;
     if (id === currentHashId) return;
     currentHashId = id;
     clearTimeout(hashTimer);
@@ -28,6 +29,12 @@
       history.replaceState(null, '', '#' + id);
     }, 300);
   };
+
+  // If URL has a sentence hash, auto-enter sentence mode after page loads
+  if (window.location.hash.indexOf('#sentence/') === 0) {
+    window._autoEnterSentenceMode = true;
+    window._sentenceModeActive = true; // suppress scroll spy immediately
+  }
 })();
 
 // ── BREADCRUMB CHAPTER DROPDOWN + SCROLL SPY + PROGRESS ──
@@ -64,7 +71,12 @@
     a.addEventListener('click', function (e) {
       e.preventDefault();
       breadcrumbChapter.closest('.breadcrumb-dropdown').classList.remove('is-open');
-      window.scrollTo(0, h2.getBoundingClientRect().top + window.scrollY - 60);
+      // If sentence mode is active, jump to that chapter's first sentence
+      if (window._sentenceGoToChapter) {
+        window._sentenceGoToChapter(h2.id);
+      } else {
+        window.scrollTo(0, h2.getBoundingClientRect().top + window.scrollY - 60);
+      }
     });
   });
 
@@ -98,11 +110,13 @@
     dropdownLinks.forEach(function (a) {
       a.classList.toggle('active', a.dataset.id === id);
     });
-    if (window._updateChapterHash) window._updateChapterHash(id);
+    if (!window._sentenceModeActive && window._updateChapterHash) window._updateChapterHash(id);
   }
 
   var visible = new Map();
   var spyObserver = new IntersectionObserver(function (entries) {
+    // Don't update breadcrumb from scroll spy when sentence mode is active
+    if (window._sentenceModeActive) return;
     entries.forEach(function (e) {
       visible.set(e.target.id, e.isIntersecting ? e.boundingClientRect.top : Infinity);
     });
@@ -121,7 +135,10 @@
   }, { rootMargin: '-40px 0px -70% 0px', threshold: 0 });
 
   headings.forEach(function (h) { spyObserver.observe(h); });
-  setActive(headings[0].id);
+  if (!window._sentenceModeActive) setActive(headings[0].id);
+
+  // Expose for sentence mode to update breadcrumb
+  window._breadcrumbSetActive = setActive;
 })();
 
 // Section headings — no accordion
@@ -237,4 +254,583 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   if (topNav) topNav.addEventListener('mouseenter', showNav);
 
   onScroll();
+})();
+
+// ── MODE DROPDOWN + SENTENCE READER ──
+(function () {
+  var modeDropdown = document.getElementById('mode-dropdown');
+  var modeToggle = document.getElementById('mode-toggle');
+  if (!modeDropdown || !modeToggle) return;
+
+  var modeCurrentLabel = modeToggle.querySelector('.mode-current');
+  var modeLinks = modeDropdown.querySelectorAll('.mode-dropdown-list a');
+  var currentMode = 'scroll';
+
+  // Toggle dropdown
+  modeToggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    modeDropdown.classList.toggle('is-open');
+  });
+  document.addEventListener('click', function (e) {
+    if (!modeDropdown.contains(e.target)) modeDropdown.classList.remove('is-open');
+  });
+
+  // Mode selection
+  modeLinks.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var mode = a.dataset.mode;
+      if (mode === currentMode) { modeDropdown.classList.remove('is-open'); return; }
+      currentMode = mode;
+      modeCurrentLabel.textContent = a.textContent;
+      modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === mode); });
+      modeDropdown.classList.remove('is-open');
+
+      if (mode === 'sentence') {
+        enterSentenceMode();
+      } else {
+        exitSentenceMode();
+      }
+    });
+  });
+
+  // ── Sentence extraction ──
+  var sentences = [];
+  var sentenceIndex = -1;
+  var reader = null;
+
+  function extractSentences() {
+    if (sentences.length) return sentences;
+    var article = document.getElementById('main-content');
+    if (!article) return [];
+
+    // Start with the epigraph if present
+    var epigraph = article.querySelector('.epigraph');
+    if (epigraph) {
+      // Collect full text, replacing <br> with spaces
+      var clone = epigraph.cloneNode(true);
+      clone.querySelectorAll('br').forEach(function (br) { br.replaceWith(' '); });
+      var epText = clone.textContent.trim().replace(/\s+/g, ' ');
+      if (epText) {
+        sentences.push({ text: epText, type: 'heading', chapterId: null });
+      }
+    }
+
+    // Walk all section headings and their body paragraphs
+    var headings = Array.from(article.querySelectorAll('h2.section-heading'));
+    headings.forEach(function (h2) {
+      var label = h2.textContent.replace(/^[+\u2212]\s*/, '').trim();
+      sentences.push({ text: label, type: 'heading', chapterId: h2.id });
+
+      var body = h2.nextElementSibling;
+      if (!body || !body.classList.contains('section-body')) return;
+
+      // Get all text-bearing elements
+      var children = body.children;
+      var c = 0;
+      while (c < children.length) {
+        var el = children[c];
+
+        // Group consecutive salutation + dateline into one "sentence" with line breaks
+        if (el.classList.contains('letter-salutation') || el.classList.contains('letter-dateline')) {
+          var groupParts = [];
+          while (c < children.length &&
+            (children[c].classList.contains('letter-salutation') || children[c].classList.contains('letter-dateline'))) {
+            var t = children[c].textContent.trim();
+            if (t) groupParts.push(t);
+            c++;
+          }
+          if (groupParts.length) {
+            sentences.push({ text: groupParts.join('\n'), type: 'sentence', chapterId: h2.id });
+          }
+          continue;
+        }
+
+        // Poetry block — treat as one sentence with line breaks
+        if (el.classList.contains('poetry-block')) {
+          var lines = [];
+          el.querySelectorAll('.poetry-line').forEach(function (pl) {
+            var lt = pl.textContent.trim();
+            if (lt) lines.push(lt);
+          });
+          if (lines.length) {
+            sentences.push({ text: lines.join('\n'), type: 'sentence', chapterId: h2.id });
+          }
+          c++;
+          continue;
+        }
+
+        // Poetry attribution — skip (context from poetry block)
+        if (el.classList.contains('poetry-attribution')) {
+          c++;
+          continue;
+        }
+
+        // Regular paragraphs
+        if (el.tagName === 'P') {
+          var raw = el.textContent.trim();
+          if (raw) {
+            splitIntoSentences(raw, h2.id);
+          }
+        }
+
+        c++;
+      }
+    });
+
+    var MAX_SENTENCE_LEN = 450;
+
+    function maybeSplitLong(text, chapterId) {
+      if (text.length <= MAX_SENTENCE_LEN) {
+        sentences.push({ text: text, type: 'sentence', chapterId: chapterId });
+        return;
+      }
+      // Split at clause boundaries: semicolons, colons, em-dashes, or commas near the midpoint
+      var delimiters = /([;:\u2014—])\s+|,\s+(?=[a-z])/g;
+      var bestSplit = -1;
+      var mid = text.length / 2;
+      var match;
+      while ((match = delimiters.exec(text)) !== null) {
+        var pos = match.index + match[0].length;
+        if (bestSplit === -1 || Math.abs(pos - mid) < Math.abs(bestSplit - mid)) {
+          bestSplit = pos;
+        }
+      }
+      if (bestSplit > 40 && bestSplit < text.length - 40) {
+        var part1 = text.substring(0, bestSplit).trim();
+        var part2 = text.substring(bestSplit).trim();
+        // Recursively split if still too long
+        maybeSplitLong(part1, chapterId);
+        maybeSplitLong(part2, chapterId);
+      } else {
+        // Can't find a good split point — just push it
+        sentences.push({ text: text, type: 'sentence', chapterId: chapterId });
+      }
+    }
+
+    // Common abbreviations that shouldn't end a sentence
+    var ABBREVS = /(?:Mrs?|Ms|Dr|St|Jr|Sr|Prof|Rev|Gen|Col|Sgt|Lt|Mt|Ft|etc|vs|vol|ed|dept|div|approx)\.\s*/i;
+
+    function splitIntoSentences(raw, chapterId) {
+      // Protect abbreviations by temporarily replacing their periods
+      var protected_ = raw.replace(/\b(Mrs?|Ms|Dr|St|Jr|Sr|Prof|Rev|Gen|Col|Sgt|Lt|Mt|Ft)\.\s/gi, function(m, abbr) {
+        return abbr + '\x00 ';
+      });
+      var parts = protected_.match(/[^.!?]*[.!?]+(?=\s+[A-Z"\u201c\u2018(]|$)/g);
+      // Restore periods
+      if (parts) {
+        parts = parts.map(function(p) { return p.replace(/\x00/g, '.'); });
+      }
+      if (!parts || parts.length === 0) {
+        maybeSplitLong(raw, chapterId);
+        return;
+      }
+      var captured = parts.join('').length;
+      if (captured < protected_.length) {
+        var remainder = protected_.substring(captured).replace(/\x00/g, '.').trim();
+        if (remainder) parts.push(remainder);
+      }
+      parts.forEach(function (s) {
+        var trimmed = s.trim();
+        if (trimmed) {
+          maybeSplitLong(trimmed, chapterId);
+        }
+      });
+    }
+
+    return sentences;
+  }
+
+  var transitioning = false;
+  var fragmentTimers = [];
+
+  function buildReader() {
+    if (reader) return reader;
+
+    reader = document.createElement('div');
+    reader.className = 'sentence-reader';
+    reader.id = 'sentence-reader';
+
+    // Cover slide — exact clone of the hero + start prompt
+    var cover = document.createElement('div');
+    cover.className = 'sentence-reader-cover';
+    cover.id = 'sr-cover';
+
+    // Clone the actual hero element
+    var heroEl = document.querySelector('.hero');
+    if (heroEl) {
+      var heroClone = heroEl.cloneNode(true);
+      heroClone.removeAttribute('id');
+      heroClone.classList.add('sr-cover-hero');
+      // Remove the animated line (it's a one-time animation)
+      var line = heroClone.querySelector('.hero-line');
+      if (line) line.remove();
+      // No inline start prompt — tooltip on the arrow handles this
+      cover.appendChild(heroClone);
+    }
+    reader.appendChild(cover);
+
+    // Sentence body (hidden when cover is shown)
+    var body = document.createElement('div');
+    body.className = 'sentence-reader-body';
+    body.id = 'sr-body';
+    body.style.display = 'none';
+    body.innerHTML = '<div class="sentence-reader-text" id="sr-text"></div>';
+    reader.appendChild(body);
+
+    // Nav
+    var nav = document.createElement('div');
+    nav.className = 'sentence-reader-nav';
+    nav.innerHTML =
+      '<span class="sentence-reader-hint">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> arrow keys</span>' +
+      '<span class="sentence-reader-counter" id="sr-counter"></span>' +
+      '<button class="sentence-reader-btn" id="sr-prev" aria-label="Previous sentence">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+      '</button>' +
+      '<div class="sr-next-wrap">' +
+        '<div class="sr-start-tooltip" id="sr-start-tooltip"><span class="sr-tooltip-desktop">Press <kbd>&rarr;</kbd> or click to begin</span><span class="sr-tooltip-mobile">Swipe left or tap to begin</span></div>' +
+        '<button class="sentence-reader-btn" id="sr-next" aria-label="Next sentence">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>' +
+        '</button>' +
+      '</div>';
+    reader.appendChild(nav);
+
+    document.body.appendChild(reader);
+
+    document.getElementById('sr-prev').addEventListener('click', function () { go(-1); });
+    document.getElementById('sr-next').addEventListener('click', function () { go(1); });
+    document.getElementById('sr-start-tooltip').addEventListener('click', function (e) { e.stopPropagation(); go(1); });
+
+    // Clicking anywhere on the cover advances
+    cover.addEventListener('click', function () { go(1); });
+
+    return reader;
+  }
+
+  function escHtml(t) {
+    return t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  }
+
+  // Split sentence into meaningful clause-level fragments for typewriter effect
+  function splitFragments(text) {
+    // Line breaks are always fragment boundaries
+    if (text.indexOf('\n') >= 0) {
+      return text.split('\n').filter(function (l) { return l.trim(); });
+    }
+
+    // Split at major clause boundaries only:
+    // semicolons, colons, em-dashes, and coordinating conjunctions (and/but/or/for/yet/so/nor)
+    // but only when the conjunction follows a comma
+    var pattern = /(;\s+|:\s+|\u2014\s*|—\s*|,\s+(?=and\s|but\s|or\s|for\s|yet\s|so\s|nor\s|which\s|where\s|when\s|while\s|although\s|though\s))/;
+    var parts = text.split(pattern);
+
+    if (parts.length <= 1) return [text];
+
+    // Recombine: merge delimiters back onto the preceding fragment
+    var fragments = [];
+    var current = '';
+    for (var i = 0; i < parts.length; i++) {
+      if (pattern.test(parts[i])) {
+        current += parts[i];
+      } else {
+        if (current.trim()) fragments.push(current.trim());
+        current = parts[i];
+      }
+    }
+    if (current.trim()) fragments.push(current.trim());
+
+    // Only use fragments if we got 2-5 meaningful chunks (not too many)
+    if (fragments.length < 2 || fragments.length > 5) return [text];
+    // Reject if any fragment is too short (< 20 chars) — probably a bad split
+    for (var j = 0; j < fragments.length; j++) {
+      if (fragments[j].length < 15) return [text];
+    }
+    return fragments;
+  }
+
+  function renderSentence(direction) {
+    var coverEl = document.getElementById('sr-cover');
+    var bodyEl = document.getElementById('sr-body');
+    var textEl = document.getElementById('sr-text');
+    var counterEl = document.getElementById('sr-counter');
+
+    // Clear any pending fragment timers
+    fragmentTimers.forEach(function (t) { clearTimeout(t); });
+    fragmentTimers = [];
+
+    var navEl = reader.querySelector('.sentence-reader-nav');
+    var tooltip = document.getElementById('sr-start-tooltip');
+
+    // Cover slide at index -1
+    if (sentenceIndex === -1) {
+      coverEl.style.display = '';
+      bodyEl.style.display = 'none';
+      // Show nav but only the next button, styled for dark bg
+      if (navEl) {
+        navEl.style.display = '';
+        navEl.classList.add('on-cover');
+      }
+      document.getElementById('sr-prev').style.display = 'none';
+      document.getElementById('sr-counter').style.display = 'none';
+      var hintEl = reader.querySelector('.sentence-reader-hint');
+      if (hintEl) hintEl.style.display = 'none';
+      if (tooltip) tooltip.classList.add('is-visible');
+      return;
+    }
+
+    coverEl.style.display = 'none';
+    bodyEl.style.display = '';
+    if (navEl) {
+      navEl.style.display = '';
+      navEl.classList.remove('on-cover');
+    }
+    document.getElementById('sr-prev').style.display = '';
+    document.getElementById('sr-counter').style.display = '';
+    var hintEl2 = reader.querySelector('.sentence-reader-hint');
+    if (hintEl2) hintEl2.style.display = '';
+    if (tooltip) tooltip.classList.remove('is-visible');
+
+    var s = sentences[sentenceIndex];
+    if (!s) return;
+
+    // Set font style
+    if (s.type === 'heading') {
+      textEl.style.fontFamily = "'IM Fell French Canon', serif";
+      textEl.style.fontSize = 'clamp(36px, 5.5vw, 60px)';
+      textEl.style.fontWeight = '400';
+      textEl.style.color = 'var(--accent, #6b3a2a)';
+    } else {
+      textEl.style.fontFamily = '';
+      textEl.style.fontSize = '';
+      textEl.style.fontWeight = '';
+      textEl.style.color = '';
+    }
+
+    // Crossfade: fade out, swap content, fade in with fragment reveal
+    textEl.classList.add('is-fading');
+
+    setTimeout(function () {
+      // Build fragment HTML
+      var rawText = s.text;
+      var fragments = splitFragments(rawText);
+
+      if (fragments.length <= 1) {
+        // Simple content, no fragment animation
+        if (rawText.indexOf('\n') >= 0) {
+          textEl.innerHTML = escHtml(rawText).replace(/\n/g, '<br>');
+        } else {
+          textEl.textContent = rawText;
+        }
+      } else {
+        // Wrap each fragment in a span for staggered reveal
+        var html = '';
+        fragments.forEach(function (frag, idx) {
+          var fragHtml = escHtml(frag);
+          // Line-break fragments get <br> between them, clause fragments get a space
+          var separator = (rawText.indexOf('\n') >= 0) ? '<br>' : ' ';
+          if (idx > 0) html += separator;
+          html += '<span class="sr-fragment" data-idx="' + idx + '">' + fragHtml + '</span>';
+        });
+        textEl.innerHTML = html;
+      }
+
+      // Fade in
+      textEl.classList.remove('is-fading');
+
+      // Stagger fragment reveals — slow and gentle
+      var fragEls = textEl.querySelectorAll('.sr-fragment');
+      fragEls.forEach(function (f, idx) {
+        var timer = setTimeout(function () {
+          f.classList.add('is-visible');
+        }, 150 + idx * 350);
+        fragmentTimers.push(timer);
+      });
+
+    }, 250); // matches the CSS fade-out duration
+
+    counterEl.textContent = (sentenceIndex + 1) + ' / ' + sentences.length;
+    document.getElementById('sr-prev').disabled = sentenceIndex === -1;
+    document.getElementById('sr-next').disabled = sentenceIndex === sentences.length - 1;
+  }
+
+  // Build a map of chapter-local sentence indices for URL hashing
+  function getSentenceLocalIndex(globalIdx) {
+    var s = sentences[globalIdx];
+    if (!s || !s.chapterId) return 0;
+    var count = 0;
+    for (var i = 0; i < globalIdx; i++) {
+      if (sentences[i].chapterId === s.chapterId) count++;
+    }
+    return count;
+  }
+
+  function findSentenceByHash(hash) {
+    // Format: #sentence/chapter-id/N
+    var parts = hash.replace(/^#/, '').split('/');
+    if (parts[0] !== 'sentence' || !parts[1]) return -1;
+    var chapterId = parts[1];
+    var localIdx = parseInt(parts[2] || '0', 10);
+    var count = 0;
+    for (var i = 0; i < sentences.length; i++) {
+      if (sentences[i].chapterId === chapterId) {
+        if (count === localIdx) return i;
+        count++;
+      }
+    }
+    // Fallback: first sentence of the chapter
+    for (var j = 0; j < sentences.length; j++) {
+      if (sentences[j].chapterId === chapterId) return j;
+    }
+    return -1;
+  }
+
+  function updateBreadcrumbForSentence() {
+    if (sentenceIndex < 0) return;
+    var s = sentences[sentenceIndex];
+    if (!s) return;
+    // Update breadcrumb label (but suppress its hash update)
+    window._suppressHashUpdate = true;
+    if (s.chapterId && window._breadcrumbSetActive) {
+      window._breadcrumbSetActive(s.chapterId);
+    }
+    window._suppressHashUpdate = false;
+    // Set the sentence-specific URL hash
+    var chapterId = s.chapterId || 'cover';
+    var localIdx = s.chapterId ? getSentenceLocalIndex(sentenceIndex) : 0;
+    history.replaceState(null, '', '#sentence/' + chapterId + '/' + localIdx);
+  }
+
+  function goToSentenceIndex(idx) {
+    if (idx < -1 || idx >= sentences.length) return;
+    transitioning = true;
+    sentenceIndex = idx;
+    renderSentence(1);
+    updateBreadcrumbForSentence();
+    setTimeout(function () { transitioning = false; }, 280);
+  }
+
+  function go(delta) {
+    if (transitioning) return;
+    var next = sentenceIndex + delta;
+    if (next < -1 || next >= sentences.length) return;
+    transitioning = true;
+    sentenceIndex = next;
+    renderSentence(delta);
+    updateBreadcrumbForSentence();
+    setTimeout(function () { transitioning = false; }, 280);
+  }
+
+  // Expose for breadcrumb chapter dropdown
+  window._sentenceGoToChapter = function (chapterId) {
+    if (currentMode !== 'sentence') return;
+    extractSentences();
+    // Find first sentence with this chapterId
+    for (var i = 0; i < sentences.length; i++) {
+      if (sentences[i].chapterId === chapterId && sentences[i].type === 'heading') {
+        goToSentenceIndex(i);
+        return;
+      }
+    }
+    // Fallback: find any sentence with this chapterId
+    for (var j = 0; j < sentences.length; j++) {
+      if (sentences[j].chapterId === chapterId) {
+        goToSentenceIndex(j);
+        return;
+      }
+    }
+  };
+
+  function enterSentenceMode() {
+    extractSentences();
+    if (!sentences.length) return;
+
+    buildReader();
+
+    // Restore from URL hash if it's a sentence hash
+    var hash = window.location.hash;
+    if (hash.indexOf('#sentence/') === 0) {
+      var restored = findSentenceByHash(hash);
+      sentenceIndex = restored >= 0 ? restored : -1;
+    } else {
+      sentenceIndex = -1; // cover slide
+    }
+
+    renderSentence(1);
+    if (sentenceIndex >= 0) updateBreadcrumbForSentence();
+    window._sentenceModeActive = true;
+    reader.classList.add('is-active');
+    document.body.style.overflow = 'hidden';
+    var topNav = document.getElementById('top-nav');
+    if (topNav) topNav.classList.add('is-locked');
+  }
+
+  function exitSentenceMode() {
+    window._sentenceModeActive = false;
+    window._sentenceGoToChapter = null;
+    if (reader) {
+      reader.classList.remove('is-active');
+    }
+    document.body.style.overflow = '';
+    var topNav = document.getElementById('top-nav');
+    if (topNav) topNav.classList.remove('is-locked');
+
+    // Scroll to the chapter the user was reading
+    if (sentenceIndex >= 0 && sentences[sentenceIndex] && sentences[sentenceIndex].chapterId) {
+      var h = document.getElementById(sentences[sentenceIndex].chapterId);
+      if (h) {
+        window.scrollTo(0, h.getBoundingClientRect().top + window.scrollY - 60);
+      }
+    }
+  }
+
+  // Auto-enter sentence mode if URL hash says so
+  if (window._autoEnterSentenceMode) {
+    currentMode = 'sentence';
+    modeCurrentLabel.textContent = 'Sentence at a Time';
+    modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === 'sentence'); });
+    enterSentenceMode();
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function (e) {
+    if (currentMode !== 'sentence') return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      go(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      go(-1);
+    } else if (e.key === 'Escape') {
+      // Switch back to scroll mode
+      currentMode = 'scroll';
+      modeCurrentLabel.textContent = 'Scroll';
+      modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === 'scroll'); });
+      exitSentenceMode();
+    }
+  });
+
+  // Swipe navigation (touch)
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var SWIPE_THRESHOLD = 50;
+
+  document.addEventListener('touchstart', function (e) {
+    if (currentMode !== 'sentence') return;
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function (e) {
+    if (currentMode !== 'sentence') return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    // Only trigger if horizontal swipe is dominant
+    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) {
+        go(1);  // swipe left = next
+      } else {
+        go(-1); // swipe right = prev
+      }
+    }
+  }, { passive: true });
 })();

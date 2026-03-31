@@ -19,7 +19,13 @@
       "Bash(node scripts/build-frankenstein-page.mjs)",
       "Bash(curl -sL \"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Frankenstein_1945_Universal_Picture.jpg/440px-Frankenstein_1945_Universal_Picture.jpg\" -o books/frankenstein/images/cover.jpg)",
       "WebSearch",
-      "Bash(curl -sL \"https://digitalcollections.nypl.org/items/745b1060-01d6-0135-4825-0bd73a22949a\" -o /dev/null -w \"%{http_code}\")"
+      "Bash(curl -sL \"https://digitalcollections.nypl.org/items/745b1060-01d6-0135-4825-0bd73a22949a\" -o /dev/null -w \"%{http_code}\")",
+      "WebFetch(domain:fonts.google.com)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh auth:*)",
+      "Bash(git remote:*)"
     ]
   }
 }
