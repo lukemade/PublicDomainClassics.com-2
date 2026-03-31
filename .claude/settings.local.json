@@ -25,7 +25,10 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(gh auth:*)",
-      "Bash(git remote:*)"
+      "Bash(git remote:*)",
+      "Bash(npx vite:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)"
     ]
   }
 }
