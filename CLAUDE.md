@@ -167,5 +167,9 @@ The verification script compares two text sources:
   - **Libre Franklin** — top nav and breadcrumb UI elements
 - Google Fonts link for book pages (as of Frankenstein build):
   `Libre+Baskerville:ital,wght@0,400;0,700;1,400&Cormorant+Unicase:wght@300;400;500;600;700&IM+Fell+English:ital@0;1&IM+Fell+English+SC&IM+Fell+French+Canon:ital@0;1&IM+Fell+DW+Pica+SC`
+- **Drop cap rules:**
+  - Only apply `class="drop-cap"` to the first paragraph of a chapter/section, never to quotes or poetry
+  - The paragraph must be long enough to be at least 3 lines tall at normal reading width — if it's a short paragraph (under ~150 characters), skip the drop cap
+  - Drop caps use Cormorant Unicase, 8.5em, with mix-blend-mode: multiply
 - Accessibility: skip links, ARIA labels, focus-visible outlines, WCAG AA contrast.
 - New book pages must be added as entries in `vite.config.js` under `build.rollupOptions.input`.
