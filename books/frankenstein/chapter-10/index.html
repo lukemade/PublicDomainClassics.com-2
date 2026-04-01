@@ -634,6 +634,100 @@
     }
 
     /* ── Sentence mode ── */
+    /* Mode dropdown (top-right of nav) */
+    .mode-dropdown {
+      position: absolute;
+      right: 0;
+    }
+    .mode-dropdown-btn {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      color: rgba(232, 223, 208, 0.6);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .mode-dropdown-btn:hover { color: #e8dfd0; }
+    .mode-label { color: rgba(232, 223, 208, 0.35); }
+    .mode-current { color: rgba(232, 223, 208, 0.8); }
+    .mode-caret {
+      width: 8px; height: 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .mode-caret::after {
+      content: '';
+      width: 5px; height: 5px;
+      border-right: 1.5px solid rgba(232, 223, 208, 0.4);
+      border-bottom: 1.5px solid rgba(232, 223, 208, 0.4);
+      transform: rotate(45deg);
+      transition: transform 0.2s;
+    }
+    .mode-dropdown[open] .mode-caret::after { transform: rotate(-135deg); }
+    .mode-dropdown-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      background: #2a2520;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      z-index: 300;
+      padding: 4px 0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      list-style: none;
+      min-width: 140px;
+    }
+    .mode-dropdown-list li a {
+      display: block;
+      padding: 8px 16px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.85rem;
+      color: rgba(232, 223, 208, 0.6);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer;
+    }
+    .mode-dropdown-list li a:hover { background: rgba(255, 255, 255, 0.06); color: #e8dfd0; }
+    .mode-dropdown-list li a.is-active {
+      color: #e8dfd0;
+      background: rgba(107, 58, 42, 0.25);
+    }
+    .sentence-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: var(--bg, #faf8f4);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 2rem 80px;
+    }
+    .sentence-overlay.is-active { display: flex; }
+    .sentence-display {
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+    .sentence-text {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+      line-height: 1.6;
+      color: var(--text, #2c2420);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .sentence-text.is-visible { opacity: 1; }
+    .sentence-counter {
+      margin-top: 2rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      color: rgba(90, 79, 66, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -647,233 +741,17 @@
         <span class="book-switch-title">Frankenstein</span>
         <svg width="10" height="10" viewBox="0 0 10 10" style="stroke: #d4564c; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;"><path d="M2 4l3 3 3-3"/></svg>
       </button>
-      <div class="mode-dropdown" id="mode-dropdown" style="position:relative;margin-left:auto;">
-        <button class="mode-toggle" id="mode-toggle" onclick="document.getElementById('mode-dropdown').classList.toggle('is-open');event.stopPropagation();" style="display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:rgba(255,255,255,0.5);font-family:'Libre Baskerville',serif;font-size:0.8rem;cursor:pointer;padding:6px 10px;border-radius:4px;">
-          <span>Mode: </span><span class="mode-current" id="mode-current-label">Chapter</span>
-          <svg width="10" height="10" viewBox="0 0 10 10" style="stroke:rgba(255,255,255,0.4);fill:none;stroke-width:1.5;stroke-linecap:round;"><path d="M2 4l3 3 3-3"/></svg>
-        </button>
-        <ul class="mode-dropdown-list" style="position:absolute;top:calc(100% + 6px);right:0;min-width:180px;background:#2a2520;border:1px solid rgba(255,255,255,0.1);border-radius:6px;box-shadow:0 8px 32px rgba(0,0,0,0.5);list-style:none;margin:0;padding:6px 0;display:none;z-index:9999;">
-          <li><a href="#" id="mode-scroll-btn" data-mode="scroll" class="active" style="display:block;padding:10px 16px 6px;font-family:'Libre Baskerville',serif;font-size:0.85rem;color:rgba(232,223,208,0.6);text-decoration:none;">Chapter<span style="display:block;font-size:0.7rem;color:rgba(196,185,154,0.55);margin-top:2px;">Read the full chapter with scroll</span></a></li>
-          <li><a href="#" id="mode-sentence-btn" data-mode="sentence" style="display:block;padding:10px 16px 6px;font-family:'Libre Baskerville',serif;font-size:0.85rem;color:rgba(232,223,208,0.6);text-decoration:none;">Sentence<span style="display:block;font-size:0.7rem;color:rgba(196,185,154,0.55);margin-top:2px;">One sentence at a time, focused</span></a></li>
+      <details class="mode-dropdown" id="mode-dropdown">
+        <summary class="mode-dropdown-btn">
+          <span class="mode-label">Mode:</span>
+          <span class="mode-current" id="mode-current">Chapter</span>
+          <span class="mode-caret"></span>
+        </summary>
+        <ul class="mode-dropdown-list">
+          <li><a href="#" data-mode="chapter" class="is-active" id="mode-chapter">Chapter</a></li>
+          <li><a href="#" data-mode="sentence" id="mode-sentence">Sentence</a></li>
         </ul>
-      </div>
-      <script>
-        // Inline mode dropdown — no dependency on shared JS
-        (function(){
-          var dd = document.getElementById('mode-dropdown');
-          var list = dd.querySelector('.mode-dropdown-list');
-          document.addEventListener('click', function(e) {
-            if (!dd.contains(e.target)) { dd.classList.remove('is-open'); list.style.display='none'; }
-          });
-          // Show/hide list when is-open toggles
-          new MutationObserver(function() {
-            list.style.display = dd.classList.contains('is-open') ? 'block' : 'none';
-          }).observe(dd, { attributes: true, attributeFilter: ['class'] });
-
-          // Sentence mode
-          var scrollBtn = document.getElementById('mode-scroll-btn');
-          var sentenceBtn = document.getElementById('mode-sentence-btn');
-          var label = document.getElementById('mode-current-label');
-          var sentences = [], idx = 0, overlay = null;
-
-          function extract() {
-            if (sentences.length) return;
-            var main = document.getElementById('main-content');
-            if (!main) return;
-            var ps = main.querySelectorAll('p:not(.letter-salutation):not(.letter-dateline):not(.poetry-line):not(.epigraph-attribution)');
-            var txt = '';
-            ps.forEach(function(p) { txt += p.textContent + ' '; });
-            // Split on sentence-ending punctuation
-            var raw = txt.replace(/([.!?]) +/g, '$1|||').split('|||');
-            var result = [];
-            raw.forEach(function(s) {
-              s = s.trim();
-              if (!s || s.length < 3) return;
-              // Split long sentences (>200 chars) at comma boundaries
-              if (s.length > 200) {
-                // Split at commas, semicolons, or em-dashes
-                var parts = s.split(/(, +|; +|— *)/);
-                var chunk = '';
-                for (var pi = 0; pi < parts.length; pi++) {
-                  var p = parts[pi];
-                  if (chunk.length + p.length > 180 && chunk.length > 30) {
-                    result.push(chunk.trim());
-                    chunk = p;
-                  } else {
-                    chunk += p;
-                  }
-                }
-                if (chunk.trim()) result.push(chunk.trim());
-              } else {
-                result.push(s);
-              }
-            });
-            sentences = result;
-          }
-
-          function show() {
-            if (!overlay) return;
-            var t = overlay.querySelector('.s-text');
-            var bc = overlay.querySelector('.s-breadcrumb-pos');
-            if (!t) return;
-            t.style.opacity = '0';
-            t.style.transition = 'none';
-            setTimeout(function() {
-              t.textContent = sentences[idx];
-              if (bc) bc.textContent = 'Sentence ' + (idx+1) + '/' + sentences.length;
-              void t.offsetWidth;
-              t.style.transition = 'opacity 0.5s';
-              t.style.opacity = '1';
-            }, 50);
-          }
-
-          function enter(startIdx) {
-            extract();
-            if (!sentences.length) return;
-            idx = startIdx || 0;
-            if (!overlay) {
-              overlay = document.createElement('div');
-              overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#faf8f4;display:flex;flex-direction:column;';
-              overlay.innerHTML = ''
-                // Top bar with chapter name and X
-                + '<div class="s-chrome" style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid rgba(107,58,42,0.08);transition:opacity 0.4s;">'
-                + '<div style="font-family:Libre Baskerville,serif;font-size:0.85rem;color:rgba(90,79,66,0.55);display:flex;align-items:center;gap:6px;">'
-                + '<a href="/" style="color:rgba(90,79,66,0.55);text-decoration:none;">PDC</a>'
-                + '<span style="color:rgba(90,79,66,0.3);">&rsaquo;</span>'
-                + '<a href="/books/frankenstein/" style="color:rgba(90,79,66,0.55);text-decoration:none;">Frankenstein</a>'
-                + '<span style="color:rgba(90,79,66,0.3);">&rsaquo;</span>'
-                + '<span>Chapter 10</span>'
-                + '<span style="color:rgba(90,79,66,0.3);">&rsaquo;</span>'
-                + '<span class="s-breadcrumb-pos">Sentence 1</span>'
-                + '</div>'
-                + '<button id="s-close" style="width:36px;height:36px;border-radius:50%;background:rgba(44,36,32,0.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" style="stroke:#2c2420;fill:none;stroke-width:2;stroke-linecap:round;"><path d="M18 6L6 18M6 6l12 12"/></svg></button>'
-                + '</div>'
-                // Content area
-                + '<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 2rem;">'
-                + '<div style="max-width:1200px;width:100%;text-align:left;">'
-                + '<div class="s-text" style="font-family:Libre Baskerville,serif;font-size:clamp(1.6rem,4vw,2.8rem);line-height:1.55;color:#2c2420;opacity:0;transition:opacity 0.5s;"></div>'
-                + '</div></div>'
-                // Bottom bar with arrows and counter
-                + '<div class="s-chrome" style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid rgba(107,58,42,0.08);transition:opacity 0.4s;">'
-                + '<button id="s-prev" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;font-family:Libre Baskerville,serif;font-size:0.85rem;color:#d4564c;padding:8px 12px;border-radius:4px;"><svg width="16" height="16" viewBox="0 0 24 24" style="stroke:#d4564c;fill:none;stroke-width:2;stroke-linecap:round;"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Previous</button>'
-                + ''
-                + '<div style="font-size:0.8rem;color:rgba(90,79,66,0.55);">← → keyboard</div>'
-                + '<button id="s-next" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;font-family:Libre Baskerville,serif;font-size:0.85rem;color:#d4564c;padding:8px 12px;border-radius:4px;">Next <svg width="16" height="16" viewBox="0 0 24 24" style="stroke:#d4564c;fill:none;stroke-width:2;stroke-linecap:round;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>'
-                + '</div>';
-              document.body.appendChild(overlay);
-
-              var nextChapterUrl = '/books/frankenstein/chapter-11/#sentence/1';
-              var nextChapterTitle = 'Chapter 11';
-
-              function advance() {
-                if (idx >= sentences.length - 1) {
-                  showNextChapter();
-                } else {
-                  idx++;
-                  show();
-                  updateHash();
-                  hideNextChapter();
-                }
-              }
-
-              function showNextChapter() {
-                if (!nextChapterUrl) return;
-                var bar = overlay.querySelector('.s-next-chapter');
-                if (!bar) {
-                  bar = document.createElement('div');
-                  bar.className = 's-next-chapter';
-                  bar.style.cssText = 'position:absolute;bottom:0;left:0;right:0;background:#d4564c;padding:20px 24px;display:flex;align-items:center;justify-content:center;gap:12px;transform:translateY(100%);transition:transform 0.4s ease;cursor:pointer;';
-                  bar.innerHTML = '<span style="font-family:Libre Baskerville,serif;font-size:1rem;color:#fff;">Next: ' + nextChapterTitle + '</span><svg width="18" height="18" viewBox="0 0 24 24" style="stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-                  bar.addEventListener('click', function() { window.location.href = nextChapterUrl; });
-                  overlay.appendChild(bar);
-                }
-                setTimeout(function() { bar.style.transform = 'translateY(0)'; }, 50);
-              }
-
-              function hideNextChapter() {
-                var bar = overlay.querySelector('.s-next-chapter');
-                if (bar) bar.style.transform = 'translateY(100%)';
-              }
-
-              // Auto-hide controls after 3s, show on mouse move (desktop only)
-              var chromeEls = overlay.querySelectorAll('.s-chrome');
-              var hideTimer = null;
-              var isMobile = window.matchMedia('(max-width: 768px)').matches;
-              function showChrome() {
-                chromeEls.forEach(function(el) { el.style.opacity = '1'; });
-                clearTimeout(hideTimer);
-                if (!isMobile) {
-                  hideTimer = setTimeout(function() {
-                    chromeEls.forEach(function(el) { el.style.opacity = '0'; });
-                  }, 3000);
-                }
-              }
-              overlay.addEventListener('mousemove', showChrome);
-              overlay.addEventListener('touchstart', showChrome, {passive:true});
-              showChrome();
-
-              document.getElementById('s-close').addEventListener('click', exit);
-              document.getElementById('s-prev').addEventListener('click', function() { idx = Math.max(idx-1, 0); show(); updateHash(); hideNextChapter(); showChrome(); });
-              document.getElementById('s-next').addEventListener('click', function() { advance(); showChrome(); });
-              // Click content area to advance
-              overlay.querySelector('.s-text').parentElement.parentElement.addEventListener('click', function(e) {
-                if (e.target.closest('button')) return;
-                advance();
-              });
-            }
-            overlay.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            label.textContent = 'Sentence';
-            dd.classList.remove('is-open');
-            list.style.display = 'none';
-            show();
-            updateHash();
-          }
-
-          function exit() {
-            if (overlay) overlay.style.display = 'none';
-            document.body.style.overflow = '';
-            label.textContent = 'Chapter';
-            dd.classList.remove('is-open');
-            list.style.display = 'none';
-            // Remove sentence hash
-            if (location.hash.startsWith('#sentence')) {
-              history.replaceState(null, '', location.pathname);
-            }
-          }
-
-          function updateHash() {
-            history.replaceState(null, '', '#sentence/' + (idx + 1));
-          }
-
-          // Check URL hash on load
-          if (location.hash.startsWith('#sentence/')) {
-            var startIdx = Math.max((parseInt(location.hash.split('/')[1]) || 1) - 1, 0);
-            setTimeout(function() { enter(startIdx); }, 100);
-          }
-
-          sentenceBtn.addEventListener('click', function(e) { e.preventDefault(); enter(); });
-          scrollBtn.addEventListener('click', function(e) { e.preventDefault(); exit(); });
-          document.addEventListener('keydown', function(e) {
-            if (!overlay || overlay.style.display === 'none') return;
-            if (e.key === 'Escape') { exit(); return; }
-            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); advance(); }
-            if (e.key === 'ArrowLeft') { e.preventDefault(); idx = Math.max(idx-1, 0); show(); updateHash(); hideNextChapter(); }
-          });
-
-          // Touch swipe
-          var touchX = 0;
-          document.addEventListener('touchstart', function(e) { if (overlay && overlay.style.display !== 'none') touchX = e.touches[0].clientX; }, {passive:true});
-          document.addEventListener('touchend', function(e) {
-            if (!overlay || overlay.style.display === 'none') return;
-            var diff = e.changedTouches[0].clientX - touchX;
-            if (Math.abs(diff) > 50) {
-              if (diff < 0) { advance(); }
-              else { idx = Math.max(idx-1, 0); show(); updateHash(); hideNextChapter(); }
-            }
-          }, {passive:true});
-        })();
-      </script>
+      </details>
     </div>
   </nav>
   <div class="book-header" id="book-header">
@@ -994,13 +872,118 @@
         libOverlay.addEventListener('click', function(e) { if (e.target === libOverlay) libOverlay.classList.remove('is-open'); });
       }
       // Escape closes overlays and sentence mode
-      // Escape closes overlays
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           if (tocOverlay) tocOverlay.classList.remove('is-open');
           if (libOverlay) libOverlay.classList.remove('is-open');
+          exitSentenceMode();
         }
       });
+
+      // ── Mode dropdown + Sentence-at-a-time mode ──
+      var modeDropdown = document.getElementById('mode-dropdown');
+      var modeCurrent = document.getElementById('mode-current');
+      var modeChapterBtn = document.getElementById('mode-chapter');
+      var modeSentenceBtn = document.getElementById('mode-sentence');
+      var sentenceOverlay = document.getElementById('sentence-overlay');
+      var sentenceText = document.getElementById('sentence-text');
+      var sentenceCounter = document.getElementById('sentence-counter');
+      var sentences = [];
+      var sentenceIdx = 0;
+      var sentenceActive = false;
+
+      function extractSentences() {
+        if (sentences.length > 0) return;
+        var main = document.getElementById('main-content');
+        if (!main) return;
+        var text = '';
+        var paragraphs = main.querySelectorAll('p:not(.letter-salutation):not(.letter-dateline):not(.poetry-line)');
+        paragraphs.forEach(function(p) { text += p.textContent + ' '; });
+        var raw = text.match(/[^.!?]+[.!?]+[”’"')\s]*/g) || [text];
+        sentences = raw.map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+      }
+
+      function showSentence() {
+        if (!sentenceText || sentenceIdx < 0 || sentenceIdx >= sentences.length) return;
+        sentenceText.classList.remove('is-visible');
+        setTimeout(function() {
+          sentenceText.textContent = sentences[sentenceIdx];
+          sentenceCounter.textContent = (sentenceIdx + 1) + ' / ' + sentences.length;
+          void sentenceText.offsetWidth;
+          sentenceText.classList.add('is-visible');
+        }, 80);
+      }
+
+      function enterSentenceMode() {
+        extractSentences();
+        if (sentences.length === 0) return;
+        sentenceActive = true;
+        sentenceIdx = 0;
+        sentenceOverlay.classList.add('is-active');
+        if (modeCurrent) modeCurrent.textContent = 'Sentence';
+        if (modeChapterBtn) modeChapterBtn.classList.remove('is-active');
+        if (modeSentenceBtn) modeSentenceBtn.classList.add('is-active');
+        if (modeDropdown) modeDropdown.removeAttribute('open');
+        showSentence();
+      }
+
+      function exitSentenceMode() {
+        sentenceActive = false;
+        if (sentenceOverlay) sentenceOverlay.classList.remove('is-active');
+        if (modeCurrent) modeCurrent.textContent = 'Chapter';
+        if (modeChapterBtn) modeChapterBtn.classList.add('is-active');
+        if (modeSentenceBtn) modeSentenceBtn.classList.remove('is-active');
+        if (modeDropdown) modeDropdown.removeAttribute('open');
+      }
+
+      if (modeSentenceBtn) {
+        modeSentenceBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          enterSentenceMode();
+        });
+      }
+      if (modeChapterBtn) {
+        modeChapterBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          exitSentenceMode();
+        });
+      }
+
+      // Navigation: click, arrow keys, swipe
+      if (sentenceOverlay) {
+        sentenceOverlay.addEventListener('click', function(e) {
+          if (!sentenceActive) return;
+          sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1);
+          showSentence();
+        });
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (!sentenceActive) return;
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          e.preventDefault();
+          sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1);
+          showSentence();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          sentenceIdx = Math.max(sentenceIdx - 1, 0);
+          showSentence();
+        }
+      });
+
+      var touchStartX = 0;
+      if (sentenceOverlay) {
+        sentenceOverlay.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+        sentenceOverlay.addEventListener('touchend', function(e) {
+          if (!sentenceActive) return;
+          var diff = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(diff) > 50) {
+            if (diff < 0) sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1);
+            else sentenceIdx = Math.max(sentenceIdx - 1, 0);
+            showSentence();
+          }
+        }, { passive: true });
+      }
     })();
   </script>
 
@@ -1038,6 +1021,13 @@
     
   </main>
 
+  <!-- Sentence mode overlay -->
+  <div class="sentence-overlay" id="sentence-overlay">
+    <div class="sentence-display">
+      <div class="sentence-text" id="sentence-text"></div>
+      <div class="sentence-counter" id="sentence-counter"></div>
+    </div>
+  </div>
 
   <footer class="doc-footer">
     <div class="brand">Public Domain Classics</div>
