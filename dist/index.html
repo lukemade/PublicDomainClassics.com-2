@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
   <title>Public Domain Classics — Timeless literature, beautifully presented</title>
   <meta name="description" content="Public domain literature from Project Gutenberg and other sources, presented as beautifully formatted, illustrated web pages.">
   <meta property="og:title" content="Public Domain Classics — Timeless literature, beautifully presented">
@@ -11,297 +10,227 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://publicdomainclassics.com/">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Public Domain Classics — Timeless literature, beautifully presented">
-  <meta name="twitter:description" content="Public domain literature, presented as beautifully formatted, illustrated web pages.">
   <link rel="canonical" href="https://publicdomainclassics.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display+SC:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Libre Baskerville', 'Georgia', serif;
       color: #2c2420;
-      background: #faf8f4;
+      background: #1a1510;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* --- Nav --- */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #1a1510;
-      padding: 0 2rem;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .nav-brand {
-      font-family: 'Libre Baskerville', serif;
-      font-weight: 600;
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      color: #e8dfd0;
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    .nav-brand:hover {
-      color: #ffffff;
-    }
-
-    .skip-link {
-      position: absolute;
-      top: -100%;
-      left: 1rem;
-      z-index: 9999;
-      padding: 0.5rem 1rem;
-      background: #6b3a2a;
-      color: #fff;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-    .skip-link:focus { top: 0.5rem; }
 
     a:focus-visible, button:focus-visible {
       outline: 2px solid #6b3a2a;
       outline-offset: 2px;
     }
 
-    /* --- Hero --- */
-    .hero {
+    .skip-link {
+      position: absolute; top: -100%; left: 1rem; z-index: 9999;
+      padding: 0.5rem 1rem; background: #6b3a2a; color: #fff;
+      font-size: 0.875rem; text-decoration: none; border-radius: 4px;
+    }
+    .skip-link:focus { top: 0.5rem; }
+
+    /* --- Nav (minimal) --- */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #1a1510;
+      padding: 0 2rem; height: 56px;
+      display: flex; align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-brand:hover { opacity: 1; }
+    .brand-logo {
+      height: 32px;
+      width: auto;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .nav-brand:hover .brand-logo { opacity: 1; }
+    .brand-beta {
+      font-family: 'Fraunces', serif;
+      font-size: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #d4564c;
+      border: 1px solid rgba(212, 86, 76, 0.4);
+      border-radius: 3px;
+      padding: 1px 5px;
+      line-height: 1.4;
+    }
+
+    /* --- Header (compact) --- */
+    .site-header {
       background: #1a1510;
       color: #faf8f4;
-      padding: 7rem 2rem 6rem;
+      padding: 2.5rem 2rem 2rem;
       text-align: center;
-      position: relative;
-      overflow: hidden;
     }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 30% 50%, rgba(107, 58, 42, 0.15) 0%, transparent 60%),
-        radial-gradient(ellipse at 70% 30%, rgba(139, 90, 43, 0.1) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .hero-ornament {
-      display: block;
-      margin: 0 auto 2rem;
-      font-size: 1.5rem;
-      color: rgba(232, 223, 208, 0.4);
-      letter-spacing: 0.5em;
-    }
-
-    .hero h1 {
-      font-family: 'Libre Baskerville', serif;
-      font-weight: 700;
-      font-size: clamp(2.8rem, 6vw, 4.5rem);
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
-      letter-spacing: 0.02em;
-      position: relative;
-    }
-
-    .hero-tagline {
-      font-family: 'Libre Baskerville', serif;
-      font-weight: 300;
-      font-style: italic;
-      font-size: clamp(1.15rem, 2.2vw, 1.45rem);
-      color: #c4b99a;
-      max-width: 550px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.6;
-    }
-
-    .hero-rule {
-      display: block;
-      width: 80px;
-      height: 1px;
-      background: rgba(196, 185, 154, 0.35);
-      margin: 0 auto 2.5rem;
-      border: none;
-    }
-
-    .hero-description {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 1.05rem;
-      color: #9a9080;
-      max-width: 520px;
-      margin: 0 auto;
-      line-height: 1.8;
-    }
-
-    /* --- Featured --- */
-    .featured {
-      background: #f0ece4;
-      padding: 5rem 2rem;
-      position: relative;
-    }
-
-    .featured::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(107, 58, 42, 0.2), transparent);
-    }
-
-    .featured-inner {
-      max-width: 680px;
-      margin: 0 auto;
-    }
-
-    .featured-label {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      color: #6b3a2a;
-      margin-bottom: 0.75rem;
-    }
-
-    .featured h2 {
-      font-family: 'Libre Baskerville', serif;
+    .site-header h1 {
+      font-family: 'Fraunces', serif;
       font-weight: 400;
+      font-size: 1.6rem;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .site-tagline {
+      font-family: 'Libre Baskerville', serif;
       font-style: italic;
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
-      color: #2c2420;
+      font-size: 0.9rem;
+      color: rgba(196, 185, 154, 0.6);
     }
 
+    /* --- Book Grid (the star) --- */
+    .library {
+      background: #1a1510;
+      padding: 2rem 2rem 4rem;
+    }
+    .library-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* --- Book Card --- */
     .book-card {
-      background: #faf8f4;
-      border-radius: 4px;
-      padding: 2.5rem 2.75rem;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05), 0 4px 20px rgba(0, 0, 0, 0.03);
-      border: 1px solid rgba(107, 58, 42, 0.1);
-      transition: box-shadow 0.3s ease;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      border-color: rgba(107, 58, 42, 0.3);
     }
 
-    .book-card:hover {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07), 0 8px 30px rgba(0, 0, 0, 0.05);
+    .book-card-cover {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      display: block;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .book-card-info {
+      padding: 1.25rem 1.25rem 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     .book-card-meta {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
       letter-spacing: 0.08em;
-      color: #8a7e6e;
-      margin-bottom: 0.75rem;
+      color: rgba(196, 185, 154, 0.5);
+      margin-bottom: 0.5rem;
     }
 
     .book-card h3 {
-      font-family: 'Libre Baskerville', serif;
-      font-weight: 600;
-      font-size: 1.5rem;
-      line-height: 1.35;
-      color: #2c2420;
-      margin-bottom: 1rem;
+      font-family: 'IM Fell French Canon', serif;
+      font-weight: 400;
+      font-size: 1.15rem;
+      line-height: 1.3;
+      color: #e8dfd0;
+      margin-bottom: 0.6rem;
     }
 
-    .book-card-description {
+    .book-card-author {
       font-family: 'Libre Baskerville', serif;
-      font-size: 1.05rem;
-      color: #5a4f42;
-      line-height: 1.75;
-      margin-bottom: 1.75rem;
+      font-size: 0.8rem;
+      color: rgba(196, 185, 154, 0.45);
+      margin-top: auto;
     }
 
-    .book-card-link {
-      display: inline-flex;
+    /* Coming soon placeholder cards */
+    .book-card--placeholder {
+      border-style: dashed;
+      border-color: rgba(255, 255, 255, 0.04);
+      background: transparent;
+      cursor: default;
+    }
+    .book-card--placeholder:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: rgba(255, 255, 255, 0.04);
+    }
+    .book-card--placeholder .book-card-cover {
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-family: 'Libre Baskerville', serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      color: #6b3a2a;
-      text-decoration: none;
-      transition: gap 0.2s ease, color 0.2s ease;
+      justify-content: center;
     }
-
-    .book-card-link:hover {
-      gap: 0.75rem;
-      color: #4a2518;
-    }
-
-    .book-card-link svg {
-      width: 16px;
-      height: 16px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+    .book-card--placeholder .placeholder-label {
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: rgba(196, 185, 154, 0.2);
     }
 
     /* --- Footer --- */
     footer {
-      padding: 3.5rem 2rem;
+      padding: 2.5rem 2rem;
       text-align: center;
-      background: #faf8f4;
-      border-top: 1px solid rgba(107, 58, 42, 0.1);
+      background: #1a1510;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
-
-    .footer-ornament {
-      display: block;
-      margin-bottom: 1.5rem;
-      font-size: 1rem;
-      color: rgba(44, 36, 32, 0.2);
-      letter-spacing: 0.5em;
-    }
-
     .footer-brand {
-      font-family: 'Libre Baskerville', serif;
-      font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
-      color: #2c2420;
-      margin-bottom: 0.75rem;
+      font-family: 'IM Fell English SC', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: rgba(232, 223, 208, 0.4);
+      margin-bottom: 0.5rem;
     }
-
     .footer-note {
       font-family: 'Libre Baskerville', serif;
-      font-size: 0.95rem;
-      color: #8a7e6e;
+      font-size: 0.8rem;
+      color: rgba(196, 185, 154, 0.3);
       max-width: 480px;
       margin: 0 auto;
       line-height: 1.7;
     }
 
-    /* Mobile */
+    /* --- Responsive --- */
+    @media (max-width: 900px) {
+      .library-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.25rem;
+      }
+    }
     @media (max-width: 600px) {
-      nav { padding: 0 1rem; height: 44px; }
-      .nav-brand { font-size: 10px; }
-      .hero { padding: 4rem 1.25rem 3.5rem; }
-      .hero h1 { font-size: clamp(1.8rem, 8vw, 2.8rem); }
-      .hero-tagline { font-size: 1rem; margin-bottom: 1.5rem; }
-      .hero-rule { margin-bottom: 1.5rem; }
-      .hero-description { font-size: 0.9rem; }
-      .featured { padding: 3rem 1.25rem; }
-      .featured h2 { font-size: 1.3rem; }
-      .book-card { padding: 1.5rem; }
-      .book-card h3 { font-size: 1.1rem; }
-      .book-card-description { font-size: 0.9rem; }
-      footer { padding: 2.5rem 1.25rem; }
+      nav { padding: 0 1rem; }
+      .site-header { padding: 1.5rem 1.25rem 1rem; }
+      .site-header h1 { font-size: 1.3rem; }
+      .library { padding: 1rem 1rem 3rem; }
+      .library-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+      .book-card-info { padding: 0.75rem 0.75rem 1rem; }
+      .book-card h3 { font-size: 0.95rem; }
+      .book-card-meta { font-size: 0.6rem; }
+      .book-card-author { font-size: 0.7rem; }
+      footer { padding: 2rem 1.25rem; }
     }
   </style>
 </head>
@@ -309,40 +238,86 @@
 
   <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <!-- Nav -->
   <nav aria-label="Main navigation">
-    <a href="/" class="nav-brand">Public Domain Classics</a>
+    <a href="/" class="nav-brand">
+      <img class="brand-logo" src="/assets/logo.svg" alt="Public Domain Classics">
+      <span class="brand-beta">Beta</span>
+    </a>
   </nav>
 
-  <!-- Hero -->
-  <section id="main-content" class="hero">
-    <span class="hero-ornament" aria-hidden="true">&mdash; &loz; &mdash;</span>
-    <h1>Public Domain<br>Classics</h1>
-    <p class="hero-tagline">Timeless literature, beautifully presented.</p>
-    <hr class="hero-rule">
-    <p class="hero-description">Classic works from Project Gutenberg and other sources, presented as gorgeously formatted web pages with historical illustrations, clean typography, and structured navigation.</p>
-  </section>
+  <header class="site-header">
+    <h1>Public Domain Classics</h1>
+    <p class="site-tagline">Timeless literature, beautifully presented.</p>
+  </header>
 
-  <!-- Featured Book -->
-  <section class="featured">
-    <div class="featured-inner">
-      <div class="featured-label">Featured Book</div>
-      <h2>Start reading</h2>
-      <div class="book-card">
-        <div class="book-card-meta">Gothic Fiction &middot; Mary Shelley &middot; 1818</div>
-        <h3>Frankenstein; or, The Modern Prometheus</h3>
-        <p class="book-card-description">Mary Shelley&rsquo;s groundbreaking tale of ambition, creation, and consequence&mdash;widely considered the first science fiction novel. Presented with historical illustrations from the 1831 edition.</p>
-        <a href="/books/frankenstein/" class="book-card-link">
-          Read the full text
-          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+  <main id="main-content" class="library">
+    <div class="library-grid">
+
+      <!-- Frankenstein -->
+      <a href="/books/frankenstein/" class="book-card">
+        <img class="book-card-cover" src="/books/frankenstein/images/default.jpg" alt="Frankenstein book cover" loading="eager">
+        <div class="book-card-info">
+          <div class="book-card-meta">Gothic Fiction &middot; 1818</div>
+          <h3>Frankenstein; or, The Modern Prometheus</h3>
+          <div class="book-card-author">Mary Shelley</div>
+        </div>
+      </a>
+
+      <!-- Moby-Dick -->
+      <a href="/books/moby-dick/" class="book-card">
+        <img class="book-card-cover" src="/books/moby-dick/images/default.jpg" alt="Moby-Dick title page" loading="eager">
+        <div class="book-card-info">
+          <div class="book-card-meta">Adventure &middot; 1851</div>
+          <h3>Moby-Dick; or, The Whale</h3>
+          <div class="book-card-author">Herman Melville</div>
+        </div>
+      </a>
+
+      <!-- Placeholder slots for upcoming books -->
+      <div class="book-card book-card--placeholder">
+        <div class="book-card-cover"><span class="placeholder-label">Coming Soon</span></div>
+        <div class="book-card-info"></div>
       </div>
-    </div>
-  </section>
 
-  <!-- Footer -->
+      <div class="book-card book-card--placeholder">
+        <div class="book-card-cover"><span class="placeholder-label">Coming Soon</span></div>
+        <div class="book-card-info"></div>
+      </div>
+
+      <div class="book-card book-card--placeholder">
+        <div class="book-card-cover"><span class="placeholder-label">Coming Soon</span></div>
+        <div class="book-card-info"></div>
+      </div>
+
+      <div class="book-card book-card--placeholder">
+        <div class="book-card-cover"><span class="placeholder-label">Coming Soon</span></div>
+        <div class="book-card-info"></div>
+      </div>
+
+      <div class="book-card book-card--placeholder">
+        <div class="book-card-cover"><span class="placeholder-label">Coming Soon</span></div>
+        <div class="book-card-info"></div>
+      </div>
+
+      <div class="book-card book-card--placeholder">
+        <div class="book-card-cover"><span class="placeholder-label">Coming Soon</span></div>
+        <div class="book-card-info"></div>
+      </div>
+
+      <div class="book-card book-card--placeholder">
+        <div class="book-card-cover"><span class="placeholder-label">Coming Soon</span></div>
+        <div class="book-card-info"></div>
+      </div>
+
+      <div class="book-card book-card--placeholder">
+        <div class="book-card-cover"><span class="placeholder-label">Coming Soon</span></div>
+        <div class="book-card-info"></div>
+      </div>
+
+    </div>
+  </main>
+
   <footer>
-    <span class="footer-ornament" aria-hidden="true">&mdash; &loz; &mdash;</span>
     <div class="footer-brand">Public Domain Classics</div>
     <p class="footer-note">All texts are sourced from Project Gutenberg and other public domain collections. Original works are in the public domain in the United States.</p>
   </footer>

@@ -40,7 +40,17 @@
       "Bash(node scripts/build-moby-dick-chapters.mjs)",
       "Bash(node scripts/build-frankenstein-chapters.mjs)",
       "Bash(ls -la books/frankenstein/images/*.jpg)",
-      "Bash(grep -n 'fill=\"\"\\\\${accent}\"\"' scripts/build-frankenstein-chapters.mjs)"
+      "Bash(grep -n 'fill=\"\"\\\\${accent}\"\"' scripts/build-frankenstein-chapters.mjs)",
+      "Bash(grep -E \"^[+-].{0,100}\")",
+      "Bash(git revert:*)",
+      "mcp__scheduled-tasks__list_scheduled_tasks",
+      "Bash(ls dist/assets/*.svg)",
+      "Bash(find . -name *.svg -path */assets/*)",
+      "Bash(find . -name *.svg -path */dist/*)",
+      "Bash(find . -name logo*)",
+      "Bash(ls dist/assets/logo*)",
+      "Bash(cp -r books/frankenstein/letter-* dist/books/frankenstein/)",
+      "Bash(cp -r books/frankenstein/chapter-* dist/books/frankenstein/)"
     ]
   }
 }
