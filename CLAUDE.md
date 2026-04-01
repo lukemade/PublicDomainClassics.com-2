@@ -167,6 +167,7 @@ The verification script compares two text sources:
   - **Libre Franklin** — top nav and breadcrumb UI elements
 - Google Fonts link for book pages (as of Frankenstein build):
   `Libre+Baskerville:ital,wght@0,400;0,700;1,400&Cormorant+Unicase:wght@300;400;500;600;700&IM+Fell+English:ital@0;1&IM+Fell+English+SC&IM+Fell+French+Canon:ital@0;1&IM+Fell+DW+Pica+SC`
+- **Text contrast rule:** All text must meet WCAG AA contrast ratio (4.5:1 for normal text, 3:1 for large text). Never use opacity below 0.5 for any visible text. For light text on dark backgrounds, minimum `rgba(232, 223, 208, 0.55)`. For dark text on light backgrounds, minimum `rgba(90, 79, 66, 0.55)`.
 - **Drop cap rules:**
   - Only apply `class="drop-cap"` to the first paragraph of a chapter/section, never to quotes or poetry
   - The paragraph must start with a letter (A-Z) — no quotes, parentheses, or punctuation
