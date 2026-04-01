@@ -170,7 +170,7 @@ for (let s = 0; s < sections.length; s++) {
   const blocks = parseBlocks(sec.lines, isLetter);
 
   html += `\n    <h2 class="section-heading" id="${id}">${escapeHtml(sec.title)}</h2>\n`;
-  html += `    <div class="section-body ">\n`;
+  html += `    <div class="section-body">\n`;
 
   let isFirstPara = true;
 
@@ -183,9 +183,16 @@ for (let s = 0; s < sections.length; s++) {
         html += `      <p class="letter-dateline">${processInlineFormatting(escapeHtml(block.text))}</p>\n`;
         break;
       case 'paragraph': {
-        const cls = isFirstPara ? ' class="drop-cap"' : '';
+        let cls = '';
+        if (isFirstPara) {
+          const startsWithLetter = /^[A-Za-z]/.test(block.text);
+          const longEnough = block.text.length >= 200;
+          if (startsWithLetter && longEnough) {
+            cls = ' class="drop-cap"';
+          }
+          isFirstPara = false;
+        }
         html += `      <p${cls}>${processInlineFormatting(escapeHtml(block.text))}</p>\n`;
-        isFirstPara = false;
         break;
       }
       case 'poetry':

@@ -28,11 +28,18 @@ while ((match = sectionRegex.exec(content)) !== null) {
 
 console.log(`Parsed ${chapters.length} chapters`);
 
+// ─── Accent color cycling ───────────────────────────────────
+const accentColors = ['#d4564c', '#6b5ce7', '#2eb8a6'];
+function getAccent(idx) {
+  return accentColors[((idx % accentColors.length) + accentColors.length) % accentColors.length];
+}
+
 // ─── Page template ──────────────────────────────────────────
 
 function pageHead(chapter, chapterIdx, isCover) {
   const plainTitle = chapter.title.replace(/&mdash;/g, '\u2014').replace(/&amp;/g, '&');
   const coverClass = isCover ? ' is-cover' : '';
+  const accent = getAccent(chapterIdx);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,6 +53,9 @@ function pageHead(chapter, chapterIdx, isCover) {
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/css/document-template.css">
   <style>
+    :root { --chapter-accent: ${accent}; }
+    .drop-cap::first-letter { color: var(--chapter-accent) !important; }
+
     /* ── Site nav ── */
     .site-nav {
       position: sticky;
@@ -724,6 +734,7 @@ function bookHeader(chapter, chapterIdx, isCover) {
   const prev = chapterIdx > 0 ? chapters[chapterIdx - 1] : null;
   const next = chapterIdx < chapters.length - 1 ? chapters[chapterIdx + 1] : null;
   const coverClass = isCover ? ' is-cover' : '';
+  const accent = getAccent(chapterIdx);
 
   // First chapter's prev goes to Cover, cover's prev is disabled
   let prevLink;

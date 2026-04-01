@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Letter 3 — Frankenstein — Public Domain Classics</title>
+  <link rel="canonical" href="https://publicdomainclassics.com/books/frankenstein/letter-3/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/css/document-template.css">
+  <style>
+    :root { --chapter-accent: #2eb8a6; }
+
+    /* Drop cap uses chapter accent */
+    .drop-cap::first-letter { color: var(--chapter-accent) !important; }
+
+    /* ── Site nav ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: #1a1510;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+    .site-nav-brand {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      color: rgba(232, 223, 208, 0.35);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .site-nav-brand:hover { color: rgba(232, 223, 208, 0.7); }
+
+    /* Centered book title with library icon */
+    .book-switch {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .book-switch:hover {
+      color: #e8dfd0;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .book-switch-icon {
+      width: 16px; height: 16px;
+      stroke: #d4564c; fill: none;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .book-switch-label { color: rgba(232, 223, 208, 0.45); }
+    .book-switch-title { color: rgba(232, 223, 208, 0.85); }
+
+    /* ── Library overlay (fullscreen book picker) ── */
+    .library-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(26, 21, 16, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .library-overlay.is-open { display: flex; }
+    .library-overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .library-overlay-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.4rem;
+      color: #e8dfd0;
+    }
+    .library-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: rgba(232, 223, 208, 0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .library-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .library-close svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .library-list {
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 16px 24px 60px;
+    }
+    .library-card {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      text-decoration: none;
+      transition: background 0.15s;
+      border-radius: 6px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+    .library-card:hover { background: rgba(255, 255, 255, 0.04); }
+    .library-card.is-current {
+      background: rgba(107, 58, 42, 0.15);
+      border-left: 3px solid #d4564c;
+    }
+    .library-card-cover {
+      width: 70px; height: 100px;
+      object-fit: cover;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .library-card-info { flex: 1; min-width: 0; }
+    .library-card-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.1rem;
+      color: #e8dfd0;
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+    .library-card-meta {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(196, 185, 154, 0.4);
+      margin-bottom: 8px;
+    }
+    .library-card-desc {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      color: rgba(196, 185, 154, 0.45);
+      line-height: 1.6;
+    }
+    .library-card-badge {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      color: #d4564c;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .library-card--placeholder .library-card-title {
+      color: rgba(232, 223, 208, 0.25);
+    }
+    .library-card--placeholder .library-card-desc {
+      color: rgba(196, 185, 154, 0.2);
+    }
+
+    /* ── Book header (static hero) ── */
+    .book-header {
+      background: #111;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-header-bg {
+      position: absolute; inset: 0;
+      background: url('/books/frankenstein/images/default.jpg') center/cover no-repeat;
+      opacity: 0.25;
+    }
+    .book-header-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(10, 8, 5, 0.7) 0%, rgba(10, 8, 5, 0.92) 100%);
+    }
+
+    .book-header-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 24px;
+      padding: 40px 29px 36px;
+    }
+    .book-header-inner .book-header-cover-wrap {
+      flex: 0 0 auto;
+    }
+    .book-header-inner .book-header-text-wrap {
+      flex: 1;
+    }
+    .book-header-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.12em;
+      color: rgba(196, 185, 154, 0.45);
+      margin-bottom: 8px;
+    }
+    .book-header-chapter {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 3.8rem;
+      font-weight: 400;
+      color: #e8dfd0;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    /* ── Bottom bar — sticky to bottom ── */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      background: rgba(26, 21, 16, 0.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 56px;
+      padding: 0 1rem;
+      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
+    }
+    .bottom-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1000px;
+      gap: 8px;
+    }
+    .ch-prev, .ch-next {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      transition: font-size 0.4s ease, color 0.4s ease;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      padding: 10px 16px;
+      transition: color 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ch-prev { flex-shrink: 0; }
+    .ch-next { flex-shrink: 0; }
+    .ch-prev:hover, .ch-next:hover { color: #fff; }
+    .ch-prev[aria-disabled="true"],
+    .ch-next[aria-disabled="true"] {
+      color: rgba(232, 223, 208, 0.15);
+      pointer-events: none;
+    }
+    .ch-prev-title, .ch-next-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+    .ch-prev svg, .ch-next svg {
+      width: 14px; height: 14px; flex-shrink: 0;
+      stroke: #d4564c; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .ch-prev[aria-disabled="true"] svg,
+    .ch-next[aria-disabled="true"] svg {
+      stroke: rgba(232, 223, 208, 0.15);
+    }
+
+    /* Center of bottom bar: chapter name + colorful plus */
+    .bottom-bar-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .bottom-bar-center:hover { background: rgba(255, 255, 255, 0.06); }
+    .bottom-bar-chapter {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      transition: font-size 0.4s ease, color 0.4s ease;
+      color: rgba(232, 223, 208, 0.7);
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .toc-icon {
+      width: 24px; height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .bottom-bar-center:hover .toc-icon {
+      transform: scale(1.15);
+    }
+    .toc-icon svg {
+      width: 20px; height: 20px;
+      stroke: #d4564c; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── Fullscreen TOC overlay ── */
+    .toc-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(26, 21, 16, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .toc-overlay.is-open { display: flex; }
+    .toc-overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .toc-overlay-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.2rem;
+      color: #e8dfd0;
+    }
+    .toc-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: rgba(232, 223, 208, 0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .toc-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .toc-close svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toc-overlay-list {
+      list-style: none;
+      padding: 12px 0;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .toc-overlay-list a {
+      display: block;
+      padding: 12px 24px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1rem;
+      color: rgba(232, 223, 208, 0.6);
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    .toc-overlay-list a:hover {
+      color: #e8dfd0;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .toc-overlay-list a.active {
+      color: #e8dfd0;
+      background: rgba(107, 58, 42, 0.2);
+      border-left: 3px solid rgba(107, 58, 42, 0.6);
+    }
+
+    /* Add bottom padding to body so content isn't hidden behind bottom bar */
+    body { padding-bottom: 56px; }
+
+    /* Bottom bar expanded state — when user reaches end of chapter */
+    .bottom-bar.is-expanded {
+      height: 80px;
+      background: rgba(107, 58, 42, 0.97);
+      border-top-color: rgba(212, 86, 76, 0.3);
+      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
+    }
+    .bottom-bar.is-expanded .ch-prev,
+    .bottom-bar.is-expanded .ch-next {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .bottom-bar.is-expanded .ch-prev svg,
+    .bottom-bar.is-expanded .ch-next svg {
+      stroke: #fff;
+      width: 18px; height: 18px;
+    }
+    .bottom-bar.is-expanded .ch-next {
+      animation: pulseNext 2s ease infinite;
+    }
+    @keyframes pulseNext {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .bottom-bar.is-expanded .bottom-bar-chapter {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+    }
+    .bottom-bar.is-expanded .toc-icon svg {
+      stroke: #fff;
+    }
+    .bottom-bar.is-expanded .toc-icon svg circle {
+      fill: #fff;
+    }
+
+
+    /* ── Crossfade images on cover ── */
+    .crossfade-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-size: cover; background-position: center;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+    .crossfade-bg.is-active { opacity: 0.3; }
+    .crossfade-thumb {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    .crossfade-thumb.is-active { opacity: 1; }
+
+    /* ── Cover page — side-by-side ── */
+    .book-header.is-cover .book-header-bg {
+      opacity: 0;
+    }
+    .book-header.is-cover .book-header-inner {
+      flex-direction: row;
+      text-align: left;
+      padding: 48px 2rem 44px;
+      gap: 40px;
+      align-items: center;
+    }
+    .book-header-cover-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .book-header.is-cover .book-header-cover {
+      width: 100%;
+      max-width: 300px;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.55), 0 4px 16px rgba(0, 0, 0, 0.35);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .book-header.is-cover .book-header-cover:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.65);
+    }
+    .book-header-text-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .book-header.is-cover .book-header-title {
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      color: rgba(196, 185, 154, 0.5);
+    }
+    .book-header.is-cover .book-header-chapter {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      margin-bottom: 10px;
+      line-height: 1.1;
+      text-align: left;
+    }
+    .book-header-author {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      color: rgba(196, 185, 154, 0.45);
+      margin-bottom: 24px;
+    }
+    .book-header.is-cover .chapter-selector {
+      justify-content: flex-start;
+    }
+    .book-header:not(.is-cover) .book-header-author {
+      display: none;
+    }
+    .book-header:not(.is-cover) .book-header-cover {
+      width: 80px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 3px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+    .chapter-eyebrow {
+      font-family: 'IM Fell DW Pica SC', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: #d4564c;
+      margin-bottom: 8px;
+    }
+    .book-header:not(.is-cover) .book-header-chapter {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      margin-bottom: 0;
+      line-height: 1.05;
+    }
+    @media (max-width: 700px) {
+      .book-header.is-cover .book-header-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+      }
+      .book-header.is-cover .book-header-cover { max-width: 200px; }
+      .book-header-text-wrap { align-items: center; }
+      .book-header.is-cover .book-header-chapter { text-align: center; }
+      .book-header.is-cover .chapter-selector { justify-content: center; }
+    }
+
+    /* ── Reading area ── */
+    .article-body {
+      margin-top: 0 !important;
+      border-radius: 0;
+    }
+
+    /* ── Bottom chapter nav ── */
+    .chapter-bottom-nav {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 1px;
+      max-width: 780px;
+      margin: 3rem auto 0;
+      padding: 0;
+      background: rgba(107, 58, 42, 0.12);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .chapter-bottom-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: var(--text, #2c2420);
+      text-decoration: none;
+      padding: 20px 16px;
+      background: var(--bg, #faf8f4);
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .chapter-bottom-nav a:hover {
+      background: var(--surface, #f0ece4);
+      color: var(--accent, #6b3a2a);
+    }
+    .chapter-bottom-nav a[aria-disabled="true"] {
+      color: rgba(90, 79, 66, 0.25);
+      pointer-events: none;
+    }
+    .chapter-bottom-nav .nav-direction {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(90, 79, 66, 0.5);
+    }
+    .chapter-bottom-nav svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── TOC page styles ── */
+    .toc-section {
+      background: var(--bg, #faf8f4);
+      padding: 3rem 2rem 4rem;
+    }
+    .toc-inner { max-width: 680px; margin: 0 auto; }
+    .toc-inner h2 {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.6rem; font-weight: 400;
+      color: var(--text, #2c2420);
+      margin-bottom: 1.5rem;
+    }
+    .toc-list { list-style: none; padding: 0; }
+    .toc-list li { border-bottom: 1px solid rgba(107, 58, 42, 0.1); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a {
+      display: block; padding: 0.75rem 0;
+      font-family: 'Libre Baskerville', serif; font-size: 0.95rem;
+      color: var(--text, #2c2420); text-decoration: none; transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--accent, #6b3a2a); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .site-nav { padding: 0 0.75rem; height: 40px; }
+      .book-switch { font-size: 0.6rem; padding: 4px 8px; }
+      .book-switch-label { display: none; }
+      .book-header-chapter { font-size: 2rem; }
+      .book-header.is-cover .book-header-chapter { font-size: 1.8rem; }
+      .book-header.is-cover .book-header-cover { max-width: 160px; }
+      .book-header.is-cover .book-header-inner { padding: 24px 1rem 16px; }
+      .ch-prev-title, .ch-next-title { display: none; }
+      .bottom-bar { height: 50px; }
+      .bottom-bar-chapter { display: none; }
+      body { padding-bottom: 50px; }
+      .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
+    }
+
+    /* ── Sentence mode ── */
+    .sentence-toggle {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      color: rgba(232, 223, 208, 0.6);
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      margin-left: 12px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .sentence-toggle:hover { color: #e8dfd0; border-color: rgba(255, 255, 255, 0.25); }
+    .sentence-toggle.is-active {
+      background: #d4564c;
+      border-color: #d4564c;
+      color: #fff;
+    }
+    .sentence-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: var(--bg, #faf8f4);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 2rem 80px;
+    }
+    .sentence-overlay.is-active { display: flex; }
+    .sentence-display {
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+    .sentence-text {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+      line-height: 1.6;
+      color: var(--text, #2c2420);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .sentence-text.is-visible { opacity: 1; }
+    .sentence-counter {
+      margin-top: 2rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      color: rgba(90, 79, 66, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Site navigation">
+    <div class="site-nav-inner">
+      <a href="/" class="site-nav-brand">PDC</a>
+      <button class="book-switch" id="library-open" aria-label="Switch book">
+        <svg class="book-switch-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="4" height="16" rx="0.5"/><rect x="7" y="2" width="4" height="18" rx="0.5"/><rect x="12" y="5" width="4" height="15" rx="0.5"/><rect x="17" y="3" width="4" height="17" rx="0.5"/></svg>
+        <span class="book-switch-title">Frankenstein</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" style="stroke: #d4564c; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;"><path d="M2 4l3 3 3-3"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div class="book-header" id="book-header">
+    <div class="book-header-bg" aria-hidden="true"></div>
+    <div class="book-header-overlay" aria-hidden="true"></div>
+    <div class="book-header-inner">
+      
+      <div class="book-header-cover-wrap">
+        <img class="book-header-cover" src="/books/frankenstein/images/default.jpg" alt="" loading="eager">
+      </div>
+      <div class="book-header-text-wrap">
+        
+        <h1 class="book-header-chapter">Letter 3</h1>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Bottom bar: prev / chapter name + plus / next -->
+  <div class="bottom-bar">
+    <div class="bottom-bar-inner">
+      <a class="ch-prev" href="/books/frankenstein/letter-2/"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span class="ch-prev-title">Letter 2</span></a>
+      <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
+        <span class="bottom-bar-chapter">Letter 3</span>
+        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#2eb8a6" stroke="none"/><circle cx="4" cy="12" r="1" fill="#2eb8a6" stroke="none"/><circle cx="4" cy="18" r="1" fill="#2eb8a6" stroke="none"/></svg></span>
+      </button>
+      <button class="sentence-toggle" id="sentence-toggle">Sentence</button>
+      <a class="ch-next" href="/books/frankenstein/letter-4/"><span class="ch-next-title">Letter 4</span><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <!-- Fullscreen TOC overlay -->
+  <div class="toc-overlay" id="toc-overlay">
+    <div class="toc-overlay-header">
+      <div class="toc-overlay-title">Frankenstein &mdash; Table of Contents</div>
+      <button class="toc-close" id="toc-close" aria-label="Close table of contents">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <ul class="toc-overlay-list">
+      <li><a href="/books/frankenstein/">Cover</a></li>
+      <li><a href="/books/frankenstein/letter-1/">Letter 1</a></li>
+      <li><a href="/books/frankenstein/letter-2/">Letter 2</a></li>
+      <li><a class="active" href="/books/frankenstein/letter-3/">Letter 3</a></li>
+      <li><a href="/books/frankenstein/letter-4/">Letter 4</a></li>
+      <li><a href="/books/frankenstein/chapter-1/">Chapter 1</a></li>
+      <li><a href="/books/frankenstein/chapter-2/">Chapter 2</a></li>
+      <li><a href="/books/frankenstein/chapter-3/">Chapter 3</a></li>
+      <li><a href="/books/frankenstein/chapter-4/">Chapter 4</a></li>
+      <li><a href="/books/frankenstein/chapter-5/">Chapter 5</a></li>
+      <li><a href="/books/frankenstein/chapter-6/">Chapter 6</a></li>
+      <li><a href="/books/frankenstein/chapter-7/">Chapter 7</a></li>
+      <li><a href="/books/frankenstein/chapter-8/">Chapter 8</a></li>
+      <li><a href="/books/frankenstein/chapter-9/">Chapter 9</a></li>
+      <li><a href="/books/frankenstein/chapter-10/">Chapter 10</a></li>
+      <li><a href="/books/frankenstein/chapter-11/">Chapter 11</a></li>
+      <li><a href="/books/frankenstein/chapter-12/">Chapter 12</a></li>
+      <li><a href="/books/frankenstein/chapter-13/">Chapter 13</a></li>
+      <li><a href="/books/frankenstein/chapter-14/">Chapter 14</a></li>
+      <li><a href="/books/frankenstein/chapter-15/">Chapter 15</a></li>
+      <li><a href="/books/frankenstein/chapter-16/">Chapter 16</a></li>
+      <li><a href="/books/frankenstein/chapter-17/">Chapter 17</a></li>
+      <li><a href="/books/frankenstein/chapter-18/">Chapter 18</a></li>
+      <li><a href="/books/frankenstein/chapter-19/">Chapter 19</a></li>
+      <li><a href="/books/frankenstein/chapter-20/">Chapter 20</a></li>
+      <li><a href="/books/frankenstein/chapter-21/">Chapter 21</a></li>
+      <li><a href="/books/frankenstein/chapter-22/">Chapter 22</a></li>
+      <li><a href="/books/frankenstein/chapter-23/">Chapter 23</a></li>
+      <li><a href="/books/frankenstein/chapter-24/">Chapter 24</a></li>
+    </ul>
+  </div>
+
+  <!-- Library overlay (book picker) -->
+  <div class="library-overlay" id="library-overlay">
+    <div class="library-overlay-header">
+      <div class="library-overlay-title">Library</div>
+      <button class="library-close" id="library-close" aria-label="Close library">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="library-list">
+      <a href="/books/frankenstein/" class="library-card is-current"><img class="library-card-cover" src="/books/frankenstein/images/default.jpg" alt="" loading="lazy"><div class="library-card-info"><div class="library-card-title">Frankenstein; or, The Modern Prometheus</div><div class="library-card-meta">Mary Shelley · 1818 · Gothic Fiction</div><div class="library-card-desc">A tale of ambition, creation, and consequence—widely considered the first science fiction novel.</div><div class="library-card-badge">Currently Reading</div></div></a><a href="/books/moby-dick/" class="library-card"><img class="library-card-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="lazy"><div class="library-card-info"><div class="library-card-title">Moby-Dick; or, The Whale</div><div class="library-card-meta">Herman Melville · 1851 · Adventure</div><div class="library-card-desc">Captain Ahab’s obsessive quest for the great white whale—a towering work of American literature.</div></div></a><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Pride and Prejudice</div><div class="library-card-meta">Jane Austen · 1813 · Romance</div><div class="library-card-desc">A witty exploration of love, class, and the perils of hasty judgment in Regency-era England.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Dracula</div><div class="library-card-meta">Bram Stoker · 1897 · Gothic Horror</div><div class="library-card-desc">The classic vampire tale told through diaries, letters, and newspaper clippings.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Great Gatsby</div><div class="library-card-meta">F. Scott Fitzgerald · 1925 · Literary Fiction</div><div class="library-card-desc">The decadence and disillusionment of the Jazz Age on Long Island.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Jane Eyre</div><div class="library-card-meta">Charlotte Bront\u00eb · 1847 · Gothic Romance</div><div class="library-card-desc">An orphan governess navigates love, independence, and dark secrets at Thornfield Hall.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Adventures of Sherlock Holmes</div><div class="library-card-meta">Arthur Conan Doyle · 1892 · Mystery</div><div class="library-card-desc">Twelve tales of the world\u2019s greatest consulting detective and his companion Dr. Watson.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">A Tale of Two Cities</div><div class="library-card-meta">Charles Dickens · 1859 · Historical Fiction</div><div class="library-card-desc">Paris and London during the turmoil of the French Revolution.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Picture of Dorian Gray</div><div class="library-card-meta">Oscar Wilde · 1890 · Philosophical Fiction</div><div class="library-card-desc">Beauty, corruption, and a portrait that ages so its subject never will.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Wuthering Heights</div><div class="library-card-meta">Emily Bront\u00eb · 1847 · Gothic Romance</div><div class="library-card-desc">A dark, passionate tale of obsession and revenge on the Yorkshire moors.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Bottom bar expand when near end of page
+      var bottomBar = document.querySelector('.bottom-bar');
+      if (bottomBar) {
+        var expanded = false;
+        window.addEventListener('scroll', function() {
+          var scrollBottom = window.scrollY + window.innerHeight;
+          var docHeight = document.documentElement.scrollHeight;
+          var nearEnd = (docHeight - scrollBottom) < 300;
+          if (nearEnd !== expanded) {
+            expanded = nearEnd;
+            bottomBar.classList.toggle('is-expanded', expanded);
+          }
+        }, { passive: true });
+      }
+
+      // TOC overlay
+      var tocOpen = document.getElementById('toc-open');
+      var tocClose = document.getElementById('toc-close');
+      var tocOverlay = document.getElementById('toc-overlay');
+      if (tocOpen && tocOverlay) {
+        tocOpen.addEventListener('click', function() { tocOverlay.classList.add('is-open'); });
+        tocClose.addEventListener('click', function() { tocOverlay.classList.remove('is-open'); });
+        tocOverlay.addEventListener('click', function(e) { if (e.target === tocOverlay) tocOverlay.classList.remove('is-open'); });
+      }
+      // Library overlay
+      var libOpen = document.getElementById('library-open');
+      var libClose = document.getElementById('library-close');
+      var libOverlay = document.getElementById('library-overlay');
+      if (libOpen && libOverlay) {
+        libOpen.addEventListener('click', function() { libOverlay.classList.add('is-open'); });
+        libClose.addEventListener('click', function() { libOverlay.classList.remove('is-open'); });
+        libOverlay.addEventListener('click', function(e) { if (e.target === libOverlay) libOverlay.classList.remove('is-open'); });
+      }
+      // Escape closes overlays and sentence mode
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (tocOverlay) tocOverlay.classList.remove('is-open');
+          if (libOverlay) libOverlay.classList.remove('is-open');
+          exitSentenceMode();
+        }
+      });
+
+      // ── Sentence-at-a-time mode ──
+      var sentenceBtn = document.getElementById('sentence-toggle');
+      var sentenceOverlay = document.getElementById('sentence-overlay');
+      var sentenceText = document.getElementById('sentence-text');
+      var sentenceCounter = document.getElementById('sentence-counter');
+      var sentences = [];
+      var sentenceIdx = 0;
+      var sentenceActive = false;
+
+      function extractSentences() {
+        if (sentences.length > 0) return;
+        var main = document.getElementById('main-content');
+        if (!main) return;
+        var text = '';
+        var paragraphs = main.querySelectorAll('p:not(.letter-salutation):not(.letter-dateline):not(.poetry-line)');
+        paragraphs.forEach(function(p) { text += p.textContent + ' '; });
+        // Split on sentence-ending punctuation followed by space
+        var raw = text.match(/[^.!?]*[.!?]+[\u201D\u2019"'\)]?\s*/g) || [text];
+        sentences = raw.map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+      }
+
+      function showSentence() {
+        if (!sentenceText || sentenceIdx < 0 || sentenceIdx >= sentences.length) return;
+        sentenceText.classList.remove('is-visible');
+        setTimeout(function() {
+          sentenceText.textContent = sentences[sentenceIdx];
+          sentenceCounter.textContent = (sentenceIdx + 1) + ' / ' + sentences.length;
+          // Trigger reflow then fade in
+          void sentenceText.offsetWidth;
+          sentenceText.classList.add('is-visible');
+        }, 80);
+      }
+
+      function enterSentenceMode() {
+        extractSentences();
+        if (sentences.length === 0) return;
+        sentenceActive = true;
+        sentenceIdx = 0;
+        sentenceOverlay.classList.add('is-active');
+        sentenceBtn.classList.add('is-active');
+        showSentence();
+      }
+
+      function exitSentenceMode() {
+        sentenceActive = false;
+        if (sentenceOverlay) sentenceOverlay.classList.remove('is-active');
+        if (sentenceBtn) sentenceBtn.classList.remove('is-active');
+      }
+
+      if (sentenceBtn) {
+        sentenceBtn.addEventListener('click', function() {
+          if (sentenceActive) { exitSentenceMode(); } else { enterSentenceMode(); }
+        });
+      }
+
+      // Navigation: click, arrow keys, swipe
+      if (sentenceOverlay) {
+        sentenceOverlay.addEventListener('click', function(e) {
+          if (!sentenceActive) return;
+          if (e.target === sentenceOverlay || sentenceOverlay.contains(e.target)) {
+            sentenceIdx++;
+            if (sentenceIdx >= sentences.length) sentenceIdx = sentences.length - 1;
+            showSentence();
+          }
+        });
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (!sentenceActive) return;
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          e.preventDefault();
+          sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1);
+          showSentence();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          sentenceIdx = Math.max(sentenceIdx - 1, 0);
+          showSentence();
+        }
+      });
+
+      // Touch swipe
+      var touchStartX = 0;
+      if (sentenceOverlay) {
+        sentenceOverlay.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+        sentenceOverlay.addEventListener('touchend', function(e) {
+          if (!sentenceActive) return;
+          var diff = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(diff) > 50) {
+            if (diff < 0) { sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1); }
+            else { sentenceIdx = Math.max(sentenceIdx - 1, 0); }
+            showSentence();
+          }
+        }, { passive: true });
+      }
+      // ── Crossfade images on cover page ──
+      var bgs = document.querySelectorAll('.crossfade-bg');
+      var thumbs = document.querySelectorAll('.crossfade-thumb');
+      if (bgs.length > 1) {
+        var slideIdx = 0;
+        setInterval(function() {
+          bgs[slideIdx].classList.remove('is-active');
+          if (thumbs[slideIdx]) thumbs[slideIdx].classList.remove('is-active');
+          slideIdx = (slideIdx + 1) % bgs.length;
+          bgs[slideIdx].classList.add('is-active');
+          if (thumbs[slideIdx]) thumbs[slideIdx].classList.add('is-active');
+        }, 3000);
+      }
+    })();
+  </script>
+
+  <main id="main-content" class="article-body">
+
+<div class="section-body">
+      <p class="letter-salutation"><em>To Mrs. Saville, England.</em></p>
+      <p class="letter-dateline">July 7th, 17&mdash;.</p>
+      <p class="letter-salutation">My dear Sister,</p>
+      <p class="drop-cap">I write a few lines in haste to say that I am safe&mdash;and well advanced on my voyage. This letter will reach England by a merchantman now on its homeward voyage from Archangel; more fortunate than I, who may not see my native land, perhaps, for many years. I am, however, in good spirits: my men are bold and apparently firm of purpose, nor do the floating sheets of ice that continually pass us, indicating the dangers of the region towards which we are advancing, appear to dismay them. We have already reached a very high latitude; but it is the height of summer, and although not so warm as in England, the southern gales, which blow us speedily towards those shores which I so ardently desire to attain, breathe a degree of renovating warmth which I had not expected.</p>
+      <p>No incidents have hitherto befallen us that would make a figure in a letter. One or two stiff gales and the springing of a leak are accidents which experienced navigators scarcely remember to record, and I shall be well content if nothing worse happen to us during our voyage.</p>
+      <p>Adieu, my dear Margaret. Be assured that for my own sake, as well as yours, I will not rashly encounter danger. I will be cool, persevering, and prudent.</p>
+      <p>But success <em>shall</em> crown my endeavours. Wherefore not? Thus far I have gone, tracing a secure way over the pathless seas, the very stars themselves being witnesses and testimonies of my triumph. Why not still proceed over the untamed yet obedient element? What can stop the determined heart and resolved will of man?</p>
+      <p>My swelling heart involuntarily pours itself out thus. But I must finish. Heaven bless my beloved sister!</p>
+      <p>R.W.</p>
+    </div>
+
+    
+  </main>
+
+  <!-- Sentence mode overlay -->
+  <div class="sentence-overlay" id="sentence-overlay">
+    <div class="sentence-display">
+      <div class="sentence-text" id="sentence-text"></div>
+      <div class="sentence-counter" id="sentence-counter"></div>
+    </div>
+  </div>
+
+  <footer class="doc-footer">
+    <div class="brand">Public Domain Classics</div>
+    <p class="disclaimer">
+      This text is sourced from <a href="https://www.gutenberg.org/ebooks/84">Project Gutenberg</a>
+      and is in the public domain in the United States.
+      <br>Formatted for readability &mdash; original text preserved verbatim.
+    </p>
+  </footer>
+</body>
+</html>

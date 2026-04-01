@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Chapter 11 — Frankenstein — Public Domain Classics</title>
+  <link rel="canonical" href="https://publicdomainclassics.com/books/frankenstein/chapter-11/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/css/document-template.css">
+  <style>
+    :root { --chapter-accent: #2eb8a6; }
+
+    /* Drop cap uses chapter accent */
+    .drop-cap::first-letter { color: var(--chapter-accent) !important; }
+
+    /* ── Site nav ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: #1a1510;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+    .site-nav-brand {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      color: rgba(232, 223, 208, 0.35);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .site-nav-brand:hover { color: rgba(232, 223, 208, 0.7); }
+
+    /* Centered book title with library icon */
+    .book-switch {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .book-switch:hover {
+      color: #e8dfd0;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .book-switch-icon {
+      width: 16px; height: 16px;
+      stroke: #d4564c; fill: none;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .book-switch-label { color: rgba(232, 223, 208, 0.45); }
+    .book-switch-title { color: rgba(232, 223, 208, 0.85); }
+
+    /* ── Library overlay (fullscreen book picker) ── */
+    .library-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(26, 21, 16, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .library-overlay.is-open { display: flex; }
+    .library-overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .library-overlay-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.4rem;
+      color: #e8dfd0;
+    }
+    .library-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: rgba(232, 223, 208, 0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .library-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .library-close svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .library-list {
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 16px 24px 60px;
+    }
+    .library-card {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      text-decoration: none;
+      transition: background 0.15s;
+      border-radius: 6px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+    .library-card:hover { background: rgba(255, 255, 255, 0.04); }
+    .library-card.is-current {
+      background: rgba(107, 58, 42, 0.15);
+      border-left: 3px solid #d4564c;
+    }
+    .library-card-cover {
+      width: 70px; height: 100px;
+      object-fit: cover;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .library-card-info { flex: 1; min-width: 0; }
+    .library-card-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.1rem;
+      color: #e8dfd0;
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+    .library-card-meta {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(196, 185, 154, 0.4);
+      margin-bottom: 8px;
+    }
+    .library-card-desc {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      color: rgba(196, 185, 154, 0.45);
+      line-height: 1.6;
+    }
+    .library-card-badge {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      color: #d4564c;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .library-card--placeholder .library-card-title {
+      color: rgba(232, 223, 208, 0.25);
+    }
+    .library-card--placeholder .library-card-desc {
+      color: rgba(196, 185, 154, 0.2);
+    }
+
+    /* ── Book header (static hero) ── */
+    .book-header {
+      background: #111;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-header-bg {
+      position: absolute; inset: 0;
+      background: url('/books/frankenstein/images/default.jpg') center/cover no-repeat;
+      opacity: 0.25;
+    }
+    .book-header-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(10, 8, 5, 0.7) 0%, rgba(10, 8, 5, 0.92) 100%);
+    }
+
+    .book-header-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 24px;
+      padding: 40px 29px 36px;
+    }
+    .book-header-inner .book-header-cover-wrap {
+      flex: 0 0 auto;
+    }
+    .book-header-inner .book-header-text-wrap {
+      flex: 1;
+    }
+    .book-header-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.12em;
+      color: rgba(196, 185, 154, 0.45);
+      margin-bottom: 8px;
+    }
+    .book-header-chapter {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 3.8rem;
+      font-weight: 400;
+      color: #e8dfd0;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    /* ── Bottom bar — sticky to bottom ── */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      background: rgba(26, 21, 16, 0.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 56px;
+      padding: 0 1rem;
+      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
+    }
+    .bottom-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1000px;
+      gap: 8px;
+    }
+    .ch-prev, .ch-next {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      transition: font-size 0.4s ease, color 0.4s ease;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      padding: 10px 16px;
+      transition: color 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ch-prev { flex-shrink: 0; }
+    .ch-next { flex-shrink: 0; }
+    .ch-prev:hover, .ch-next:hover { color: #fff; }
+    .ch-prev[aria-disabled="true"],
+    .ch-next[aria-disabled="true"] {
+      color: rgba(232, 223, 208, 0.15);
+      pointer-events: none;
+    }
+    .ch-prev-title, .ch-next-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+    .ch-prev svg, .ch-next svg {
+      width: 14px; height: 14px; flex-shrink: 0;
+      stroke: #d4564c; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .ch-prev[aria-disabled="true"] svg,
+    .ch-next[aria-disabled="true"] svg {
+      stroke: rgba(232, 223, 208, 0.15);
+    }
+
+    /* Center of bottom bar: chapter name + colorful plus */
+    .bottom-bar-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .bottom-bar-center:hover { background: rgba(255, 255, 255, 0.06); }
+    .bottom-bar-chapter {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      transition: font-size 0.4s ease, color 0.4s ease;
+      color: rgba(232, 223, 208, 0.7);
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .toc-icon {
+      width: 24px; height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .bottom-bar-center:hover .toc-icon {
+      transform: scale(1.15);
+    }
+    .toc-icon svg {
+      width: 20px; height: 20px;
+      stroke: #d4564c; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── Fullscreen TOC overlay ── */
+    .toc-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(26, 21, 16, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .toc-overlay.is-open { display: flex; }
+    .toc-overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .toc-overlay-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.2rem;
+      color: #e8dfd0;
+    }
+    .toc-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: rgba(232, 223, 208, 0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .toc-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .toc-close svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toc-overlay-list {
+      list-style: none;
+      padding: 12px 0;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .toc-overlay-list a {
+      display: block;
+      padding: 12px 24px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1rem;
+      color: rgba(232, 223, 208, 0.6);
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    .toc-overlay-list a:hover {
+      color: #e8dfd0;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .toc-overlay-list a.active {
+      color: #e8dfd0;
+      background: rgba(107, 58, 42, 0.2);
+      border-left: 3px solid rgba(107, 58, 42, 0.6);
+    }
+
+    /* Add bottom padding to body so content isn't hidden behind bottom bar */
+    body { padding-bottom: 56px; }
+
+    /* Bottom bar expanded state — when user reaches end of chapter */
+    .bottom-bar.is-expanded {
+      height: 80px;
+      background: rgba(107, 58, 42, 0.97);
+      border-top-color: rgba(212, 86, 76, 0.3);
+      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
+    }
+    .bottom-bar.is-expanded .ch-prev,
+    .bottom-bar.is-expanded .ch-next {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .bottom-bar.is-expanded .ch-prev svg,
+    .bottom-bar.is-expanded .ch-next svg {
+      stroke: #fff;
+      width: 18px; height: 18px;
+    }
+    .bottom-bar.is-expanded .ch-next {
+      animation: pulseNext 2s ease infinite;
+    }
+    @keyframes pulseNext {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .bottom-bar.is-expanded .bottom-bar-chapter {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+    }
+    .bottom-bar.is-expanded .toc-icon svg {
+      stroke: #fff;
+    }
+    .bottom-bar.is-expanded .toc-icon svg circle {
+      fill: #fff;
+    }
+
+
+    /* ── Crossfade images on cover ── */
+    .crossfade-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-size: cover; background-position: center;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+    .crossfade-bg.is-active { opacity: 0.3; }
+    .crossfade-thumb {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    .crossfade-thumb.is-active { opacity: 1; }
+
+    /* ── Cover page — side-by-side ── */
+    .book-header.is-cover .book-header-bg {
+      opacity: 0;
+    }
+    .book-header.is-cover .book-header-inner {
+      flex-direction: row;
+      text-align: left;
+      padding: 48px 2rem 44px;
+      gap: 40px;
+      align-items: center;
+    }
+    .book-header-cover-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .book-header.is-cover .book-header-cover {
+      width: 100%;
+      max-width: 300px;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.55), 0 4px 16px rgba(0, 0, 0, 0.35);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .book-header.is-cover .book-header-cover:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.65);
+    }
+    .book-header-text-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .book-header.is-cover .book-header-title {
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      color: rgba(196, 185, 154, 0.5);
+    }
+    .book-header.is-cover .book-header-chapter {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      margin-bottom: 10px;
+      line-height: 1.1;
+      text-align: left;
+    }
+    .book-header-author {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      color: rgba(196, 185, 154, 0.45);
+      margin-bottom: 24px;
+    }
+    .book-header.is-cover .chapter-selector {
+      justify-content: flex-start;
+    }
+    .book-header:not(.is-cover) .book-header-author {
+      display: none;
+    }
+    .book-header:not(.is-cover) .book-header-cover {
+      width: 80px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 3px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+    .chapter-eyebrow {
+      font-family: 'IM Fell DW Pica SC', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: #d4564c;
+      margin-bottom: 8px;
+    }
+    .book-header:not(.is-cover) .book-header-chapter {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      margin-bottom: 0;
+      line-height: 1.05;
+    }
+    @media (max-width: 700px) {
+      .book-header.is-cover .book-header-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+      }
+      .book-header.is-cover .book-header-cover { max-width: 200px; }
+      .book-header-text-wrap { align-items: center; }
+      .book-header.is-cover .book-header-chapter { text-align: center; }
+      .book-header.is-cover .chapter-selector { justify-content: center; }
+    }
+
+    /* ── Reading area ── */
+    .article-body {
+      margin-top: 0 !important;
+      border-radius: 0;
+    }
+
+    /* ── Bottom chapter nav ── */
+    .chapter-bottom-nav {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 1px;
+      max-width: 780px;
+      margin: 3rem auto 0;
+      padding: 0;
+      background: rgba(107, 58, 42, 0.12);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .chapter-bottom-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: var(--text, #2c2420);
+      text-decoration: none;
+      padding: 20px 16px;
+      background: var(--bg, #faf8f4);
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .chapter-bottom-nav a:hover {
+      background: var(--surface, #f0ece4);
+      color: var(--accent, #6b3a2a);
+    }
+    .chapter-bottom-nav a[aria-disabled="true"] {
+      color: rgba(90, 79, 66, 0.25);
+      pointer-events: none;
+    }
+    .chapter-bottom-nav .nav-direction {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(90, 79, 66, 0.5);
+    }
+    .chapter-bottom-nav svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── TOC page styles ── */
+    .toc-section {
+      background: var(--bg, #faf8f4);
+      padding: 3rem 2rem 4rem;
+    }
+    .toc-inner { max-width: 680px; margin: 0 auto; }
+    .toc-inner h2 {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.6rem; font-weight: 400;
+      color: var(--text, #2c2420);
+      margin-bottom: 1.5rem;
+    }
+    .toc-list { list-style: none; padding: 0; }
+    .toc-list li { border-bottom: 1px solid rgba(107, 58, 42, 0.1); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a {
+      display: block; padding: 0.75rem 0;
+      font-family: 'Libre Baskerville', serif; font-size: 0.95rem;
+      color: var(--text, #2c2420); text-decoration: none; transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--accent, #6b3a2a); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .site-nav { padding: 0 0.75rem; height: 40px; }
+      .book-switch { font-size: 0.6rem; padding: 4px 8px; }
+      .book-switch-label { display: none; }
+      .book-header-chapter { font-size: 2rem; }
+      .book-header.is-cover .book-header-chapter { font-size: 1.8rem; }
+      .book-header.is-cover .book-header-cover { max-width: 160px; }
+      .book-header.is-cover .book-header-inner { padding: 24px 1rem 16px; }
+      .ch-prev-title, .ch-next-title { display: none; }
+      .bottom-bar { height: 50px; }
+      .bottom-bar-chapter { display: none; }
+      body { padding-bottom: 50px; }
+      .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
+    }
+
+    /* ── Sentence mode ── */
+    .sentence-toggle {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      color: rgba(232, 223, 208, 0.6);
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      margin-left: 12px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .sentence-toggle:hover { color: #e8dfd0; border-color: rgba(255, 255, 255, 0.25); }
+    .sentence-toggle.is-active {
+      background: #d4564c;
+      border-color: #d4564c;
+      color: #fff;
+    }
+    .sentence-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: var(--bg, #faf8f4);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 2rem 80px;
+    }
+    .sentence-overlay.is-active { display: flex; }
+    .sentence-display {
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+    .sentence-text {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+      line-height: 1.6;
+      color: var(--text, #2c2420);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .sentence-text.is-visible { opacity: 1; }
+    .sentence-counter {
+      margin-top: 2rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      color: rgba(90, 79, 66, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Site navigation">
+    <div class="site-nav-inner">
+      <a href="/" class="site-nav-brand">PDC</a>
+      <button class="book-switch" id="library-open" aria-label="Switch book">
+        <svg class="book-switch-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="4" height="16" rx="0.5"/><rect x="7" y="2" width="4" height="18" rx="0.5"/><rect x="12" y="5" width="4" height="15" rx="0.5"/><rect x="17" y="3" width="4" height="17" rx="0.5"/></svg>
+        <span class="book-switch-title">Frankenstein</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" style="stroke: #d4564c; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;"><path d="M2 4l3 3 3-3"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div class="book-header" id="book-header">
+    <div class="book-header-bg" aria-hidden="true"></div>
+    <div class="book-header-overlay" aria-hidden="true"></div>
+    <div class="book-header-inner">
+      
+      <div class="book-header-cover-wrap">
+        <img class="book-header-cover" src="/books/frankenstein/images/default.jpg" alt="" loading="eager">
+      </div>
+      <div class="book-header-text-wrap">
+        
+        <h1 class="book-header-chapter">Chapter 11</h1>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Bottom bar: prev / chapter name + plus / next -->
+  <div class="bottom-bar">
+    <div class="bottom-bar-inner">
+      <a class="ch-prev" href="/books/frankenstein/chapter-10/"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span class="ch-prev-title">Chapter 10</span></a>
+      <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
+        <span class="bottom-bar-chapter">Chapter 11</span>
+        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#2eb8a6" stroke="none"/><circle cx="4" cy="12" r="1" fill="#2eb8a6" stroke="none"/><circle cx="4" cy="18" r="1" fill="#2eb8a6" stroke="none"/></svg></span>
+      </button>
+      <button class="sentence-toggle" id="sentence-toggle">Sentence</button>
+      <a class="ch-next" href="/books/frankenstein/chapter-12/"><span class="ch-next-title">Chapter 12</span><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <!-- Fullscreen TOC overlay -->
+  <div class="toc-overlay" id="toc-overlay">
+    <div class="toc-overlay-header">
+      <div class="toc-overlay-title">Frankenstein &mdash; Table of Contents</div>
+      <button class="toc-close" id="toc-close" aria-label="Close table of contents">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <ul class="toc-overlay-list">
+      <li><a href="/books/frankenstein/">Cover</a></li>
+      <li><a href="/books/frankenstein/letter-1/">Letter 1</a></li>
+      <li><a href="/books/frankenstein/letter-2/">Letter 2</a></li>
+      <li><a href="/books/frankenstein/letter-3/">Letter 3</a></li>
+      <li><a href="/books/frankenstein/letter-4/">Letter 4</a></li>
+      <li><a href="/books/frankenstein/chapter-1/">Chapter 1</a></li>
+      <li><a href="/books/frankenstein/chapter-2/">Chapter 2</a></li>
+      <li><a href="/books/frankenstein/chapter-3/">Chapter 3</a></li>
+      <li><a href="/books/frankenstein/chapter-4/">Chapter 4</a></li>
+      <li><a href="/books/frankenstein/chapter-5/">Chapter 5</a></li>
+      <li><a href="/books/frankenstein/chapter-6/">Chapter 6</a></li>
+      <li><a href="/books/frankenstein/chapter-7/">Chapter 7</a></li>
+      <li><a href="/books/frankenstein/chapter-8/">Chapter 8</a></li>
+      <li><a href="/books/frankenstein/chapter-9/">Chapter 9</a></li>
+      <li><a href="/books/frankenstein/chapter-10/">Chapter 10</a></li>
+      <li><a class="active" href="/books/frankenstein/chapter-11/">Chapter 11</a></li>
+      <li><a href="/books/frankenstein/chapter-12/">Chapter 12</a></li>
+      <li><a href="/books/frankenstein/chapter-13/">Chapter 13</a></li>
+      <li><a href="/books/frankenstein/chapter-14/">Chapter 14</a></li>
+      <li><a href="/books/frankenstein/chapter-15/">Chapter 15</a></li>
+      <li><a href="/books/frankenstein/chapter-16/">Chapter 16</a></li>
+      <li><a href="/books/frankenstein/chapter-17/">Chapter 17</a></li>
+      <li><a href="/books/frankenstein/chapter-18/">Chapter 18</a></li>
+      <li><a href="/books/frankenstein/chapter-19/">Chapter 19</a></li>
+      <li><a href="/books/frankenstein/chapter-20/">Chapter 20</a></li>
+      <li><a href="/books/frankenstein/chapter-21/">Chapter 21</a></li>
+      <li><a href="/books/frankenstein/chapter-22/">Chapter 22</a></li>
+      <li><a href="/books/frankenstein/chapter-23/">Chapter 23</a></li>
+      <li><a href="/books/frankenstein/chapter-24/">Chapter 24</a></li>
+    </ul>
+  </div>
+
+  <!-- Library overlay (book picker) -->
+  <div class="library-overlay" id="library-overlay">
+    <div class="library-overlay-header">
+      <div class="library-overlay-title">Library</div>
+      <button class="library-close" id="library-close" aria-label="Close library">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="library-list">
+      <a href="/books/frankenstein/" class="library-card is-current"><img class="library-card-cover" src="/books/frankenstein/images/default.jpg" alt="" loading="lazy"><div class="library-card-info"><div class="library-card-title">Frankenstein; or, The Modern Prometheus</div><div class="library-card-meta">Mary Shelley · 1818 · Gothic Fiction</div><div class="library-card-desc">A tale of ambition, creation, and consequence—widely considered the first science fiction novel.</div><div class="library-card-badge">Currently Reading</div></div></a><a href="/books/moby-dick/" class="library-card"><img class="library-card-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="lazy"><div class="library-card-info"><div class="library-card-title">Moby-Dick; or, The Whale</div><div class="library-card-meta">Herman Melville · 1851 · Adventure</div><div class="library-card-desc">Captain Ahab’s obsessive quest for the great white whale—a towering work of American literature.</div></div></a><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Pride and Prejudice</div><div class="library-card-meta">Jane Austen · 1813 · Romance</div><div class="library-card-desc">A witty exploration of love, class, and the perils of hasty judgment in Regency-era England.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Dracula</div><div class="library-card-meta">Bram Stoker · 1897 · Gothic Horror</div><div class="library-card-desc">The classic vampire tale told through diaries, letters, and newspaper clippings.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Great Gatsby</div><div class="library-card-meta">F. Scott Fitzgerald · 1925 · Literary Fiction</div><div class="library-card-desc">The decadence and disillusionment of the Jazz Age on Long Island.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Jane Eyre</div><div class="library-card-meta">Charlotte Bront\u00eb · 1847 · Gothic Romance</div><div class="library-card-desc">An orphan governess navigates love, independence, and dark secrets at Thornfield Hall.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Adventures of Sherlock Holmes</div><div class="library-card-meta">Arthur Conan Doyle · 1892 · Mystery</div><div class="library-card-desc">Twelve tales of the world\u2019s greatest consulting detective and his companion Dr. Watson.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">A Tale of Two Cities</div><div class="library-card-meta">Charles Dickens · 1859 · Historical Fiction</div><div class="library-card-desc">Paris and London during the turmoil of the French Revolution.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Picture of Dorian Gray</div><div class="library-card-meta">Oscar Wilde · 1890 · Philosophical Fiction</div><div class="library-card-desc">Beauty, corruption, and a portrait that ages so its subject never will.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Wuthering Heights</div><div class="library-card-meta">Emily Bront\u00eb · 1847 · Gothic Romance</div><div class="library-card-desc">A dark, passionate tale of obsession and revenge on the Yorkshire moors.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Bottom bar expand when near end of page
+      var bottomBar = document.querySelector('.bottom-bar');
+      if (bottomBar) {
+        var expanded = false;
+        window.addEventListener('scroll', function() {
+          var scrollBottom = window.scrollY + window.innerHeight;
+          var docHeight = document.documentElement.scrollHeight;
+          var nearEnd = (docHeight - scrollBottom) < 300;
+          if (nearEnd !== expanded) {
+            expanded = nearEnd;
+            bottomBar.classList.toggle('is-expanded', expanded);
+          }
+        }, { passive: true });
+      }
+
+      // TOC overlay
+      var tocOpen = document.getElementById('toc-open');
+      var tocClose = document.getElementById('toc-close');
+      var tocOverlay = document.getElementById('toc-overlay');
+      if (tocOpen && tocOverlay) {
+        tocOpen.addEventListener('click', function() { tocOverlay.classList.add('is-open'); });
+        tocClose.addEventListener('click', function() { tocOverlay.classList.remove('is-open'); });
+        tocOverlay.addEventListener('click', function(e) { if (e.target === tocOverlay) tocOverlay.classList.remove('is-open'); });
+      }
+      // Library overlay
+      var libOpen = document.getElementById('library-open');
+      var libClose = document.getElementById('library-close');
+      var libOverlay = document.getElementById('library-overlay');
+      if (libOpen && libOverlay) {
+        libOpen.addEventListener('click', function() { libOverlay.classList.add('is-open'); });
+        libClose.addEventListener('click', function() { libOverlay.classList.remove('is-open'); });
+        libOverlay.addEventListener('click', function(e) { if (e.target === libOverlay) libOverlay.classList.remove('is-open'); });
+      }
+      // Escape closes overlays and sentence mode
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (tocOverlay) tocOverlay.classList.remove('is-open');
+          if (libOverlay) libOverlay.classList.remove('is-open');
+          exitSentenceMode();
+        }
+      });
+
+      // ── Sentence-at-a-time mode ──
+      var sentenceBtn = document.getElementById('sentence-toggle');
+      var sentenceOverlay = document.getElementById('sentence-overlay');
+      var sentenceText = document.getElementById('sentence-text');
+      var sentenceCounter = document.getElementById('sentence-counter');
+      var sentences = [];
+      var sentenceIdx = 0;
+      var sentenceActive = false;
+
+      function extractSentences() {
+        if (sentences.length > 0) return;
+        var main = document.getElementById('main-content');
+        if (!main) return;
+        var text = '';
+        var paragraphs = main.querySelectorAll('p:not(.letter-salutation):not(.letter-dateline):not(.poetry-line)');
+        paragraphs.forEach(function(p) { text += p.textContent + ' '; });
+        // Split on sentence-ending punctuation followed by space
+        var raw = text.match(/[^.!?]*[.!?]+[\u201D\u2019"'\)]?\s*/g) || [text];
+        sentences = raw.map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+      }
+
+      function showSentence() {
+        if (!sentenceText || sentenceIdx < 0 || sentenceIdx >= sentences.length) return;
+        sentenceText.classList.remove('is-visible');
+        setTimeout(function() {
+          sentenceText.textContent = sentences[sentenceIdx];
+          sentenceCounter.textContent = (sentenceIdx + 1) + ' / ' + sentences.length;
+          // Trigger reflow then fade in
+          void sentenceText.offsetWidth;
+          sentenceText.classList.add('is-visible');
+        }, 80);
+      }
+
+      function enterSentenceMode() {
+        extractSentences();
+        if (sentences.length === 0) return;
+        sentenceActive = true;
+        sentenceIdx = 0;
+        sentenceOverlay.classList.add('is-active');
+        sentenceBtn.classList.add('is-active');
+        showSentence();
+      }
+
+      function exitSentenceMode() {
+        sentenceActive = false;
+        if (sentenceOverlay) sentenceOverlay.classList.remove('is-active');
+        if (sentenceBtn) sentenceBtn.classList.remove('is-active');
+      }
+
+      if (sentenceBtn) {
+        sentenceBtn.addEventListener('click', function() {
+          if (sentenceActive) { exitSentenceMode(); } else { enterSentenceMode(); }
+        });
+      }
+
+      // Navigation: click, arrow keys, swipe
+      if (sentenceOverlay) {
+        sentenceOverlay.addEventListener('click', function(e) {
+          if (!sentenceActive) return;
+          if (e.target === sentenceOverlay || sentenceOverlay.contains(e.target)) {
+            sentenceIdx++;
+            if (sentenceIdx >= sentences.length) sentenceIdx = sentences.length - 1;
+            showSentence();
+          }
+        });
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (!sentenceActive) return;
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          e.preventDefault();
+          sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1);
+          showSentence();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          sentenceIdx = Math.max(sentenceIdx - 1, 0);
+          showSentence();
+        }
+      });
+
+      // Touch swipe
+      var touchStartX = 0;
+      if (sentenceOverlay) {
+        sentenceOverlay.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+        sentenceOverlay.addEventListener('touchend', function(e) {
+          if (!sentenceActive) return;
+          var diff = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(diff) > 50) {
+            if (diff < 0) { sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1); }
+            else { sentenceIdx = Math.max(sentenceIdx - 1, 0); }
+            showSentence();
+          }
+        }, { passive: true });
+      }
+      // ── Crossfade images on cover page ──
+      var bgs = document.querySelectorAll('.crossfade-bg');
+      var thumbs = document.querySelectorAll('.crossfade-thumb');
+      if (bgs.length > 1) {
+        var slideIdx = 0;
+        setInterval(function() {
+          bgs[slideIdx].classList.remove('is-active');
+          if (thumbs[slideIdx]) thumbs[slideIdx].classList.remove('is-active');
+          slideIdx = (slideIdx + 1) % bgs.length;
+          bgs[slideIdx].classList.add('is-active');
+          if (thumbs[slideIdx]) thumbs[slideIdx].classList.add('is-active');
+        }, 3000);
+      }
+    })();
+  </script>
+
+  <main id="main-content" class="article-body">
+
+<div class="section-body">
+      <p>“It is with considerable difficulty that I remember the original era of my being; all the events of that period appear confused and indistinct. A strange multiplicity of sensations seized me, and I saw, felt, heard, and smelt at the same time; and it was, indeed, a long time before I learned to distinguish between the operations of my various senses. By degrees, I remember, a stronger light pressed upon my nerves, so that I was obliged to shut my eyes. Darkness then came over me and troubled me, but hardly had I felt this when, by opening my eyes, as I now suppose, the light poured in upon me again. I walked and, I believe, descended, but I presently found a great alteration in my sensations. Before, dark and opaque bodies had surrounded me, impervious to my touch or sight; but I now found that I could wander on at liberty, with no obstacles which I could not either surmount or avoid. The light became more and more oppressive to me, and the heat wearying me as I walked, I sought a place where I could receive shade. This was the forest near Ingolstadt; and here I lay by the side of a brook resting from my fatigue, until I felt tormented by hunger and thirst. This roused me from my nearly dormant state, and I ate some berries which I found hanging on the trees or lying on the ground. I slaked my thirst at the brook, and then lying down, was overcome by sleep.</p>
+      <p>“It was dark when I awoke; I felt cold also, and half frightened, as it were, instinctively, finding myself so desolate. Before I had quitted your apartment, on a sensation of cold, I had covered myself with some clothes, but these were insufficient to secure me from the dews of night. I was a poor, helpless, miserable wretch; I knew, and could distinguish, nothing; but feeling pain invade me on all sides, I sat down and wept.</p>
+      <p>“Soon a gentle light stole over the heavens and gave me a sensation of pleasure. I started up and beheld a radiant form rise from among the trees. [The moon] I gazed with a kind of wonder. It moved slowly, but it enlightened my path, and I again went out in search of berries. I was still cold when under one of the trees I found a huge cloak, with which I covered myself, and sat down upon the ground. No distinct ideas occupied my mind; all was confused. I felt light, and hunger, and thirst, and darkness; innumerable sounds rang in my ears, and on all sides various scents saluted me; the only object that I could distinguish was the bright moon, and I fixed my eyes on that with pleasure.</p>
+      <p>“Several changes of day and night passed, and the orb of night had greatly lessened, when I began to distinguish my sensations from each other. I gradually saw plainly the clear stream that supplied me with drink and the trees that shaded me with their foliage. I was delighted when I first discovered that a pleasant sound, which often saluted my ears, proceeded from the throats of the little winged animals who had often intercepted the light from my eyes. I began also to observe, with greater accuracy, the forms that surrounded me and to perceive the boundaries of the radiant roof of light which canopied me. Sometimes I tried to imitate the pleasant songs of the birds but was unable. Sometimes I wished to express my sensations in my own mode, but the uncouth and inarticulate sounds which broke from me frightened me into silence again.</p>
+      <p>“The moon had disappeared from the night, and again, with a lessened form, showed itself, while I still remained in the forest. My sensations had by this time become distinct, and my mind received every day additional ideas. My eyes became accustomed to the light and to perceive objects in their right forms; I distinguished the insect from the herb, and by degrees, one herb from another. I found that the sparrow uttered none but harsh notes, whilst those of the blackbird and thrush were sweet and enticing.</p>
+      <p>“One day, when I was oppressed by cold, I found a fire which had been left by some wandering beggars, and was overcome with delight at the warmth I experienced from it. In my joy I thrust my hand into the live embers, but quickly drew it out again with a cry of pain. How strange, I thought, that the same cause should produce such opposite effects! I examined the materials of the fire, and to my joy found it to be composed of wood. I quickly collected some branches, but they were wet and would not burn. I was pained at this and sat still watching the operation of the fire. The wet wood which I had placed near the heat dried and itself became inflamed. I reflected on this, and by touching the various branches, I discovered the cause and busied myself in collecting a great quantity of wood, that I might dry it and have a plentiful supply of fire. When night came on and brought sleep with it, I was in the greatest fear lest my fire should be extinguished. I covered it carefully with dry wood and leaves and placed wet branches upon it; and then, spreading my cloak, I lay on the ground and sank into sleep.</p>
+      <p>“It was morning when I awoke, and my first care was to visit the fire. I uncovered it, and a gentle breeze quickly fanned it into a flame. I observed this also and contrived a fan of branches, which roused the embers when they were nearly extinguished. When night came again I found, with pleasure, that the fire gave light as well as heat and that the discovery of this element was useful to me in my food, for I found some of the offals that the travellers had left had been roasted, and tasted much more savoury than the berries I gathered from the trees. I tried, therefore, to dress my food in the same manner, placing it on the live embers. I found that the berries were spoiled by this operation, and the nuts and roots much improved.</p>
+      <p>“Food, however, became scarce, and I often spent the whole day searching in vain for a few acorns to assuage the pangs of hunger. When I found this, I resolved to quit the place that I had hitherto inhabited, to seek for one where the few wants I experienced would be more easily satisfied. In this emigration I exceedingly lamented the loss of the fire which I had obtained through accident and knew not how to reproduce it. I gave several hours to the serious consideration of this difficulty, but I was obliged to relinquish all attempt to supply it, and wrapping myself up in my cloak, I struck across the wood towards the setting sun. I passed three days in these rambles and at length discovered the open country. A great fall of snow had taken place the night before, and the fields were of one uniform white; the appearance was disconsolate, and I found my feet chilled by the cold damp substance that covered the ground.</p>
+      <p>“It was about seven in the morning, and I longed to obtain food and shelter; at length I perceived a small hut, on a rising ground, which had doubtless been built for the convenience of some shepherd. This was a new sight to me, and I examined the structure with great curiosity. Finding the door open, I entered. An old man sat in it, near a fire, over which he was preparing his breakfast. He turned on hearing a noise, and perceiving me, shrieked loudly, and quitting the hut, ran across the fields with a speed of which his debilitated form hardly appeared capable. His appearance, different from any I had ever before seen, and his flight somewhat surprised me. But I was enchanted by the appearance of the hut; here the snow and rain could not penetrate; the ground was dry; and it presented to me then as exquisite and divine a retreat as Pandæmonium appeared to the dæmons of hell after their sufferings in the lake of fire. I greedily devoured the remnants of the shepherd’s breakfast, which consisted of bread, cheese, milk, and wine; the latter, however, I did not like. Then, overcome by fatigue, I lay down among some straw and fell asleep.</p>
+      <p>“It was noon when I awoke, and allured by the warmth of the sun, which shone brightly on the white ground, I determined to recommence my travels; and, depositing the remains of the peasant’s breakfast in a wallet I found, I proceeded across the fields for several hours, until at sunset I arrived at a village. How miraculous did this appear! The huts, the neater cottages, and stately houses engaged my admiration by turns. The vegetables in the gardens, the milk and cheese that I saw placed at the windows of some of the cottages, allured my appetite. One of the best of these I entered, but I had hardly placed my foot within the door before the children shrieked, and one of the women fainted. The whole village was roused; some fled, some attacked me, until, grievously bruised by stones and many other kinds of missile weapons, I escaped to the open country and fearfully took refuge in a low hovel, quite bare, and making a wretched appearance after the palaces I had beheld in the village. This hovel however, joined a cottage of a neat and pleasant appearance, but after my late dearly bought experience, I dared not enter it. My place of refuge was constructed of wood, but so low that I could with difficulty sit upright in it. No wood, however, was placed on the earth, which formed the floor, but it was dry; and although the wind entered it by innumerable chinks, I found it an agreeable asylum from the snow and rain.</p>
+      <p>“Here, then, I retreated and lay down happy to have found a shelter, however miserable, from the inclemency of the season, and still more from the barbarity of man. As soon as morning dawned I crept from my kennel, that I might view the adjacent cottage and discover if I could remain in the habitation I had found. It was situated against the back of the cottage and surrounded on the sides which were exposed by a pig sty and a clear pool of water. One part was open, and by that I had crept in; but now I covered every crevice by which I might be perceived with stones and wood, yet in such a manner that I might move them on occasion to pass out; all the light I enjoyed came through the sty, and that was sufficient for me.</p>
+      <p>“Having thus arranged my dwelling and carpeted it with clean straw, I retired, for I saw the figure of a man at a distance, and I remembered too well my treatment the night before to trust myself in his power. I had first, however, provided for my sustenance for that day by a loaf of coarse bread, which I purloined, and a cup with which I could drink more conveniently than from my hand of the pure water which flowed by my retreat. The floor was a little raised, so that it was kept perfectly dry, and by its vicinity to the chimney of the cottage it was tolerably warm.</p>
+      <p>“Being thus provided, I resolved to reside in this hovel until something should occur which might alter my determination. It was indeed a paradise compared to the bleak forest, my former residence, the rain-dropping branches, and dank earth. I ate my breakfast with pleasure and was about to remove a plank to procure myself a little water when I heard a step, and looking through a small chink, I beheld a young creature, with a pail on her head, passing before my hovel. The girl was young and of gentle demeanour, unlike what I have since found cottagers and farmhouse servants to be. Yet she was meanly dressed, a coarse blue petticoat and a linen jacket being her only garb; her fair hair was plaited but not adorned: she looked patient yet sad. I lost sight of her, and in about a quarter of an hour she returned bearing the pail, which was now partly filled with milk. As she walked along, seemingly incommoded by the burden, a young man met her, whose countenance expressed a deeper despondence. Uttering a few sounds with an air of melancholy, he took the pail from her head and bore it to the cottage himself. She followed, and they disappeared. Presently I saw the young man again, with some tools in his hand, cross the field behind the cottage; and the girl was also busied, sometimes in the house and sometimes in the yard.</p>
+      <p>“On examining my dwelling, I found that one of the windows of the cottage had formerly occupied a part of it, but the panes had been filled up with wood. In one of these was a small and almost imperceptible chink through which the eye could just penetrate. Through this crevice a small room was visible, whitewashed and clean but very bare of furniture. In one corner, near a small fire, sat an old man, leaning his head on his hands in a disconsolate attitude. The young girl was occupied in arranging the cottage; but presently she took something out of a drawer, which employed her hands, and she sat down beside the old man, who, taking up an instrument, began to play and to produce sounds sweeter than the voice of the thrush or the nightingale. It was a lovely sight, even to me, poor wretch who had never beheld aught beautiful before. The silver hair and benevolent countenance of the aged cottager won my reverence, while the gentle manners of the girl enticed my love. He played a sweet mournful air which I perceived drew tears from the eyes of his amiable companion, of which the old man took no notice, until she sobbed audibly; he then pronounced a few sounds, and the fair creature, leaving her work, knelt at his feet. He raised her and smiled with such kindness and affection that I felt sensations of a peculiar and overpowering nature; they were a mixture of pain and pleasure, such as I had never before experienced, either from hunger or cold, warmth or food; and I withdrew from the window, unable to bear these emotions.</p>
+      <p>“Soon after this the young man returned, bearing on his shoulders a load of wood. The girl met him at the door, helped to relieve him of his burden, and taking some of the fuel into the cottage, placed it on the fire; then she and the youth went apart into a nook of the cottage, and he showed her a large loaf and a piece of cheese. She seemed pleased and went into the garden for some roots and plants, which she placed in water, and then upon the fire. She afterwards continued her work, whilst the young man went into the garden and appeared busily employed in digging and pulling up roots. After he had been employed thus about an hour, the young woman joined him and they entered the cottage together.</p>
+      <p>“The old man had, in the meantime, been pensive, but on the appearance of his companions he assumed a more cheerful air, and they sat down to eat. The meal was quickly dispatched. The young woman was again occupied in arranging the cottage, the old man walked before the cottage in the sun for a few minutes, leaning on the arm of the youth. Nothing could exceed in beauty the contrast between these two excellent creatures. One was old, with silver hairs and a countenance beaming with benevolence and love; the younger was slight and graceful in his figure, and his features were moulded with the finest symmetry, yet his eyes and attitude expressed the utmost sadness and despondency. The old man returned to the cottage, and the youth, with tools different from those he had used in the morning, directed his steps across the fields.</p>
+      <p>“Night quickly shut in, but to my extreme wonder, I found that the cottagers had a means of prolonging light by the use of tapers, and was delighted to find that the setting of the sun did not put an end to the pleasure I experienced in watching my human neighbours. In the evening the young girl and her companion were employed in various occupations which I did not understand; and the old man again took up the instrument which produced the divine sounds that had enchanted me in the morning. So soon as he had finished, the youth began, not to play, but to utter sounds that were monotonous, and neither resembling the harmony of the old man’s instrument nor the songs of the birds; I since found that he read aloud, but at that time I knew nothing of the science of words or letters.</p>
+      <p>“The family, after having been thus occupied for a short time, extinguished their lights and retired, as I conjectured, to rest.”</p>
+    </div>
+
+    
+  </main>
+
+  <!-- Sentence mode overlay -->
+  <div class="sentence-overlay" id="sentence-overlay">
+    <div class="sentence-display">
+      <div class="sentence-text" id="sentence-text"></div>
+      <div class="sentence-counter" id="sentence-counter"></div>
+    </div>
+  </div>
+
+  <footer class="doc-footer">
+    <div class="brand">Public Domain Classics</div>
+    <p class="disclaimer">
+      This text is sourced from <a href="https://www.gutenberg.org/ebooks/84">Project Gutenberg</a>
+      and is in the public domain in the United States.
+      <br>Formatted for readability &mdash; original text preserved verbatim.
+    </p>
+  </footer>
+</body>
+</html>
