@@ -634,24 +634,67 @@
     }
 
     /* ── Sentence mode ── */
-    .sentence-toggle {
-      background: none;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 4px;
-      color: rgba(232, 223, 208, 0.6);
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      cursor: pointer;
-      margin-left: 12px;
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
-      white-space: nowrap;
+    /* Mode dropdown (top-right of nav) */
+    .mode-dropdown {
+      position: absolute;
+      right: 0;
     }
-    .sentence-toggle:hover { color: #e8dfd0; border-color: rgba(255, 255, 255, 0.25); }
-    .sentence-toggle.is-active {
-      background: #d4564c;
-      border-color: #d4564c;
-      color: #fff;
+    .mode-dropdown-btn {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      color: rgba(232, 223, 208, 0.6);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .mode-dropdown-btn:hover { color: #e8dfd0; }
+    .mode-label { color: rgba(232, 223, 208, 0.35); }
+    .mode-current { color: rgba(232, 223, 208, 0.8); }
+    .mode-caret {
+      width: 8px; height: 8px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .mode-caret::after {
+      content: '';
+      width: 5px; height: 5px;
+      border-right: 1.5px solid rgba(232, 223, 208, 0.4);
+      border-bottom: 1.5px solid rgba(232, 223, 208, 0.4);
+      transform: rotate(45deg);
+      transition: transform 0.2s;
+    }
+    .mode-dropdown[open] .mode-caret::after { transform: rotate(-135deg); }
+    .mode-dropdown-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      background: #2a2520;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      z-index: 300;
+      padding: 4px 0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      list-style: none;
+      min-width: 140px;
+    }
+    .mode-dropdown-list li a {
+      display: block;
+      padding: 8px 16px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.85rem;
+      color: rgba(232, 223, 208, 0.6);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer;
+    }
+    .mode-dropdown-list li a:hover { background: rgba(255, 255, 255, 0.06); color: #e8dfd0; }
+    .mode-dropdown-list li a.is-active {
+      color: #e8dfd0;
+      background: rgba(107, 58, 42, 0.25);
     }
     .sentence-overlay {
       display: none;
@@ -698,6 +741,17 @@
         <span class="book-switch-title">Frankenstein</span>
         <svg width="10" height="10" viewBox="0 0 10 10" style="stroke: #d4564c; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;"><path d="M2 4l3 3 3-3"/></svg>
       </button>
+      <details class="mode-dropdown" id="mode-dropdown">
+        <summary class="mode-dropdown-btn">
+          <span class="mode-label">Mode:</span>
+          <span class="mode-current" id="mode-current">Chapter</span>
+          <span class="mode-caret"></span>
+        </summary>
+        <ul class="mode-dropdown-list">
+          <li><a href="#" data-mode="chapter" class="is-active" id="mode-chapter">Chapter</a></li>
+          <li><a href="#" data-mode="sentence" id="mode-sentence">Sentence</a></li>
+        </ul>
+      </details>
     </div>
   </nav>
   <div class="book-header" id="book-header">
@@ -724,7 +778,6 @@
         <span class="bottom-bar-chapter">Chapter 20</span>
         <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#d4564c" stroke="none"/><circle cx="4" cy="12" r="1" fill="#d4564c" stroke="none"/><circle cx="4" cy="18" r="1" fill="#d4564c" stroke="none"/></svg></span>
       </button>
-      <button class="sentence-toggle" id="sentence-toggle">Sentence</button>
       <a class="ch-next" href="/books/frankenstein/chapter-21/"><span class="ch-next-title">Chapter 21</span><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
   </div>
@@ -827,8 +880,11 @@
         }
       });
 
-      // ── Sentence-at-a-time mode ──
-      var sentenceBtn = document.getElementById('sentence-toggle');
+      // ── Mode dropdown + Sentence-at-a-time mode ──
+      var modeDropdown = document.getElementById('mode-dropdown');
+      var modeCurrent = document.getElementById('mode-current');
+      var modeChapterBtn = document.getElementById('mode-chapter');
+      var modeSentenceBtn = document.getElementById('mode-sentence');
       var sentenceOverlay = document.getElementById('sentence-overlay');
       var sentenceText = document.getElementById('sentence-text');
       var sentenceCounter = document.getElementById('sentence-counter');
@@ -843,8 +899,7 @@
         var text = '';
         var paragraphs = main.querySelectorAll('p:not(.letter-salutation):not(.letter-dateline):not(.poetry-line)');
         paragraphs.forEach(function(p) { text += p.textContent + ' '; });
-        // Split on sentence-ending punctuation followed by space
-        var raw = text.match(/[^.!?]*[.!?]+[\u201D\u2019"'\)]?\s*/g) || [text];
+        var raw = text.match(/[^.!?]+[.!?]+[”’"')\s]*/g) || [text];
         sentences = raw.map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
       }
 
@@ -854,7 +909,6 @@
         setTimeout(function() {
           sentenceText.textContent = sentences[sentenceIdx];
           sentenceCounter.textContent = (sentenceIdx + 1) + ' / ' + sentences.length;
-          // Trigger reflow then fade in
           void sentenceText.offsetWidth;
           sentenceText.classList.add('is-visible');
         }, 80);
@@ -866,19 +920,32 @@
         sentenceActive = true;
         sentenceIdx = 0;
         sentenceOverlay.classList.add('is-active');
-        sentenceBtn.classList.add('is-active');
+        if (modeCurrent) modeCurrent.textContent = 'Sentence';
+        if (modeChapterBtn) modeChapterBtn.classList.remove('is-active');
+        if (modeSentenceBtn) modeSentenceBtn.classList.add('is-active');
+        if (modeDropdown) modeDropdown.removeAttribute('open');
         showSentence();
       }
 
       function exitSentenceMode() {
         sentenceActive = false;
         if (sentenceOverlay) sentenceOverlay.classList.remove('is-active');
-        if (sentenceBtn) sentenceBtn.classList.remove('is-active');
+        if (modeCurrent) modeCurrent.textContent = 'Chapter';
+        if (modeChapterBtn) modeChapterBtn.classList.add('is-active');
+        if (modeSentenceBtn) modeSentenceBtn.classList.remove('is-active');
+        if (modeDropdown) modeDropdown.removeAttribute('open');
       }
 
-      if (sentenceBtn) {
-        sentenceBtn.addEventListener('click', function() {
-          if (sentenceActive) { exitSentenceMode(); } else { enterSentenceMode(); }
+      if (modeSentenceBtn) {
+        modeSentenceBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          enterSentenceMode();
+        });
+      }
+      if (modeChapterBtn) {
+        modeChapterBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          exitSentenceMode();
         });
       }
 
@@ -886,11 +953,8 @@
       if (sentenceOverlay) {
         sentenceOverlay.addEventListener('click', function(e) {
           if (!sentenceActive) return;
-          if (e.target === sentenceOverlay || sentenceOverlay.contains(e.target)) {
-            sentenceIdx++;
-            if (sentenceIdx >= sentences.length) sentenceIdx = sentences.length - 1;
-            showSentence();
-          }
+          sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1);
+          showSentence();
         });
       }
 
@@ -907,7 +971,6 @@
         }
       });
 
-      // Touch swipe
       var touchStartX = 0;
       if (sentenceOverlay) {
         sentenceOverlay.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
@@ -915,8 +978,8 @@
           if (!sentenceActive) return;
           var diff = e.changedTouches[0].clientX - touchStartX;
           if (Math.abs(diff) > 50) {
-            if (diff < 0) { sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1); }
-            else { sentenceIdx = Math.max(sentenceIdx - 1, 0); }
+            if (diff < 0) sentenceIdx = Math.min(sentenceIdx + 1, sentences.length - 1);
+            else sentenceIdx = Math.max(sentenceIdx - 1, 0);
             showSentence();
           }
         }, { passive: true });
