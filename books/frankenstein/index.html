@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
   <title>Frankenstein; or, The Modern Prometheus — Public Domain Classics</title>
   <meta name="description" content="Mary Shelley's Frankenstein (1831 edition), beautifully formatted with clean typography and structured navigation.">
   <meta property="og:title" content="Frankenstein; or, The Modern Prometheus — Public Domain Classics">
@@ -66,10 +65,22 @@
       box-shadow: 0 20px 70px rgba(0, 0, 0, 0.65), 0 6px 20px rgba(0, 0, 0, 0.4);
     }
     @media (max-width: 900px) {
-      .hero-cover { max-width: 240px; width: clamp(160px, 30vw, 240px); }
+      .hero-content { padding-right: 0; }
+      .hero-thumbnail-wrap { flex: none; }
+      .hero-cover { max-width: 220px; }
     }
     @media (max-width: 600px) {
-      .hero-cover { width: clamp(140px, 42vw, 200px); max-width: none; }
+      .hero {
+        padding: 32px 24px 36px !important;
+      }
+      .hero-content { padding-right: 0; }
+      .hero-thumbnail-wrap { flex: none; }
+      .hero-cover {
+        width: clamp(140px, 42vw, 200px);
+        max-width: none;
+        max-height: none;
+        border-radius: 4px;
+      }
     }
   </style>
 </head>
@@ -93,6 +104,7 @@
           <ul class="breadcrumb-dropdown-list" role="listbox"></ul>
         </li>
       </ol>
+      <!-- FEATURE: Sentence-at-a-time mode (disabled for now)
       <div class="mode-dropdown" id="mode-dropdown">
         <button class="mode-toggle" id="mode-toggle">
           <span>Mode: </span><span class="mode-current">Scroll</span>
@@ -103,6 +115,7 @@
           <li><a href="#" data-mode="sentence">Sentence at a Time</a></li>
         </ul>
       </div>
+      -->
     </div>
   </nav>
 

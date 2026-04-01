@@ -7,6 +7,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         frankenstein: resolve(__dirname, 'books/frankenstein/index.html'),
+        'moby-dick': resolve(__dirname, 'books/moby-dick/index.html'),
       },
     },
   },

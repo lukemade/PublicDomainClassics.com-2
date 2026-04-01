@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Chapter 64. Stubb’s Supper. — Moby-Dick — Public Domain Classics</title>
+  <link rel="canonical" href="https://publicdomainclassics.com/books/moby-dick/chapter-64-stubbs-supper/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/css/document-template.css">
+  <style>
+    /* ── Site nav ── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: #1a1510;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+    .site-nav-brand {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      color: rgba(232, 223, 208, 0.35);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .site-nav-brand:hover { color: rgba(232, 223, 208, 0.7); }
+
+    /* Centered book title with library icon */
+    .book-switch {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .book-switch:hover {
+      color: #e8dfd0;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .book-switch-icon {
+      width: 16px; height: 16px;
+      stroke: #d4564c; fill: none;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .book-switch-label { color: rgba(232, 223, 208, 0.45); }
+    .book-switch-title { color: rgba(232, 223, 208, 0.85); }
+
+    /* ── Library overlay (fullscreen book picker) ── */
+    .library-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(26, 21, 16, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .library-overlay.is-open { display: flex; }
+    .library-overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .library-overlay-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.4rem;
+      color: #e8dfd0;
+    }
+    .library-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: rgba(232, 223, 208, 0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .library-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .library-close svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .library-list {
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 16px 24px 60px;
+    }
+    .library-card {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      text-decoration: none;
+      transition: background 0.15s;
+      border-radius: 6px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+    .library-card:hover { background: rgba(255, 255, 255, 0.04); }
+    .library-card.is-current {
+      background: rgba(107, 58, 42, 0.15);
+      border-left: 3px solid #d4564c;
+    }
+    .library-card-cover {
+      width: 70px; height: 100px;
+      object-fit: cover;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .library-card-info { flex: 1; min-width: 0; }
+    .library-card-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.1rem;
+      color: #e8dfd0;
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+    .library-card-meta {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(196, 185, 154, 0.4);
+      margin-bottom: 8px;
+    }
+    .library-card-desc {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      color: rgba(196, 185, 154, 0.45);
+      line-height: 1.6;
+    }
+    .library-card-badge {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      color: #d4564c;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .library-card--placeholder .library-card-title {
+      color: rgba(232, 223, 208, 0.25);
+    }
+    .library-card--placeholder .library-card-desc {
+      color: rgba(196, 185, 154, 0.2);
+    }
+
+    /* ── Book header (static hero) ── */
+    .book-header {
+      background: #111;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-header-bg {
+      position: absolute; inset: 0;
+      background: url('/books/moby-dick/images/default.jpg') center/cover no-repeat;
+      opacity: 0.25;
+    }
+    .book-header-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(10, 8, 5, 0.7) 0%, rgba(10, 8, 5, 0.92) 100%);
+    }
+
+    .book-header-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: left;
+      gap: 24px;
+      padding: 40px 29px 36px;
+    }
+    .book-header-inner .book-header-cover-wrap {
+      flex: 0 0 auto;
+    }
+    .book-header-inner .book-header-text-wrap {
+      flex: 1;
+    }
+    .book-header-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.12em;
+      color: rgba(196, 185, 154, 0.45);
+      margin-bottom: 8px;
+    }
+    .book-header-chapter {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 3.8rem;
+      font-weight: 400;
+      color: #e8dfd0;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    /* ── Bottom bar — sticky to bottom ── */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      background: rgba(26, 21, 16, 0.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 56px;
+      padding: 0 1rem;
+      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
+    }
+    .bottom-bar-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .ch-prev, .ch-next {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      transition: font-size 0.4s ease, color 0.4s ease;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      padding: 10px 16px;
+      transition: color 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ch-prev { margin-right: auto; }
+    .ch-next { margin-left: auto; }
+    .ch-prev:hover, .ch-next:hover { color: #fff; }
+    .ch-prev[aria-disabled="true"],
+    .ch-next[aria-disabled="true"] {
+      color: rgba(232, 223, 208, 0.15);
+      pointer-events: none;
+    }
+    .ch-prev-title, .ch-next-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+    .ch-prev svg, .ch-next svg {
+      width: 14px; height: 14px; flex-shrink: 0;
+      stroke: #d4564c; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .ch-prev[aria-disabled="true"] svg,
+    .ch-next[aria-disabled="true"] svg {
+      stroke: rgba(232, 223, 208, 0.15);
+    }
+
+    /* Center of bottom bar: chapter name + colorful plus */
+    .bottom-bar-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .bottom-bar-center:hover { background: rgba(255, 255, 255, 0.06); }
+    .bottom-bar-chapter {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      transition: font-size 0.4s ease, color 0.4s ease;
+      color: rgba(232, 223, 208, 0.7);
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .toc-icon {
+      width: 24px; height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .bottom-bar-center:hover .toc-icon {
+      transform: scale(1.15);
+    }
+    .toc-icon svg {
+      width: 20px; height: 20px;
+      stroke: #d4564c; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── Fullscreen TOC overlay ── */
+    .toc-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(26, 21, 16, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .toc-overlay.is-open { display: flex; }
+    .toc-overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .toc-overlay-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.2rem;
+      color: #e8dfd0;
+    }
+    .toc-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: rgba(232, 223, 208, 0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .toc-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .toc-close svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toc-overlay-list {
+      list-style: none;
+      padding: 12px 0;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .toc-overlay-list a {
+      display: block;
+      padding: 12px 24px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1rem;
+      color: rgba(232, 223, 208, 0.6);
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    .toc-overlay-list a:hover {
+      color: #e8dfd0;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .toc-overlay-list a.active {
+      color: #e8dfd0;
+      background: rgba(107, 58, 42, 0.2);
+      border-left: 3px solid rgba(107, 58, 42, 0.6);
+    }
+
+    /* Add bottom padding to body so content isn't hidden behind bottom bar */
+    body { padding-bottom: 56px; }
+
+    /* Bottom bar expanded state — when user reaches end of chapter */
+    .bottom-bar.is-expanded {
+      height: 80px;
+      background: rgba(107, 58, 42, 0.97);
+      border-top-color: rgba(212, 86, 76, 0.3);
+      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
+    }
+    .bottom-bar.is-expanded .ch-prev,
+    .bottom-bar.is-expanded .ch-next {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .bottom-bar.is-expanded .ch-prev svg,
+    .bottom-bar.is-expanded .ch-next svg {
+      stroke: #fff;
+      width: 18px; height: 18px;
+    }
+    .bottom-bar.is-expanded .ch-next {
+      animation: pulseNext 2s ease infinite;
+    }
+    @keyframes pulseNext {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .bottom-bar.is-expanded .bottom-bar-chapter {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+    }
+    .bottom-bar.is-expanded .toc-icon svg {
+      stroke: #fff;
+    }
+    .bottom-bar.is-expanded .toc-icon svg circle {
+      fill: #fff;
+    }
+
+
+    /* ── Cover page — side-by-side like Frankenstein ── */
+    .book-header.is-cover .book-header-bg {
+      opacity: 0.3;
+    }
+    .book-header.is-cover .book-header-inner {
+      flex-direction: row;
+      text-align: left;
+      padding: 48px 2rem 44px;
+      gap: 40px;
+      align-items: center;
+    }
+    .book-header-cover-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .book-header.is-cover .book-header-cover {
+      width: 100%;
+      max-width: 300px;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.55), 0 4px 16px rgba(0, 0, 0, 0.35);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .book-header.is-cover .book-header-cover:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.65);
+    }
+    .book-header-text-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .book-header.is-cover .book-header-title {
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      color: rgba(196, 185, 154, 0.5);
+    }
+    .book-header.is-cover .book-header-chapter {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      margin-bottom: 10px;
+      line-height: 1.1;
+      text-align: left;
+    }
+    .book-header-author {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      color: rgba(196, 185, 154, 0.45);
+      margin-bottom: 24px;
+    }
+    .book-header.is-cover .chapter-selector {
+      justify-content: flex-start;
+    }
+    .book-header:not(.is-cover) .book-header-author {
+      display: none;
+    }
+    .book-header:not(.is-cover) .book-header-cover {
+      width: 80px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 3px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+    .chapter-eyebrow {
+      font-family: 'IM Fell DW Pica SC', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: #d4564c;
+      margin-bottom: 8px;
+    }
+    .book-header:not(.is-cover) .book-header-chapter {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      margin-bottom: 0;
+      line-height: 1.05;
+    }
+    @media (max-width: 700px) {
+      .book-header.is-cover .book-header-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+      }
+      .book-header.is-cover .book-header-cover { max-width: 200px; }
+      .book-header-text-wrap { align-items: center; }
+      .book-header.is-cover .book-header-chapter { text-align: center; }
+      .book-header.is-cover .chapter-selector { justify-content: center; }
+    }
+
+    /* ── Reading area ── */
+    .article-body {
+      margin-top: 0 !important;
+      border-radius: 0;
+    }
+
+    /* ── Bottom chapter nav ── */
+    .chapter-bottom-nav {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 1px;
+      max-width: 780px;
+      margin: 3rem auto 0;
+      padding: 0;
+      background: rgba(107, 58, 42, 0.12);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .chapter-bottom-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: var(--text, #2c2420);
+      text-decoration: none;
+      padding: 20px 16px;
+      background: var(--bg, #faf8f4);
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .chapter-bottom-nav a:hover {
+      background: var(--surface, #f0ece4);
+      color: var(--accent, #6b3a2a);
+    }
+    .chapter-bottom-nav a[aria-disabled="true"] {
+      color: rgba(90, 79, 66, 0.25);
+      pointer-events: none;
+    }
+    .chapter-bottom-nav .nav-direction {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(90, 79, 66, 0.5);
+    }
+    .chapter-bottom-nav svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── TOC page styles ── */
+    .toc-section {
+      background: var(--bg, #faf8f4);
+      padding: 3rem 2rem 4rem;
+    }
+    .toc-inner { max-width: 680px; margin: 0 auto; }
+    .toc-inner h2 {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.6rem; font-weight: 400;
+      color: var(--text, #2c2420);
+      margin-bottom: 1.5rem;
+    }
+    .toc-list { list-style: none; padding: 0; }
+    .toc-list li { border-bottom: 1px solid rgba(107, 58, 42, 0.1); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a {
+      display: block; padding: 0.75rem 0;
+      font-family: 'Libre Baskerville', serif; font-size: 0.95rem;
+      color: var(--text, #2c2420); text-decoration: none; transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--accent, #6b3a2a); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .site-nav { padding: 0 0.75rem; height: 40px; }
+      .book-switch { font-size: 0.6rem; padding: 4px 8px; }
+      .book-switch-label { display: none; }
+      .book-header-chapter { font-size: 2rem; }
+      .book-header.is-cover .book-header-chapter { font-size: 1.8rem; }
+      .book-header.is-cover .book-header-cover { max-width: 160px; }
+      .book-header.is-cover .book-header-inner { padding: 24px 1rem 16px; }
+      .ch-prev-title, .ch-next-title { display: none; }
+      .bottom-bar { height: 50px; }
+      .bottom-bar-chapter { display: none; }
+      body { padding-bottom: 50px; }
+      .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Site navigation">
+    <div class="site-nav-inner">
+      <a href="/" class="site-nav-brand">PDC</a>
+      <button class="book-switch" id="library-open" aria-label="Switch book">
+        <svg class="book-switch-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="4" height="16" rx="0.5"/><rect x="7" y="2" width="4" height="18" rx="0.5"/><rect x="12" y="5" width="4" height="15" rx="0.5"/><rect x="17" y="3" width="4" height="17" rx="0.5"/></svg>
+        <span class="book-switch-title">Moby-Dick</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" style="stroke: #d4564c; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;"><path d="M2 4l3 3 3-3"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div class="book-header" id="book-header">
+    <div class="book-header-bg" aria-hidden="true"></div>
+    <div class="book-header-overlay" aria-hidden="true"></div>
+    <div class="book-header-inner">
+      
+      <div class="book-header-cover-wrap">
+        <img class="book-header-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="eager">
+      </div>
+      <div class="book-header-text-wrap">
+        <div class="chapter-eyebrow">Chapter 64</div>
+        <h1 class="book-header-chapter">Stubb’s Supper.</h1>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Bottom bar: prev / chapter name + plus / next -->
+  <div class="bottom-bar">
+    <div class="bottom-bar-inner">
+      <a class="ch-prev" href="/books/moby-dick/chapter-63-the-crotch/"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span class="ch-prev-title">Chapter 63. The Crotch.</span></a>
+      <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
+        <span class="bottom-bar-chapter">Chapter 64. Stubb’s Supper.</span>
+        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#d4564c" stroke="none"/><circle cx="4" cy="12" r="1" fill="#d4564c" stroke="none"/><circle cx="4" cy="18" r="1" fill="#d4564c" stroke="none"/></svg></span>
+      </button>
+      <a class="ch-next" href="/books/moby-dick/chapter-65-the-whale-as-a-dish/"><span class="ch-next-title">Chapter 65. The Whale as a Dish.</span><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+
+  <!-- Fullscreen TOC overlay -->
+  <div class="toc-overlay" id="toc-overlay">
+    <div class="toc-overlay-header">
+      <div class="toc-overlay-title">Moby-Dick &mdash; Table of Contents</div>
+      <button class="toc-close" id="toc-close" aria-label="Close table of contents">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <ul class="toc-overlay-list">
+      <li><a href="/books/moby-dick/">Cover</a></li>
+      <li><a href="/books/moby-dick/etymology/">Etymology</a></li>
+      <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
+      <li><a href="/books/moby-dick/chapter-1-loomings/">Chapter 1. Loomings.</a></li>
+      <li><a href="/books/moby-dick/chapter-2-the-carpet-bag/">Chapter 2. The Carpet-Bag.</a></li>
+      <li><a href="/books/moby-dick/chapter-3-the-spouter-inn/">Chapter 3. The Spouter-Inn.</a></li>
+      <li><a href="/books/moby-dick/chapter-4-the-counterpane/">Chapter 4. The Counterpane.</a></li>
+      <li><a href="/books/moby-dick/chapter-5-breakfast/">Chapter 5. Breakfast.</a></li>
+      <li><a href="/books/moby-dick/chapter-6-the-street/">Chapter 6. The Street.</a></li>
+      <li><a href="/books/moby-dick/chapter-7-the-chapel/">Chapter 7. The Chapel.</a></li>
+      <li><a href="/books/moby-dick/chapter-8-the-pulpit/">Chapter 8. The Pulpit.</a></li>
+      <li><a href="/books/moby-dick/chapter-9-the-sermon/">Chapter 9. The Sermon.</a></li>
+      <li><a href="/books/moby-dick/chapter-10-a-bosom-friend/">Chapter 10. A Bosom Friend.</a></li>
+      <li><a href="/books/moby-dick/chapter-11-nightgown/">Chapter 11. Nightgown.</a></li>
+      <li><a href="/books/moby-dick/chapter-12-biographical/">Chapter 12. Biographical.</a></li>
+      <li><a href="/books/moby-dick/chapter-13-wheelbarrow/">Chapter 13. Wheelbarrow.</a></li>
+      <li><a href="/books/moby-dick/chapter-14-nantucket/">Chapter 14. Nantucket.</a></li>
+      <li><a href="/books/moby-dick/chapter-15-chowder/">Chapter 15. Chowder.</a></li>
+      <li><a href="/books/moby-dick/chapter-16-the-ship/">Chapter 16. The Ship.</a></li>
+      <li><a href="/books/moby-dick/chapter-17-the-ramadan/">Chapter 17. The Ramadan.</a></li>
+      <li><a href="/books/moby-dick/chapter-18-his-mark/">Chapter 18. His Mark.</a></li>
+      <li><a href="/books/moby-dick/chapter-19-the-prophet/">Chapter 19. The Prophet.</a></li>
+      <li><a href="/books/moby-dick/chapter-20-all-astir/">Chapter 20. All Astir.</a></li>
+      <li><a href="/books/moby-dick/chapter-21-going-aboard/">Chapter 21. Going Aboard.</a></li>
+      <li><a href="/books/moby-dick/chapter-22-merry-christmas/">Chapter 22. Merry Christmas.</a></li>
+      <li><a href="/books/moby-dick/chapter-23-the-lee-shore/">Chapter 23. The Lee Shore.</a></li>
+      <li><a href="/books/moby-dick/chapter-24-the-advocate/">Chapter 24. The Advocate.</a></li>
+      <li><a href="/books/moby-dick/chapter-25-postscript/">Chapter 25. Postscript.</a></li>
+      <li><a href="/books/moby-dick/chapter-26-knights-and-squires/">Chapter 26. Knights and Squires.</a></li>
+      <li><a href="/books/moby-dick/chapter-27-knights-and-squires/">Chapter 27. Knights and Squires.</a></li>
+      <li><a href="/books/moby-dick/chapter-28-ahab/">Chapter 28. Ahab.</a></li>
+      <li><a href="/books/moby-dick/chapter-29-enter-ahab-to-him-stubb/">Chapter 29. Enter Ahab; to Him, Stubb.</a></li>
+      <li><a href="/books/moby-dick/chapter-30-the-pipe/">Chapter 30. The Pipe.</a></li>
+      <li><a href="/books/moby-dick/chapter-31-queen-mab/">Chapter 31. Queen Mab.</a></li>
+      <li><a href="/books/moby-dick/chapter-32-cetology/">Chapter 32. Cetology.</a></li>
+      <li><a href="/books/moby-dick/chapter-33-the-specksnyder/">Chapter 33. The Specksnyder.</a></li>
+      <li><a href="/books/moby-dick/chapter-34-the-cabin-table/">Chapter 34. The Cabin-Table.</a></li>
+      <li><a href="/books/moby-dick/chapter-35-the-mast-head/">Chapter 35. The Mast-Head.</a></li>
+      <li><a href="/books/moby-dick/chapter-36-the-quarter-deck/">Chapter 36. The Quarter-Deck.</a></li>
+      <li><a href="/books/moby-dick/chapter-37-sunset/">Chapter 37. Sunset.</a></li>
+      <li><a href="/books/moby-dick/chapter-38-dusk/">Chapter 38. Dusk.</a></li>
+      <li><a href="/books/moby-dick/chapter-39-first-night-watch/">Chapter 39. First Night-Watch.</a></li>
+      <li><a href="/books/moby-dick/chapter-40-midnight-forecastle/">Chapter 40. Midnight, Forecastle.</a></li>
+      <li><a href="/books/moby-dick/chapter-41-moby-dick/">Chapter 41. Moby Dick.</a></li>
+      <li><a href="/books/moby-dick/chapter-42-the-whiteness-of-the-whale/">Chapter 42. The Whiteness of the Whale.</a></li>
+      <li><a href="/books/moby-dick/chapter-43-hark/">Chapter 43. Hark!</a></li>
+      <li><a href="/books/moby-dick/chapter-44-the-chart/">Chapter 44. The Chart.</a></li>
+      <li><a href="/books/moby-dick/chapter-45-the-affidavit/">Chapter 45. The Affidavit.</a></li>
+      <li><a href="/books/moby-dick/chapter-46-surmises/">Chapter 46. Surmises.</a></li>
+      <li><a href="/books/moby-dick/chapter-47-the-mat-maker/">Chapter 47. The Mat-Maker.</a></li>
+      <li><a href="/books/moby-dick/chapter-48-the-first-lowering/">Chapter 48. The First Lowering.</a></li>
+      <li><a href="/books/moby-dick/chapter-49-the-hyena/">Chapter 49. The Hyena.</a></li>
+      <li><a href="/books/moby-dick/chapter-50-ahabs-boat-and-crew-fedallah/">Chapter 50. Ahab’s Boat and Crew. Fedallah.</a></li>
+      <li><a href="/books/moby-dick/chapter-51-the-spirit-spout/">Chapter 51. The Spirit-Spout.</a></li>
+      <li><a href="/books/moby-dick/chapter-52-the-albatross/">Chapter 52. The Albatross.</a></li>
+      <li><a href="/books/moby-dick/chapter-53-the-gam/">Chapter 53. The Gam.</a></li>
+      <li><a href="/books/moby-dick/chapter-54-the-town-hos-story/">Chapter 54. The Town-Ho’s Story.</a></li>
+      <li><a href="/books/moby-dick/chapter-55-of-the-monstrous-pictures-of-whales/">Chapter 55. Of the Monstrous Pictures of Whales.</a></li>
+      <li><a href="/books/moby-dick/chapter-56-of-the-less-erroneous-pictures-of-whales-and-the-true-pictures-of-whaling-scenes/">Chapter 56. Of the Less Erroneous Pictures of Whales, and the True Pictures of Whaling Scenes.</a></li>
+      <li><a href="/books/moby-dick/chapter-57-of-whales-in-paint-in-teeth-in-wood-in-sheet-iron-in-stone-in-mountains-in-stars/">Chapter 57. Of Whales in Paint; in Teeth; in Wood; in Sheet-Iron; in Stone; in Mountains; in Stars.</a></li>
+      <li><a href="/books/moby-dick/chapter-58-brit/">Chapter 58. Brit.</a></li>
+      <li><a href="/books/moby-dick/chapter-59-squid/">Chapter 59. Squid.</a></li>
+      <li><a href="/books/moby-dick/chapter-60-the-line/">Chapter 60. The Line.</a></li>
+      <li><a href="/books/moby-dick/chapter-61-stubb-kills-a-whale/">Chapter 61. Stubb Kills a Whale.</a></li>
+      <li><a href="/books/moby-dick/chapter-62-the-dart/">Chapter 62. The Dart.</a></li>
+      <li><a href="/books/moby-dick/chapter-63-the-crotch/">Chapter 63. The Crotch.</a></li>
+      <li><a class="active" href="/books/moby-dick/chapter-64-stubbs-supper/">Chapter 64. Stubb’s Supper.</a></li>
+      <li><a href="/books/moby-dick/chapter-65-the-whale-as-a-dish/">Chapter 65. The Whale as a Dish.</a></li>
+      <li><a href="/books/moby-dick/chapter-66-the-shark-massacre/">Chapter 66. The Shark Massacre.</a></li>
+      <li><a href="/books/moby-dick/chapter-67-cutting-in/">Chapter 67. Cutting In.</a></li>
+      <li><a href="/books/moby-dick/chapter-68-the-blanket/">Chapter 68. The Blanket.</a></li>
+      <li><a href="/books/moby-dick/chapter-69-the-funeral/">Chapter 69. The Funeral.</a></li>
+      <li><a href="/books/moby-dick/chapter-70-the-sphynx/">Chapter 70. The Sphynx.</a></li>
+      <li><a href="/books/moby-dick/chapter-71-the-jeroboams-story/">Chapter 71. The Jeroboam’s Story.</a></li>
+      <li><a href="/books/moby-dick/chapter-72-the-monkey-rope/">Chapter 72. The Monkey-Rope.</a></li>
+      <li><a href="/books/moby-dick/chapter-73-stubb-and-flask-kill-a-right-whale-and-then-have-a-talk-over-him/">Chapter 73. Stubb and Flask kill a Right Whale; and Then Have a Talk over Him.</a></li>
+      <li><a href="/books/moby-dick/chapter-74-the-sperm-whales-headcontrasted-view/">Chapter 74. The Sperm Whale’s Head—Contrasted View.</a></li>
+      <li><a href="/books/moby-dick/chapter-75-the-right-whales-headcontrasted-view/">Chapter 75. The Right Whale’s Head—Contrasted View.</a></li>
+      <li><a href="/books/moby-dick/chapter-76-the-battering-ram/">Chapter 76. The Battering-Ram.</a></li>
+      <li><a href="/books/moby-dick/chapter-77-the-great-heidelburgh-tun/">Chapter 77. The Great Heidelburgh Tun.</a></li>
+      <li><a href="/books/moby-dick/chapter-78-cistern-and-buckets/">Chapter 78. Cistern and Buckets.</a></li>
+      <li><a href="/books/moby-dick/chapter-79-the-prairie/">Chapter 79. The Prairie.</a></li>
+      <li><a href="/books/moby-dick/chapter-80-the-nut/">Chapter 80. The Nut.</a></li>
+      <li><a href="/books/moby-dick/chapter-81-the-pequod-meets-the-virgin/">Chapter 81. The Pequod Meets The Virgin.</a></li>
+      <li><a href="/books/moby-dick/chapter-82-the-honor-and-glory-of-whaling/">Chapter 82. The Honor and Glory of Whaling.</a></li>
+      <li><a href="/books/moby-dick/chapter-83-jonah-historically-regarded/">Chapter 83. Jonah Historically Regarded.</a></li>
+      <li><a href="/books/moby-dick/chapter-84-pitchpoling/">Chapter 84. Pitchpoling.</a></li>
+      <li><a href="/books/moby-dick/chapter-85-the-fountain/">Chapter 85. The Fountain.</a></li>
+      <li><a href="/books/moby-dick/chapter-86-the-tail/">Chapter 86. The Tail.</a></li>
+      <li><a href="/books/moby-dick/chapter-87-the-grand-armada/">Chapter 87. The Grand Armada.</a></li>
+      <li><a href="/books/moby-dick/chapter-88-schools-and-schoolmasters/">Chapter 88. Schools and Schoolmasters.</a></li>
+      <li><a href="/books/moby-dick/chapter-89-fast-fish-and-loose-fish/">Chapter 89. Fast-Fish and Loose-Fish.</a></li>
+      <li><a href="/books/moby-dick/chapter-90-heads-or-tails/">Chapter 90. Heads or Tails.</a></li>
+      <li><a href="/books/moby-dick/chapter-91-the-pequod-meets-the-rose-bud/">Chapter 91. The Pequod Meets The Rose-Bud.</a></li>
+      <li><a href="/books/moby-dick/chapter-92-ambergris/">Chapter 92. Ambergris.</a></li>
+      <li><a href="/books/moby-dick/chapter-93-the-castaway/">Chapter 93. The Castaway.</a></li>
+      <li><a href="/books/moby-dick/chapter-94-a-squeeze-of-the-hand/">Chapter 94. A Squeeze of the Hand.</a></li>
+      <li><a href="/books/moby-dick/chapter-95-the-cassock/">Chapter 95. The Cassock.</a></li>
+      <li><a href="/books/moby-dick/chapter-96-the-try-works/">Chapter 96. The Try-Works.</a></li>
+      <li><a href="/books/moby-dick/chapter-97-the-lamp/">Chapter 97. The Lamp.</a></li>
+      <li><a href="/books/moby-dick/chapter-98-stowing-down-and-clearing-up/">Chapter 98. Stowing Down and Clearing Up.</a></li>
+      <li><a href="/books/moby-dick/chapter-99-the-doubloon/">Chapter 99. The Doubloon.</a></li>
+      <li><a href="/books/moby-dick/chapter-100-leg-and-arm/">Chapter 100. Leg and Arm.</a></li>
+      <li><a href="/books/moby-dick/chapter-101-the-decanter/">Chapter 101. The Decanter.</a></li>
+      <li><a href="/books/moby-dick/chapter-102-a-bower-in-the-arsacides/">Chapter 102. A Bower in the Arsacides.</a></li>
+      <li><a href="/books/moby-dick/chapter-103-measurement-of-the-whales-skeleton/">Chapter 103. Measurement of The Whale’s Skeleton.</a></li>
+      <li><a href="/books/moby-dick/chapter-104-the-fossil-whale/">Chapter 104. The Fossil Whale.</a></li>
+      <li><a href="/books/moby-dick/chapter-105-does-the-whales-magnitude-diminishwill-he-perish/">Chapter 105. Does the Whale’s Magnitude Diminish?—Will He Perish?</a></li>
+      <li><a href="/books/moby-dick/chapter-106-ahabs-leg/">Chapter 106. Ahab’s Leg.</a></li>
+      <li><a href="/books/moby-dick/chapter-107-the-carpenter/">Chapter 107. The Carpenter.</a></li>
+      <li><a href="/books/moby-dick/chapter-108-ahab-and-the-carpenter/">Chapter 108. Ahab and the Carpenter.</a></li>
+      <li><a href="/books/moby-dick/chapter-109-ahab-and-starbuck-in-the-cabin/">Chapter 109. Ahab and Starbuck in the Cabin.</a></li>
+      <li><a href="/books/moby-dick/chapter-110-queequeg-in-his-coffin/">Chapter 110. Queequeg in His Coffin.</a></li>
+      <li><a href="/books/moby-dick/chapter-111-the-pacific/">Chapter 111. The Pacific.</a></li>
+      <li><a href="/books/moby-dick/chapter-112-the-blacksmith/">Chapter 112. The Blacksmith.</a></li>
+      <li><a href="/books/moby-dick/chapter-113-the-forge/">Chapter 113. The Forge.</a></li>
+      <li><a href="/books/moby-dick/chapter-114-the-gilder/">Chapter 114. The Gilder.</a></li>
+      <li><a href="/books/moby-dick/chapter-115-the-pequod-meets-the-bachelor/">Chapter 115. The Pequod Meets The Bachelor.</a></li>
+      <li><a href="/books/moby-dick/chapter-116-the-dying-whale/">Chapter 116. The Dying Whale.</a></li>
+      <li><a href="/books/moby-dick/chapter-117-the-whale-watch/">Chapter 117. The Whale Watch.</a></li>
+      <li><a href="/books/moby-dick/chapter-118-the-quadrant/">Chapter 118. The Quadrant.</a></li>
+      <li><a href="/books/moby-dick/chapter-119-the-candles/">Chapter 119. The Candles.</a></li>
+      <li><a href="/books/moby-dick/chapter-120-the-deck-towards-the-end-of-the-first-night-watch/">Chapter 120. The Deck Towards the End of the First Night Watch.</a></li>
+      <li><a href="/books/moby-dick/chapter-121-midnightthe-forecastle-bulwarks/">Chapter 121. Midnight.—The Forecastle Bulwarks.</a></li>
+      <li><a href="/books/moby-dick/chapter-122-midnight-aloftthunder-and-lightning/">Chapter 122. Midnight Aloft.—Thunder and Lightning.</a></li>
+      <li><a href="/books/moby-dick/chapter-123-the-musket/">Chapter 123. The Musket.</a></li>
+      <li><a href="/books/moby-dick/chapter-124-the-needle/">Chapter 124. The Needle.</a></li>
+      <li><a href="/books/moby-dick/chapter-125-the-log-and-line/">Chapter 125. The Log and Line.</a></li>
+      <li><a href="/books/moby-dick/chapter-126-the-life-buoy/">Chapter 126. The Life-Buoy.</a></li>
+      <li><a href="/books/moby-dick/chapter-127-the-deck/">Chapter 127. The Deck.</a></li>
+      <li><a href="/books/moby-dick/chapter-128-the-pequod-meets-the-rachel/">Chapter 128. The Pequod Meets The Rachel.</a></li>
+      <li><a href="/books/moby-dick/chapter-129-the-cabin/">Chapter 129. The Cabin.</a></li>
+      <li><a href="/books/moby-dick/chapter-130-the-hat/">Chapter 130. The Hat.</a></li>
+      <li><a href="/books/moby-dick/chapter-131-the-pequod-meets-the-delight/">Chapter 131. The Pequod Meets The Delight.</a></li>
+      <li><a href="/books/moby-dick/chapter-132-the-symphony/">Chapter 132. The Symphony.</a></li>
+      <li><a href="/books/moby-dick/chapter-133-the-chasefirst-day/">Chapter 133. The Chase—First Day.</a></li>
+      <li><a href="/books/moby-dick/chapter-134-the-chasesecond-day/">Chapter 134. The Chase—Second Day.</a></li>
+      <li><a href="/books/moby-dick/chapter-135-the-chasethird-day/">Chapter 135. The Chase.—Third Day.</a></li>
+      <li><a href="/books/moby-dick/epilogue/">Epilogue</a></li>
+    </ul>
+  </div>
+
+  <!-- Library overlay (book picker) -->
+  <div class="library-overlay" id="library-overlay">
+    <div class="library-overlay-header">
+      <div class="library-overlay-title">Library</div>
+      <button class="library-close" id="library-close" aria-label="Close library">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="library-list">
+      <a href="/books/moby-dick/" class="library-card is-current"><img class="library-card-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="lazy"><div class="library-card-info"><div class="library-card-title">Moby-Dick; or, The Whale</div><div class="library-card-meta">Herman Melville · 1851 · Adventure</div><div class="library-card-desc">Captain Ahab\u2019s obsessive quest for the great white whale\u2014a towering work of American literature.</div><div class="library-card-badge">Currently Reading</div></div></a><a href="/books/frankenstein/" class="library-card"><img class="library-card-cover" src="/books/frankenstein/images/default.jpg" alt="" loading="lazy"><div class="library-card-info"><div class="library-card-title">Frankenstein; or, The Modern Prometheus</div><div class="library-card-meta">Mary Shelley · 1818 · Gothic Fiction</div><div class="library-card-desc">A tale of ambition, creation, and consequence\u2014widely considered the first science fiction novel.</div></div></a><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Pride and Prejudice</div><div class="library-card-meta">Jane Austen · 1813 · Romance</div><div class="library-card-desc">A witty exploration of love, class, and the perils of hasty judgment in Regency-era England.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Dracula</div><div class="library-card-meta">Bram Stoker · 1897 · Gothic Horror</div><div class="library-card-desc">The classic vampire tale told through diaries, letters, and newspaper clippings.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Great Gatsby</div><div class="library-card-meta">F. Scott Fitzgerald · 1925 · Literary Fiction</div><div class="library-card-desc">The decadence and disillusionment of the Jazz Age on Long Island.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Jane Eyre</div><div class="library-card-meta">Charlotte Bront\u00eb · 1847 · Gothic Romance</div><div class="library-card-desc">An orphan governess navigates love, independence, and dark secrets at Thornfield Hall.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Adventures of Sherlock Holmes</div><div class="library-card-meta">Arthur Conan Doyle · 1892 · Mystery</div><div class="library-card-desc">Twelve tales of the world\u2019s greatest consulting detective and his companion Dr. Watson.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">A Tale of Two Cities</div><div class="library-card-meta">Charles Dickens · 1859 · Historical Fiction</div><div class="library-card-desc">Paris and London during the turmoil of the French Revolution.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Picture of Dorian Gray</div><div class="library-card-meta">Oscar Wilde · 1890 · Philosophical Fiction</div><div class="library-card-desc">Beauty, corruption, and a portrait that ages so its subject never will.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Wuthering Heights</div><div class="library-card-meta">Emily Bront\u00eb · 1847 · Gothic Romance</div><div class="library-card-desc">A dark, passionate tale of obsession and revenge on the Yorkshire moors.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Bottom bar expand when near end of page
+      var bottomBar = document.querySelector('.bottom-bar');
+      if (bottomBar) {
+        var expanded = false;
+        window.addEventListener('scroll', function() {
+          var scrollBottom = window.scrollY + window.innerHeight;
+          var docHeight = document.documentElement.scrollHeight;
+          var nearEnd = (docHeight - scrollBottom) < 300;
+          if (nearEnd !== expanded) {
+            expanded = nearEnd;
+            bottomBar.classList.toggle('is-expanded', expanded);
+          }
+        }, { passive: true });
+      }
+
+      // TOC overlay
+      var tocOpen = document.getElementById('toc-open');
+      var tocClose = document.getElementById('toc-close');
+      var tocOverlay = document.getElementById('toc-overlay');
+      if (tocOpen && tocOverlay) {
+        tocOpen.addEventListener('click', function() { tocOverlay.classList.add('is-open'); });
+        tocClose.addEventListener('click', function() { tocOverlay.classList.remove('is-open'); });
+        tocOverlay.addEventListener('click', function(e) { if (e.target === tocOverlay) tocOverlay.classList.remove('is-open'); });
+      }
+      // Library overlay
+      var libOpen = document.getElementById('library-open');
+      var libClose = document.getElementById('library-close');
+      var libOverlay = document.getElementById('library-overlay');
+      if (libOpen && libOverlay) {
+        libOpen.addEventListener('click', function() { libOverlay.classList.add('is-open'); });
+        libClose.addEventListener('click', function() { libOverlay.classList.remove('is-open'); });
+        libOverlay.addEventListener('click', function(e) { if (e.target === libOverlay) libOverlay.classList.remove('is-open'); });
+      }
+      // Escape closes both
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (tocOverlay) tocOverlay.classList.remove('is-open');
+          if (libOverlay) libOverlay.classList.remove('is-open');
+        }
+      });
+    })();
+  </script>
+
+  <main id="main-content" class="article-body">
+<div class="section-body">
+      <p class="drop-cap">Stubb&rsquo;s whale had been killed some distance from the ship. It was a calm; so, forming a tandem of three boats, we commenced the slow business of towing the trophy to the Pequod. And now, as we eighteen men with our thirty-six arms, and one hundred and eighty thumbs and fingers, slowly toiled hour after hour upon that inert, sluggish corpse in the sea; and it seemed hardly to budge at all, except at long intervals; good evidence was hereby furnished of the enormousness of the mass we moved. For, upon the great canal of Hang-Ho, or whatever they call it, in China, four or five laborers on the foot-path will draw a bulky freighted junk at the rate of a mile an hour; but this grand argosy we towed heavily forged along, as if laden with pig-lead in bulk.</p>
+      <p>Darkness came on; but three lights up and down in the Pequod&rsquo;s main-rigging dimly guided our way; till drawing nearer we saw Ahab dropping one of several more lanterns over the bulwarks. Vacantly eyeing the heaving whale for a moment, he issued the usual orders for securing it for the night, and then handing his lantern to a seaman, went his way into the cabin, and did not come forward again until morning.</p>
+      <p>Though, in overseeing the pursuit of this whale, Captain Ahab had evinced his customary activity, to call it so; yet now that the creature was dead, some vague dissatisfaction, or impatience, or despair, seemed working in him; as if the sight of that dead body reminded him that Moby Dick was yet to be slain; and though a thousand other whales were brought to his ship, all that would not one jot advance his grand, monomaniac object. Very soon you would have thought from the sound on the Pequod&rsquo;s decks, that all hands were preparing to cast anchor in the deep; for heavy chains are being dragged along the deck, and thrust rattling out of the port-holes. But by those clanking links, the vast corpse itself, not the ship, is to be moored. Tied by the head to the stern, and by the tail to the bows, the whale now lies with its black hull close to the vessel&rsquo;s and seen through the darkness of the night, which obscured the spars and rigging aloft, the two&mdash;ship and whale, seemed yoked together like colossal bullocks, whereof one reclines while the other remains standing.*</p>
+      <p>*A little item may as well be related here. The strongest and most reliable hold which the ship has upon the whale when moored alongside, is by the flukes or tail; and as from its greater density that part is relatively heavier than any other (excepting the side-fins), its flexibility even in death, causes it to sink low beneath the surface; so that with the hand you cannot get at it from the boat, in order to put the chain round it. But this difficulty is ingeniously overcome: a small, strong line is prepared with a wooden float at its outer end, and a weight in its middle, while the other end is secured to the ship. By adroit management the wooden float is made to rise on the other side of the mass, so that now having girdled the whale, the chain is readily made to follow suit; and being slipped along the body, is at last locked fast round the smallest part of the tail, at the point of junction with its broad flukes or lobes.</p>
+      <p>If moody Ahab was now all quiescence, at least so far as could be known on deck, Stubb, his second mate, flushed with conquest, betrayed an unusual but still good-natured excitement. Such an unwonted bustle was he in that the staid Starbuck, his official superior, quietly resigned to him for the time the sole management of affairs. One small, helping cause of all this liveliness in Stubb, was soon made strangely manifest. Stubb was a high liver; he was somewhat intemperately fond of the whale as a flavorish thing to his palate.</p>
+      <p>&ldquo;A steak, a steak, ere I sleep! You, Daggoo! overboard you go, and cut me one from his small!&rdquo;</p>
+      <p>Here be it known, that though these wild fishermen do not, as a general thing, and according to the great military maxim, make the enemy defray the current expenses of the war (at least before realizing the proceeds of the voyage), yet now and then you find some of these Nantucketers who have a genuine relish for that particular part of the Sperm Whale designated by Stubb; comprising the tapering extremity of the body.</p>
+      <p>About midnight that steak was cut and cooked; and lighted by two lanterns of sperm oil, Stubb stoutly stood up to his spermaceti supper at the capstan-head, as if that capstan were a sideboard. Nor was Stubb the only banqueter on whale&rsquo;s flesh that night. Mingling their mumblings with his own mastications, thousands on thousands of sharks, swarming round the dead leviathan, smackingly feasted on its fatness. The few sleepers below in their bunks were often startled by the sharp slapping of their tails against the hull, within a few inches of the sleepers&rsquo; hearts. Peering over the side you could just see them (as before you heard them) wallowing in the sullen, black waters, and turning over on their backs as they scooped out huge globular pieces of the whale of the bigness of a human head. This particular feat of the shark seems all but miraculous. How at such an apparently unassailable surface, they contrive to gouge out such symmetrical mouthfuls, remains a part of the universal problem of all things. The mark they thus leave on the whale, may best be likened to the hollow made by a carpenter in countersinking for a screw.</p>
+      <p>Though amid all the smoking horror and diabolism of a sea-fight, sharks will be seen longingly gazing up to the ship&rsquo;s decks, like hungry dogs round a table where red meat is being carved, ready to bolt down every killed man that is tossed to them; and though, while the valiant butchers over the deck-table are thus cannibally carving each other&rsquo;s live meat with carving-knives all gilded and tasselled, the sharks, also, with their jewel-hilted mouths, are quarrelsomely carving away under the table at the dead meat; and though, were you to turn the whole affair upside down, it would still be pretty much the same thing, that is to say, a shocking sharkish business enough for all parties; and though sharks also are the invariable outriders of all slave ships crossing the Atlantic, systematically trotting alongside, to be handy in case a parcel is to be carried anywhere, or a dead slave to be decently buried; and though one or two other like instances might be set down, touching the set terms, places, and occasions, when sharks do most socially congregate, and most hilariously feast; yet is there no conceivable time or occasion when you will find them in such countless numbers, and in gayer or more jovial spirits, than around a dead sperm whale, moored by night to a whaleship at sea. If you have never seen that sight, then suspend your decision about the propriety of devil-worship, and the expediency of conciliating the devil.</p>
+      <p>But, as yet, Stubb heeded not the mumblings of the banquet that was going on so nigh him, no more than the sharks heeded the smacking of his own epicurean lips.</p>
+      <p>&ldquo;Cook, cook!&mdash;where&rsquo;s that old Fleece?&rdquo; he cried at length, widening his legs still further, as if to form a more secure base for his supper; and, at the same time darting his fork into the dish, as if stabbing with his lance; &ldquo;cook, you cook!&mdash;sail this way, cook!&rdquo;</p>
+      <p>The old black, not in any very high glee at having been previously roused from his warm hammock at a most unseasonable hour, came shambling along from his galley, for, like many old blacks, there was something the matter with his knee-pans, which he did not keep well scoured like his other pans; this old Fleece, as they called him, came shuffling and limping along, assisting his step with his tongs, which, after a clumsy fashion, were made of straightened iron hoops; this old Ebony floundered along, and in obedience to the word of command, came to a dead stop on the opposite side of Stubb&rsquo;s sideboard; when, with both hands folded before him, and resting on his two-legged cane, he bowed his arched back still further over, at the same time sideways inclining his head, so as to bring his best ear into play.</p>
+      <p>&ldquo;Cook,&rdquo; said Stubb, rapidly lifting a rather reddish morsel to his mouth, &ldquo;don&rsquo;t you think this steak is rather overdone? You&rsquo;ve been beating this steak too much, cook; it&rsquo;s too tender. Don&rsquo;t I always say that to be good, a whale-steak must be tough? There are those sharks now over the side, don&rsquo;t you see they prefer it tough and rare? What a shindy they are kicking up! Cook, go and talk to &rsquo;em; tell &rsquo;em they are welcome to help themselves civilly, and in moderation, but they must keep quiet. Blast me, if I can hear my own voice. Away, cook, and deliver my message. Here, take this lantern,&rdquo; snatching one from his sideboard; &ldquo;now then, go and preach to &rsquo;em!&rdquo;</p>
+      <p>Sullenly taking the offered lantern, old Fleece limped across the deck to the bulwarks; and then, with one hand dropping his light low over the sea, so as to get a good view of his congregation, with the other hand he solemnly flourished his tongs, and leaning far over the side in a mumbling voice began addressing the sharks, while Stubb, softly crawling behind, overheard all that was said.</p>
+      <p>&ldquo;Fellow-critters: I&rsquo;se ordered here to say dat you must stop dat dam noise dare. You hear? Stop dat dam smackin&rsquo; ob de lip! Massa Stubb say dat you can fill your dam bellies up to de hatchings, but by Gor! you must stop dat dam racket!&rdquo;</p>
+      <p>&ldquo;Cook,&rdquo; here interposed Stubb, accompanying the word with a sudden slap on the shoulder,&mdash;&ldquo;Cook! why, damn your eyes, you mustn&rsquo;t swear that way when you&rsquo;re preaching. That&rsquo;s no way to convert sinners, cook!&rdquo;</p>
+      <p>&ldquo;Who dat? Den preach to him yourself,&rdquo; sullenly turning to go.</p>
+      <p>&ldquo;No, cook; go on, go on.&rdquo;</p>
+      <p>&ldquo;Well, den, Belubed fellow-critters:&rdquo;&mdash;</p>
+      <p>&ldquo;Right!&rdquo; exclaimed Stubb, approvingly, &ldquo;coax &rsquo;em to it; try that,&rdquo; and Fleece continued.</p>
+      <p>&ldquo;Do you is all sharks, and by natur wery woracious, yet I zay to you, fellow-critters, dat dat woraciousness&mdash;&rsquo;top dat dam slappin&rsquo; ob de tail! How you tink to hear, spose you keep up such a dam slappin&rsquo; and bitin&rsquo; dare?&rdquo;</p>
+      <p>&ldquo;Cook,&rdquo; cried Stubb, collaring him, &ldquo;I won&rsquo;t have that swearing. Talk to &rsquo;em gentlemanly.&rdquo;</p>
+      <p>Once more the sermon proceeded.</p>
+      <p>&ldquo;Your woraciousness, fellow-critters, I don&rsquo;t blame ye so much for; dat is natur, and can&rsquo;t be helped; but to gobern dat wicked natur, dat is de pint. You is sharks, sartin; but if you gobern de shark in you, why den you be angel; for all angel is not&rsquo;ing more dan de shark well goberned. Now, look here, bred&rsquo;ren, just try wonst to be cibil, a helping yourselbs from dat whale. Don&rsquo;t be tearin&rsquo; de blubber out your neighbour&rsquo;s mout, I say. Is not one shark dood right as toder to dat whale? And, by Gor, none on you has de right to dat whale; dat whale belong to some one else. I know some o&rsquo; you has berry brig mout, brigger dan oders; but den de brig mouts sometimes has de small bellies; so dat de brigness of de mout is not to swaller wid, but to bit off de blubber for de small fry ob sharks, dat can&rsquo;t get into de scrouge to help demselves.&rdquo;</p>
+      <p>&ldquo;Well done, old Fleece!&rdquo; cried Stubb, &ldquo;that&rsquo;s Christianity; go on.&rdquo;</p>
+      <p>&ldquo;No use goin&rsquo; on; de dam willains will keep a scougin&rsquo; and slappin&rsquo; each oder, Massa Stubb; dey don&rsquo;t hear one word; no use a-preachin&rsquo; to such dam g&rsquo;uttons as you call &rsquo;em, till dare bellies is full, and dare bellies is bottomless; and when dey do get &rsquo;em full, dey wont hear you den; for den dey sink in de sea, go fast to sleep on de coral, and can&rsquo;t hear not&rsquo;ing at all, no more, for eber and eber.&rdquo;</p>
+      <p>&ldquo;Upon my soul, I am about of the same opinion; so give the benediction, Fleece, and I&rsquo;ll away to my supper.&rdquo;</p>
+      <p>Upon this, Fleece, holding both hands over the fishy mob, raised his shrill voice, and cried&mdash;</p>
+      <p>&ldquo;Cussed fellow-critters! Kick up de damndest row as ever you can; fill your dam&rsquo; bellies &rsquo;till dey bust&mdash;and den die.&rdquo;</p>
+      <p>&ldquo;Now, cook,&rdquo; said Stubb, resuming his supper at the capstan; &ldquo;stand just where you stood before, there, over against me, and pay particular attention.&rdquo;</p>
+      <p>&ldquo;All dention,&rdquo; said Fleece, again stooping over upon his tongs in the desired position.</p>
+      <p>&ldquo;Well,&rdquo; said Stubb, helping himself freely meanwhile; &ldquo;I shall now go back to the subject of this steak. In the first place, how old are you, cook?&rdquo;</p>
+      <p>&ldquo;What dat do wid de &rsquo;teak,&rdquo; said the old black, testily.</p>
+      <p>&ldquo;Silence! How old are you, cook?&rdquo;</p>
+      <p>&ldquo;&rsquo;Bout ninety, dey say,&rdquo; he gloomily muttered.</p>
+      <p>&ldquo;And you have lived in this world hard upon one hundred years, cook, and don&rsquo;t know yet how to cook a whale-steak?&rdquo; rapidly bolting another mouthful at the last word, so that morsel seemed a continuation of the question. &ldquo;Where were you born, cook?&rdquo;</p>
+      <p>&ldquo;&rsquo;Hind de hatchway, in ferry-boat, goin&rsquo; ober de Roanoke.&rdquo;</p>
+      <p>&ldquo;Born in a ferry-boat! That&rsquo;s queer, too. But I want to know what country you were born in, cook!&rdquo;</p>
+      <p>&ldquo;Didn&rsquo;t I say de Roanoke country?&rdquo; he cried sharply.</p>
+      <p>&ldquo;No, you didn&rsquo;t, cook; but I&rsquo;ll tell you what I&rsquo;m coming to, cook. You must go home and be born over again; you don&rsquo;t know how to cook a whale-steak yet.&rdquo;</p>
+      <p>&ldquo;Bress my soul, if I cook noder one,&rdquo; he growled, angrily, turning round to depart.</p>
+      <p>&ldquo;Come back, cook;&mdash;here, hand me those tongs;&mdash;now take that bit of steak there, and tell me if you think that steak cooked as it should be? Take it, I say&rdquo;&mdash;holding the tongs towards him&mdash;&ldquo;take it, and taste it.&rdquo;</p>
+      <p>Faintly smacking his withered lips over it for a moment, the old negro muttered, &ldquo;Best cooked &rsquo;teak I eber taste; joosy, berry joosy.&rdquo;</p>
+      <p>&ldquo;Cook,&rdquo; said Stubb, squaring himself once more; &ldquo;do you belong to the church?&rdquo;</p>
+      <p>&ldquo;Passed one once in Cape-Down,&rdquo; said the old man sullenly.</p>
+      <p>&ldquo;And you have once in your life passed a holy church in Cape-Town, where you doubtless overheard a holy parson addressing his hearers as his beloved fellow-creatures, have you, cook! And yet you come here, and tell me such a dreadful lie as you did just now, eh?&rdquo; said Stubb. &ldquo;Where do you expect to go to, cook?&rdquo;</p>
+      <p>&ldquo;Go to bed berry soon,&rdquo; he mumbled, half-turning as he spoke.</p>
+      <p>&ldquo;Avast! heave to! I mean when you die, cook. It&rsquo;s an awful question. Now what&rsquo;s your answer?&rdquo;</p>
+      <p>&ldquo;When dis old brack man dies,&rdquo; said the negro slowly, changing his whole air and demeanor, &ldquo;he hisself won&rsquo;t go nowhere; but some bressed angel will come and fetch him.&rdquo;</p>
+      <p>&ldquo;Fetch him? How? In a coach and four, as they fetched Elijah? And fetch him where?&rdquo;</p>
+      <p>&ldquo;Up dere,&rdquo; said Fleece, holding his tongs straight over his head, and keeping it there very solemnly.</p>
+      <p>&ldquo;So, then, you expect to go up into our main-top, do you, cook, when you are dead? But don&rsquo;t you know the higher you climb, the colder it gets? Main-top, eh?&rdquo;</p>
+      <p>&ldquo;Didn&rsquo;t say dat t&rsquo;all,&rdquo; said Fleece, again in the sulks.</p>
+      <p>&ldquo;You said up there, didn&rsquo;t you? and now look yourself, and see where your tongs are pointing. But, perhaps you expect to get into heaven by crawling through the lubber&rsquo;s hole, cook; but, no, no, cook, you don&rsquo;t get there, except you go the regular way, round by the rigging. It&rsquo;s a ticklish business, but must be done, or else it&rsquo;s no go. But none of us are in heaven yet. Drop your tongs, cook, and hear my orders. Do ye hear? Hold your hat in one hand, and clap t&rsquo;other a&rsquo;top of your heart, when I&rsquo;m giving my orders, cook. What! that your heart, there?&mdash;that&rsquo;s your gizzard! Aloft! aloft!&mdash;that&rsquo;s it&mdash;now you have it. Hold it there now, and pay attention.&rdquo;</p>
+      <p>&ldquo;All &rsquo;dention,&rdquo; said the old black, with both hands placed as desired, vainly wriggling his grizzled head, as if to get both ears in front at one and the same time.</p>
+      <p>&ldquo;Well then, cook, you see this whale-steak of yours was so very bad, that I have put it out of sight as soon as possible; you see that, don&rsquo;t you? Well, for the future, when you cook another whale-steak for my private table here, the capstan, I&rsquo;ll tell you what to do so as not to spoil it by overdoing. Hold the steak in one hand, and show a live coal to it with the other; that done, dish it; d&rsquo;ye hear? And now to-morrow, cook, when we are cutting in the fish, be sure you stand by to get the tips of his fins; have them put in pickle. As for the ends of the flukes, have them soused, cook. There, now ye may go.&rdquo;</p>
+      <p>But Fleece had hardly got three paces off, when he was recalled.</p>
+      <p>&ldquo;Cook, give me cutlets for supper to-morrow night in the mid-watch. D&rsquo;ye hear? away you sail, then.&mdash;Halloa! stop! make a bow before you go.&mdash;Avast heaving again! Whale-balls for breakfast&mdash;don&rsquo;t forget.&rdquo;</p>
+      <p>&ldquo;Wish, by gor! whale eat him, &rsquo;stead of him eat whale. I&rsquo;m bressed if he ain&rsquo;t more of shark dan Massa Shark hisself,&rdquo; muttered the old man, limping away; with which sage ejaculation he went to his hammock.</p>
+    </div>
+
+    
+  </main>
+
+  <footer class="doc-footer">
+    <div class="brand">Public Domain Classics</div>
+    <p class="disclaimer">
+      This text is sourced from <a href="https://www.gutenberg.org/ebooks/2701">Project Gutenberg</a>
+      and is in the public domain in the United States.
+      <br>Formatted for readability &mdash; original text preserved verbatim.
+    </p>
+  </footer>
+</body>
+</html>

@@ -117,6 +117,7 @@ const head = `<!DOCTYPE html>
           <ul class="breadcrumb-dropdown-list" role="listbox"></ul>
         </li>
       </ol>
+      <!-- FEATURE: Sentence-at-a-time mode (disabled for now)
       <div class="mode-dropdown" id="mode-dropdown">
         <button class="mode-toggle" id="mode-toggle">
           <span>Mode: </span><span class="mode-current">Scroll</span>
@@ -127,6 +128,7 @@ const head = `<!DOCTYPE html>
           <li><a href="#" data-mode="sentence">Sentence at a Time</a></li>
         </ul>
       </div>
+      -->
     </div>
   </nav>
 

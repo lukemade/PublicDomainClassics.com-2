@@ -28,7 +28,16 @@
       "Bash(git remote:*)",
       "Bash(npx vite:*)",
       "Bash(npm install:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(curl -sL \"https://www.gutenberg.org/files/2701/2701-0.txt\" -o source-texts/moby-dick/gutenberg-raw.txt)",
+      "Bash(node scripts/gutenberg-to-html-moby-dick.mjs)",
+      "Bash(node scripts/build-moby-dick-page.mjs)",
+      "Bash(curl -sL \"https://upload.wikimedia.org/wikipedia/commons/3/36/Moby-Dick_FE_title_page.jpg\" -o books/moby-dick/images/default.jpg)",
+      "Bash(node scripts/verify-moby-dick.mjs)",
+      "Bash(git stash:*)",
+      "Bash(git checkout:*)",
+      "Bash(git branch:*)",
+      "Bash(node scripts/build-moby-dick-chapters.mjs)"
     ]
   }
 }
