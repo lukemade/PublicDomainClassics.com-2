@@ -79,18 +79,21 @@
       padding: 2.5rem 2rem 2rem;
       text-align: center;
     }
-    .site-header h1 {
+    .site-header .eyebrow {
       font-family: 'Fraunces', serif;
       font-weight: 400;
-      font-size: 1.6rem;
-      letter-spacing: 0.02em;
-      margin-bottom: 0.4rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(232, 223, 208, 0.6);
+      margin-bottom: 0.75rem;
     }
-    .site-tagline {
-      font-family: 'Libre Baskerville', serif;
-      font-style: italic;
-      font-size: 0.9rem;
-      color: rgba(196, 185, 154, 0.6);
+    .site-header h1 {
+      font-family: 'IM Fell French Canon', serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.15;
+      color: #e8dfd0;
     }
 
     /* --- Book Grid (the star) --- */
@@ -220,7 +223,7 @@
     @media (max-width: 600px) {
       nav { padding: 0 1rem; }
       .site-header { padding: 1.5rem 1.25rem 1rem; }
-      .site-header h1 { font-size: 1.3rem; }
+      .site-header h1 { font-size: 1.6rem; }
       .library { padding: 1rem 1rem 3rem; }
       .library-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -246,8 +249,8 @@
   </nav>
 
   <header class="site-header">
-    <h1>Public Domain Classics</h1>
-    <p class="site-tagline">Timeless literature, beautifully presented.</p>
+    <div class="eyebrow">Public Domain Classics</div>
+    <h1>Timeless literature,<br>beautifully presented.</h1>
   </header>
 
   <main id="main-content" class="library">

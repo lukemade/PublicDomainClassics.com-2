@@ -1,428 +1,125 @@
 {
-  "timestamp": "2026-03-27T17:19:30.477515",
-  "document": "AAP v. Kennedy - Preliminary Injunction Opinion",
+  "timestamp": "2026-04-01T20:02:42.463Z",
+  "document": "AAP v. Kennedy — Preliminary Injunction Opinion",
+  "source": "Georgetown Law Litigation Tracker",
   "footnotes": {
-    "total_defined": 83,
-    "total_referenced": 83,
-    "range": "1-83",
-    "sequential": true,
-    "unreferenced": [],
-    "undefined_refs": [],
+    "totalDefined": 83,
+    "totalReferenced": 83,
+    "unreferencedFootnotes": [],
+    "undefinedReferences": [],
     "gaps": [],
-    "pdf_max_footnote": 83
+    "sequential": true,
+    "range": {
+      "min": 1,
+      "max": 83
+    }
   },
   "sections": {
     "total": 30,
-    "duplicate_ids": {}
+    "duplicateIds": []
   },
-  "key_phrases": [
-    {
-      "phrase": "american academy of pediatrics",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "robert f. kennedy",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "preliminary injunction",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "administrative procedure act",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "advisory committee on immunization practices",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "federal advisory committee act",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "arbitrary and capricious",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "contrary to law",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "irreparable harm",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "balance of the equities",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "public interest",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "january 2026 memo",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "may 2025 directive",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    },
-    {
-      "phrase": "immunization schedule",
-      "in_pdf": true,
-      "in_html": true,
-      "match": true
-    }
-  ],
-  "word_stats": {
-    "pdf_word_count": 16064,
-    "html_word_count": 16417,
-    "unique_pdf_words": 4341,
-    "unique_html_words": 4297,
-    "common_words": 4134,
-    "jaccard_similarity": 91.8
+  "keyPhrases": {
+    "pdfCitationCount": 60,
+    "htmlCitationCount": 60,
+    "pdfUSCCount": 36,
+    "htmlUSCCount": 36,
+    "keyPhrases": [
+      {
+        "phrase": "american academy of pediatrics",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "robert f. kennedy",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "preliminary injunction",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "administrative procedure act",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "advisory committee on immunization practices",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "federal advisory committee act",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "arbitrary and capricious",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "contrary to law",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "irreparable harm",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "balance of the equities",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "public interest",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "january 2026 memo",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "may 2025 directive",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      },
+      {
+        "phrase": "immunization schedule",
+        "inPdf": true,
+        "inHtml": true,
+        "match": true
+      }
+    ],
+    "allKeyPhrasesMatch": true
   },
-  "sentence_comparison": {
-    "pdf_sentences": 611,
-    "html_sentences": 622,
-    "exact_or_near": 529,
-    "partial": 31,
-    "low_or_missing": 51,
-    "high_match_pct": 91.7
+  "textComparison": {
+    "pdfWords": 16064,
+    "htmlWords": 16435,
+    "accuracy": "16.0",
+    "matchedChunks": 64,
+    "mismatchedChunks": 337
   },
-  "missing_from_html": [
-    {
-      "pdf_sentence": "UNITED STATES DISTRICT COURT\nDISTRICT OF MASSACHUSETTS\n_______________________________________\n)\nAMERICAN ACADEMY OF )\nPEDIATRICS, et al., )\n)\nPlaintiffs, )\n) Civil Action No.\nv. ) 25-11916-BEM\n)\nROBE",
-      "best_html": "Skip to content United States District Court \u00b7 District of Massachusetts American Academy of Pediatrics v.",
-      "similarity": 58.9
-    },
-    {
-      "pdf_sentence": "KENNEDY, JR., et al., )\n)\nDefendants. )\n_______________________________________)\nMEMORANDUM AND ORDER ON\nPLAINTIFFS\u2019 MOTION FOR PRELIMINARY INJUNCTION\nMURPHY, J.",
-      "best_html": "Kennedy Memorandum and Order on Plaintiffs' Motion for Preliminary Injunction Civil Action No. 25-11916-BEM Judge Brian E.",
-      "similarity": 58.8
-    },
-    {
-      "pdf_sentence": "For the reasons stated below, the Court will grant Plaintiffs\u2019 motion in part.",
-      "best_html": "For the reasons discussed below, these factors favor Plaintiffs.",
-      "similarity": 67.6
-    },
-    {
-      "pdf_sentence": "The Court has previously laid out much of the relevant factual and legal\n6 See, e.g., 42 U.S.C. \u00a7 300gg-13(a)(2); 38 U.S.C. \u00a7 1701(1), (9)(G); 42 U.S.C. \u00a7 1396a(a)(10)(A),\n(a)(13)(B).\n3\nbackground.7 S",
-      "best_html": "The Court has previously laid out much of the relevant factual and legal background. 7 See Am.",
-      "similarity": 59.6
-    },
-    {
-      "pdf_sentence": "Plaintiffs now challenge: (1) Secretary Kennedy\u2019s\nMay 2025 order that the CDC remove its recommendation that pregnant women and \u201chealthy\u201d\nchildren receive the COVID vaccine; (2) the reconstitution of ",
-      "best_html": "Plaintiffs now challenge: (1) Secretary Kennedy's May 2025 order that the CDC remove its recommendation that pregnant women and \"healthy\" children receive the COVID vaccine; (2) the reconstitution of ",
-      "similarity": 66.8
-    },
-    {
-      "pdf_sentence": "The Court held hearings\non February 13, 2026, and March 4, 2026, and took the motion under advisement.",
-      "best_html": "The Court held hearings on February 13, 2026, and March 4, 2026, and took the motion under advisement. 7 The underlying facts will be discussed in more depth below, when considering the merits of prel",
-      "similarity": 64.4
-    },
-    {
-      "pdf_sentence": "Series\n11 Though Plaintiffs\u2019 motion is styled as one for a preliminary injunction, Plaintiffs ask the Court to \u201cset\naside\u201d various past actions, in addition to enjoining certain future actions.",
-      "best_html": "See infra Section III.A. 8 Capitalized and collective terms not otherwise defined have the same definitions as used in AAP I . 9 The parties agree that FACA applies to ACIP. 10 The fourth amended comp",
-      "similarity": 50.3
-    },
-    {
-      "pdf_sentence": "Soc\u2019y, 611 F.3d 79, 84 n.5 (1st Cir. 2010) (relying on the contents of\nthe CDC\u2019s website).",
-      "best_html": "Brigham Inc. , 32 F.4th 82, 85 (1st Cir. 2022) (quoting Winter v.",
-      "similarity": 46.5
-    },
-    {
-      "pdf_sentence": "ACIP Reconstitution\nOn June 9, 2025, Secretary Kennedy terminated all 17 members of ACIP.15 Secretary\nKennedy then appointed new members to ACIP on June 11, 2025, September 11, 2025, and\n13 According ",
-      "best_html": "See generally Dkt. 185-18; see also Dkt. 232 at 22\u201323 (arguing that the CDC had authority to modify the immunization schedules without consulting ACIP). 13 According to the CDC, \"[u]nlike routine . . ",
-      "similarity": 60.6
-    },
-    {
-      "pdf_sentence": "(June 9, 2025, at\n16:00 ET), https://www.wsj.com/opinion/rfk-jr-hhs-moves-to-restore-public-trust-in-vaccines-45495112 (cited at\nDkt. 237 at 21 n.37); see also HHS Takes Bold Step to Restore Public Tr",
-      "best_html": "(June 9, 2025, at 16:00 ET), https://www.wsj.com/opinion/rfk-jr-hhs-moves-to-restore-public-trust-in-vaccines-45495112 (cited at Dkt. 237 at 21 n.37); see also HHS Takes Bold Step to Restore Public Tr",
-      "similarity": 65.4
-    },
-    {
-      "pdf_sentence": "AAP should also\n16 Robert F.",
-      "best_html": "See id. 19 Robert F.",
-      "similarity": 58.3
-    },
-    {
-      "pdf_sentence": "Compl. \u00b6\u00b6 84\u201385, 87, 89, 91.\n9\n5.",
-      "best_html": "Compl. \u00b6\u00b6 96\u2013102.",
-      "similarity": 52.0
-    },
-    {
-      "pdf_sentence": "See generally Dkt. 185-18; see also Dkt. 232 at 22\u201323 (arguing that the CDC had authority\nto modify the immunization schedules without consulting ACIP).",
-      "best_html": "See generally Dkt. 185-18; see also Dkt. 232 at 22\u201323 (arguing that the CDC had authority to modify the immunization schedules without consulting ACIP). 13 According to the CDC, \"[u]nlike routine . . ",
-      "similarity": 54.9
-    },
-    {
-      "pdf_sentence": "The Court rejected those arguments in that posture, see AAP I, 2026 WL 33719, at *4\u20138,\nand does so here again.26\n26 The Court notes that its standing determination did not previously, and does not now",
-      "best_html": "The Court rejected those arguments in that posture, see AAP I , 2026 WL 33719, at *4\u20138, and does so here again. 26 b.",
-      "similarity": 56.7
-    },
-    {
-      "pdf_sentence": "Lit. 2022).\n12\nMemo has the coercive effect of \u201cexpos[ing] [healthcare providers] to . . . civil liability.\u201d28 Cf.",
-      "best_html": "Lit. 2022). 28 See, e.g. , Covered Vaccines , Health Resources & Servs.",
-      "similarity": 43.2
-    },
-    {
-      "pdf_sentence": "Taylor, 529 U.S. 362, 404 (2000))).\n31 Because Director O\u2019Neill acted entirely apart from ACIP, the Court need not decide whether the Director\u2019s\nrole is precisely limited to \u201cadopt[ing]\u201d ACIP\u2019s formal",
-      "best_html": "It is undisputed that Director O'Neill issued the January 2026 Memo without sufficiently consulting ACIP, see generally Dkt. 185-18. 34 Therefore, he lacked authority to issue the January 2026 Memo an",
-      "similarity": 58.4
-    },
-    {
-      "pdf_sentence": "Dkt. 237 at 16; see also 45 C.F.R.\n\u00a7 147.130(a)(1)(ii) (\u201c[A] recommendation from the Advisory Committee on Immunization Practices of the Centers\nfor Disease Control and Prevention is considered in eff",
-      "best_html": "Dkt. 237 at 16; see also 45 C.F.R. \u00a7 147.130(a)(1)(ii) (\"[A] recommendation from the Advisory Committee on Immunization Practices of the Centers for Disease Control and Prevention is considered in eff",
-      "similarity": 69.1
-    },
-    {
-      "pdf_sentence": "\u201cA well established canon of statutory\ninterpretation succinctly captures the problem: \u2018[I]t is a commonplace of statutory construction\nthat the specific governs the general\u2019\u201d:\n32 Indeed, Defendants a",
-      "best_html": "\"A well established canon of statutory interpretation succinctly captures the problem: '[I]t is a commonplace of statutory construction that the specific governs the general'\": The general/specific ca",
-      "similarity": 51.7
-    },
-    {
-      "pdf_sentence": "That ACIP also takes an additional vote to direct\nwhich pediatric vaccines the HHS Secretary purchases for states under the Vaccines for Children program, see 42\nU.S.C. \u00a7 1396s(d)(1), (e), does not ch",
-      "best_html": "That ACIP also takes an additional vote to direct which pediatric vaccines the HHS Secretary purchases for states under the Vaccines for Children program, see 42 U.S.C. \u00a7 1396s(d)(1), (e), does not ch",
-      "similarity": 62.0
-    },
-    {
-      "pdf_sentence": "Nevertheless, Defendants argue that the\nHHS Secretary\u2019s statutory authority to \u201c\u2018assist States and their political subdivisions in the\nprevention and suppression of communicable diseases\u2019 and \u2018advise ",
-      "best_html": "Nevertheless, Defendants argue that the HHS Secretary's statutory authority to \"'assist States and their political subdivisions in the prevention and suppression of communicable diseases' and 'advise ",
-      "similarity": 68.1
-    },
-    {
-      "pdf_sentence": "That does not address the fact that ACIP had no role in any of the other changes to\nvaccine recommendations in the January 2026 Memo.\n18\nrelating to the preservation and improvement of the public heal",
-      "best_html": "That does not address the fact that ACIP had no role in any of the other changes to vaccine recommendations in the January 2026 Memo. d.",
-      "similarity": 66.5
-    },
-    {
-      "pdf_sentence": "This\ncommon-sense reading is further reinforced by neighboring statutes that, for example, direct the\nSecretary to fund \u201ca national, evidence-based campaign to increase awareness and knowledge of\nthe ",
-      "best_html": "Put simply, this is not the kind of agency action that is \"committed to agency discretion\" and not subject to APA review. 35 See also Dkt. 283 at 52:5\u20139 (\"THE COURT: . . . if the secretary said instea",
-      "similarity": 56.3
-    },
-    {
-      "pdf_sentence": "Notwithstanding this\ncomplexity, the underlying question is nonetheless fully addressable.\n19\nmisinformation about vaccines, and disseminate scientific and evidence-based vaccine-related\ninformation, ",
-      "best_html": "This common-sense reading is further reinforced by neighboring statutes that, for example, direct the Secretary to fund \"a national, evidence-based campaign to increase awareness and knowledge of the ",
-      "similarity": 60.8
-    },
-    {
-      "pdf_sentence": "Put simply, this is not the kind of\nagency action that is \u201ccommitted to agency discretion\u201d and not subject to APA review.\ne.",
-      "best_html": "The APA exempts from judicial review actions that are \"committed to agency discretion by law.\" 5 U.S.C. \u00a7 701.",
-      "similarity": 52.9
-    },
-    {
-      "pdf_sentence": "On the current record, the Court cannot conclude that Defendants\n\u201carticulate[d] a satisfactory explanation for its action.\u201d Id. at 43.\n2.",
-      "best_html": "This failure to articulate any reason, let alone a \"satisfactory explanation for [the] action,\" renders the ACIP reconstitution unlawful.",
-      "similarity": 48.9
-    },
-    {
-      "pdf_sentence": "The Directive \u201crescind[s]\u201d the June 2022 \u201cHHS\nSecretarial Directives ratifying CDC recommendations for use of COVID-19 vaccines for children\nages six months to 17 years\u201d and \u201cthe CDC recommendation th",
-      "best_html": "The Directive \"rescind[s]\" the June 2022 \"HHS Secretarial Directives ratifying CDC recommendations for use of COVID-19 vaccines for children ages six months to 17 years\" and \"the CDC recommendation th",
-      "similarity": 66.9
-    },
-    {
-      "pdf_sentence": "The Court need only determine, as it does here, that Plaintiffs have not\nmet their burden of establishing that their challenge to the May 2025 Directive presents a\n38 In light of this conclusion, the ",
-      "best_html": "The Court need only determine, as it does here, that Plaintiffs have not met their burden of establishing that their challenge to the May 2025 Directive presents a justiciable claim that Plaintiffs ar",
-      "similarity": 62.0
-    },
-    {
-      "pdf_sentence": "See Dkt. 272 at 20.\n24\njusticiable claim that Plaintiffs are likely to win on the merits.",
-      "best_html": "See Dkt. 272 at 20. 39 See, e.g. , Already, LLC v.",
-      "similarity": 48.9
-    },
-    {
-      "pdf_sentence": "Supp. 3d at 180, which is the\n39 See, e.g., Already, LLC v.",
-      "best_html": "See Dkt. 272 at 20. 39 See, e.g. , Already, LLC v.",
-      "similarity": 69.7
-    },
-    {
-      "pdf_sentence": "New Comm, 287 F.3d at 9.\n25\n\u201ceffective control of vaccine-preventable diseases in the civilian population of the United\nStates.\u201d40 Organizational Plaintiffs\u2019 past participation in ACIP working groups ",
-      "best_html": "Supp. 3d at 180, which is the \"effective control of vaccine-preventable diseases in the civilian population of the United States.\" 40 Organizational Plaintiffs' past participation in ACIP working grou",
-      "similarity": 56.9
-    }
-  ],
-  "low_matches": [
-    {
-      "pdf_sentence": "For our public health, Congress and the Executive have built\u2014over decades\u2014an apparatus\nthat marries the rigors of science with the execution and force of the United States government.\n1 \u201cIn this respe",
-      "best_html": "For our public health, Congress and the Executive have built\u2014over decades\u2014an apparatus that marries the rigors of science with the execution and force of the United States government.",
-      "similarity": 81.2
-    },
-    {
-      "pdf_sentence": "In the words of the Centers\nfor Disease Control and Prevention (\u201cCDC\u201d), \u201c[v]accines are one of the greatest achievements of\nbiomedical science and public health.\u201d2 Since the rise of vaccine developmen",
-      "best_html": "In the words of the Centers for Disease Control and Prevention (\"CDC\"), \"[v]accines are one of the greatest achievements of biomedical science and public health.\" 2 Since the rise of vaccine developme",
-      "similarity": 86.2
-    },
-    {
-      "pdf_sentence": "Rep. 955, 955 (2014),\nhttps://www.cdc.gov/mmwr/pdf/wk/mm6342.pdf [https://perma.cc/4VFQ-V8U8].\n5 See generally, e.g., Dkt. 185-21 (\u201cACIP Charter\u201d) (signed by Secretary Kennedy); see also Federal\nAdvis",
-      "best_html": "Rep. 955, 955 (2014), https://www.cdc.gov/mmwr/pdf/wk/mm6342.pdf [https://perma.cc/4VFQ-V8U8]. 5 See generally, e.g. , Dkt. 185-21 (\"ACIP Charter\") (signed by Secretary Kennedy); see also Federal Advi",
-      "similarity": 75.7
-    },
-    {
-      "pdf_sentence": "See infra Section III.A.\n8 Capitalized and collective terms not otherwise defined have the same definitions as used in AAP I.\n9 The parties agree that FACA applies to ACIP.\n10 The fourth amended compl",
-      "best_html": "See infra Section III.A. 8 Capitalized and collective terms not otherwise defined have the same definitions as used in AAP I . 9 The parties agree that FACA applies to ACIP. 10 The fourth amended comp",
-      "similarity": 70.2
-    },
-    {
-      "pdf_sentence": "Thus, the Court construes Plaintiffs\u2019\nmotion as seeking both a preliminary injunction and a stay.\n12 In relevant part, 5 U.S.C. \u00a7 705 provides:\nOn such conditions as may be required and to the extent ",
-      "best_html": "Soc'y , 611 F.3d 79, 84 n.5 (1st Cir. 2010) (relying on the contents of the CDC's website). 12 In relevant part, 5 U.S.C. \u00a7 705 provides: On such conditions as may be required and to the extent necess",
-      "similarity": 78.3
-    },
-    {
-      "pdf_sentence": "In the January 2026 Memo, Director O\u2019Neill\nstated that he relied on discussions with health officials from Japan, Germany, and Denmark;\ndiscussions \u201cwith CDC and Food and Drug Administration (FDA) off",
-      "best_html": "In the January 2026 Memo, Director O'Neill stated that he relied on discussions with health officials from Japan, Germany, and Denmark; discussions \"with CDC and Food and Drug Administration (FDA) off",
-      "similarity": 71.9
-    },
-    {
-      "pdf_sentence": "Acting Director, CDC (Feb. 18, 2026),\nhttps://www.cdc.gov/about/leadership/director.html [https://perma.cc/KK9Y-WJKV].\n25 Presidential Mem., Aligning United States Core Childhood Vaccine Recommendatio",
-      "best_html": "Acting Director , CDC (Feb. 18, 2026), https://www.cdc.gov/about/leadership/director.html [https://perma.cc/KK9Y-WJKV]. 25 Presidential Mem., Aligning United States Core Childhood Vaccine Recommendati",
-      "similarity": 84.9
-    },
-    {
-      "pdf_sentence": "As Secretary Kennedy himself has pointed out, if healthcare providers\u2019 recommendations \u201cdiverge\nfrom the CDC\u2019s official list[,] [they] are not shielded from liability under the 1986 Vaccine Injury\nAct",
-      "best_html": "As Secretary Kennedy himself has pointed out, if healthcare providers' recommendations \"diverge from the CDC's official list[,] [they] are not shielded from liability under the 1986 Vaccine Injury Act",
-      "similarity": 84.1
-    },
-    {
-      "pdf_sentence": "The fact is that CDC changes to its immunization schedules impact liability.\n13\nWhile Defendants downplay the cascading effect of the CDC\u2019s immunization schedules as\nimplemented through local law and ",
-      "best_html": "While Defendants downplay the cascading effect of the CDC's immunization schedules as implemented through local law and policy, see Dkt. 232 at 21, that is an overtechnical analysis that ignores \"prag",
-      "similarity": 87.1
-    },
-    {
-      "pdf_sentence": "United States, 809 F.3d 134, 152\u201353\n(5th Cir. 2015) (in standing analysis, recognizing practical consequences of federal action under\nstate law), aff\u2019d by an equally divided court, 579 U.S. 547 (2016)",
-      "best_html": "United States , 809 F.3d 134, 152\u201353 (5th Cir. 2015) (in standing analysis, recognizing practical consequences of federal action under state law), aff'd by an equally divided court , 579 U.S. 547 (201",
-      "similarity": 80.0
-    },
-    {
-      "pdf_sentence": "Contrary to Law\nDefendants next argue that, even if the January 2026 Memo is final agency action, it is not\nreviewable under the APA because it is an action \u201ccommitted to agency discretion by law.\u201d\n30",
-      "best_html": "Contrary to Law Defendants next argue that, even if the January 2026 Memo is final agency action, it is not reviewable under the APA because it is an action \"committed to agency discretion by law.\" Dk",
-      "similarity": 82.0
-    },
-    {
-      "pdf_sentence": "And those state\nlaws were themselves enacted against the backdrop of a complex statutory and regulatory regime that, in a number of\ninstances provided in this section, effectively requires states to a",
-      "best_html": "And those state laws were themselves enacted against the backdrop of a complex statutory and regulatory regime that, in a number of instances provided in this section, effectively requires states to a",
-      "similarity": 89.1
-    },
-    {
-      "pdf_sentence": "It is undisputed that\nDirector O\u2019Neill issued the January 2026 Memo without sufficiently consulting ACIP, see\n17\ngenerally Dkt. 185-18.34 Therefore, he lacked authority to issue the January 2026 Memo ",
-      "best_html": "It is undisputed that Director O'Neill issued the January 2026 Memo without sufficiently consulting ACIP, see generally Dkt. 185-18. 34 Therefore, he lacked authority to issue the January 2026 Memo an",
-      "similarity": 72.1
-    },
-    {
-      "pdf_sentence": "\u201cIf an agency,\u201d like\nthe CDC, \u201cannounces and follows\u2014by rule or by settled course of adjudication\u2014a general policy\n36 Presidential Mem., Aligning United States Core Childhood Vaccine Recommendations w",
-      "best_html": "\"If an agency,\" like the CDC, \"announces and follows\u2014by rule or by settled course of adjudication\u2014a general policy by which its exercise of discretion will be governed, an irrational departure from th",
-      "similarity": 83.9
-    },
-    {
-      "pdf_sentence": "Defendants have provided no\nexplanation for relying on their recommendations rather than those of ACIP.\n22\nCOVID-19 vaccine.\u201d Dkt. 185-1 at 2.",
-      "best_html": "Defendants have provided no explanation for relying on their recommendations rather than those of ACIP. 2.",
-      "similarity": 85.5
-    },
-    {
-      "pdf_sentence": "Because it is not clear that Plaintiffs\u2019\nchallenge is viable on threshold questions of mootness and finality, the Court need not evaluate\nwhether Plaintiffs would have standing to bring such a challen",
-      "best_html": "Because it is not clear that Plaintiffs' challenge is viable on threshold questions of mootness and finality, the Court need not evaluate whether Plaintiffs would have standing to bring such a challen",
-      "similarity": 72.6
-    },
-    {
-      "pdf_sentence": "Any differences between the two versions are not material to this motion.\n26\n[A]gencies should ensure that they fully consider and understand the potential\nimplications or anticipated impacts of the a",
-      "best_html": "More specifically: [A]gencies should ensure that they fully consider and understand the potential implications or anticipated impacts of the advisory committee's potential recommendations.",
-      "similarity": 82.0
-    },
-    {
-      "pdf_sentence": "Reg. 27673, 27683 (Apr. 18, 2024).\n43 General Committee-Related Information, supra note 33; see also ACIP Charter at 2 (\u201cACIP shall provide\nadvice and guidance to the Director of the CDC regarding use",
-      "best_html": "Reg. 27673, 27683 (Apr. 18, 2024). 43 General Committee-Related Information , supra note 33; see also ACIP Charter at 2 (\"ACIP shall provide advice and guidance to the Director of the CDC regarding us",
-      "similarity": 72.5
-    },
-    {
-      "pdf_sentence": "And\nACIP\u2019s own charter directs that the members of the committee:\nshall be selected from authorities who are knowledgeable in the fields of\nimmunization practices and public health, have expertise in ",
-      "best_html": "ACIP Charter at 5. 44 On this point, there are glaring gaps. 45 First, of the fifteen members currently on ACIP, even under the most generous reading, only six appear to have any meaningful experience",
-      "similarity": 79.1
-    },
-    {
-      "pdf_sentence": "Regardless, ACIP still has a governing MBP.\n31\nwhether there is a \u201c[b]alance of specialty areas (e.g., pediatrics, internal medicine, family\nmedicine, nursing, consumer issues, state and local health ",
-      "best_html": "Further, the MBP directs the Steering Committee that recommends nominees for ACIP to consider whether there is a \"[b]alance of specialty areas (e.g., pediatrics, internal medicine, family medicine, nu",
-      "similarity": 78.1
-    },
-    {
-      "pdf_sentence": "The Government\u2019s failure to follow both longstanding\npractice and regulations aimed at ensuring that \u201cthe points of view that would promote a fairly\nbalanced advisory committee membership\u201d are represe",
-      "best_html": "The Government's failure to follow both longstanding practice and regulations aimed at ensuring that \"the points of view that would promote a fairly balanced advisory committee membership\" are represe",
-      "similarity": 80.7
-    },
-    {
-      "pdf_sentence": "\u201c\u2018Irreparable injury\u2019 in the preliminary injunction context\nmeans an injury that cannot adequately be compensated for either by a later-issued permanent\ninjunction, after a full adjudication on the me",
-      "best_html": "\u201c\u2018Irreparable injury\u2019 in the preliminary injunction context means an injury that cannot adequately be compensated for either by a later-issued permanent injunction, after a full adjudication on the me",
-      "similarity": 85.6
-    },
-    {
-      "pdf_sentence": "See infra Section III.E.2\n(discussing the scope of remedy).\n34\nGrande Cmty.",
-      "best_html": "See infra Section III.E.2 (discussing the scope of remedy).",
-      "similarity": 88.1
-    },
-    {
-      "pdf_sentence": "Cal. 2019) (finding irreparable injury where\n68 Nor is there any reason to believe that this would not be true.\n69 The Court notes it has previously rejected a similar argument from Defendants in the ",
-      "best_html": "Autoliv, Inc. , 175 F.3d 716, 725 (9th Cir. 1999))). 68 Nor is there any reason to believe that this would not be true. 69 The Court notes it has previously rejected a similar argument from Defendants",
-      "similarity": 80.4
-    },
-    {
-      "pdf_sentence": "See AAP I, 2026 WL 33719 at *7\u20138; see also supra Section III.B.1.a.\n36\nthe goals of providing healthcare and legal services were frustrated and that plaintiffs\u2019 changes to\ntheir programs and other div",
-      "best_html": "Cal. 2019) (finding irreparable injury where the goals of providing healthcare and legal services were frustrated and that plaintiffs\u2019 changes to their programs and other diversions of resources const",
-      "similarity": 82.1
-    },
-    {
-      "pdf_sentence": "Moreover, since rescheduling the ACIP meeting to March 18\u201319,\nACIP\u2019s published statement of \u201cMatters to be Considered\u201d now includes the possibility of\n70 See also Dr.",
-      "best_html": "Moreover, since rescheduling the ACIP meeting to March 18\u201319, ACIP\u2019s published statement of \u201cMatters to be Considered\u201d now includes the possibility of additional recommendation votes. 72 91 Fed.",
-      "similarity": 87.2
-    },
-    {
-      "pdf_sentence": "City of Boston, 378 F.3d 8 (1st Cir. 2004).\n40\ncourt\u2019s preliminary injunction of an illegal executive order even though a wartime president said\nhis order was \u201cnecessary to avert a national catastroph",
-      "best_html": "Sawyer , 343 U.S. 579, 582 (1952) (affirming district court\u2019s preliminary injunction of an illegal executive order even though a wartime president said his order was \u201cnecessary to avert a national cat",
-      "similarity": 81.4
-    },
-    {
-      "pdf_sentence": "Even if Defendants do show\nafter the production of the administrative record that Plaintiffs\u2019 challenges amount only to a\ndifference in opinion as to how best to best achieve these goals, merely retur",
-      "best_html": "Even if Defendants do show after the production of the administrative record that Plaintiffs\u2019 challenges amount only to a difference in opinion as to how best to best achieve these goals, merely retur",
-      "similarity": 84.1
-    },
-    {
-      "pdf_sentence": "In the face of the parties\u2019 agreement,\n78 Defendants also argue that staying the current immunization schedules would result in \u201cwhiplash\u201d that\nwould be exacerbated should Defendants ultimately prevai",
-      "best_html": "See infra Section III.E. 77 See infra Section III.E. 78 Defendants also argue that staying the current immunization schedules would result in \u201cwhiplash\u201d that would be exacerbated should Defendants ult",
-      "similarity": 79.8
-    },
-    {
-      "pdf_sentence": "But given the Court\u2019s conclusion that\nPlaintiffs have demonstrated a likelihood of success on the merits, this \u201cwhiplash\u201d is likely a result of Defendants\u2019\nown unlawful creation, which does not outwei",
-      "best_html": "But given the Court\u2019s conclusion that Plaintiffs have demonstrated a likelihood of success on the merits, this \u201cwhiplash\u201d is likely a result of Defendants\u2019 own unlawful creation, which does not outwei",
-      "similarity": 86.1
-    }
-  ],
   "issues": [
-    "51 sentence(s) with <70% match"
+    "337 text chunk(s) with <85% match"
   ],
-  "status": "NEEDS_REVIEW"
+  "overallStatus": "NEEDS_REVIEW"
 }

@@ -36,7 +36,7 @@ vite.config.js             — Multi-page Vite build; each book page is a separa
 - `npm run build` — Production build to `dist/`
 - `node scripts/gutenberg-to-html-<slug>.mjs` — Regenerate HTML fragment from source text
 - `node scripts/build-<slug>-page.mjs` — Assemble full book page
-- `node scripts/verify-<slug>.mjs` — Run accuracy verification
+- `node scripts/verify-<slug>.mjs` — Run accuracy verification (generates word-per-line diff files for manual review)
 
 ## Adding a new book (quick reference)
 
@@ -120,6 +120,8 @@ The verification script compares two text sources:
    - `"NEEDS_REVIEW"` — any discrepancy found
 
 5. **Save reports** — Write `source-texts/<slug>/gutenberg-extracted.txt` (the normalized Gutenberg text), `source-texts/<slug>/html-extracted.txt` (the normalized HTML text), and `source-texts/<slug>/verification-report.json`.
+
+6. **Secondary diff check** — Generate word-per-line files (`gutenberg-words.txt`, `html-words.txt`) and run a standard `diff` to visually confirm all differences are only formatting markers (like Gutenberg's `_italic_` underscores), not content. This serves as a non-AI failsafe. The diff output should show ONLY underscore-related differences.
 
 ### Accuracy rules when editing book HTML
 

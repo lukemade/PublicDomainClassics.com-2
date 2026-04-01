@@ -50,7 +50,10 @@
       "Bash(find . -name logo*)",
       "Bash(ls dist/assets/logo*)",
       "Bash(cp -r books/frankenstein/letter-* dist/books/frankenstein/)",
-      "Bash(cp -r books/frankenstein/chapter-* dist/books/frankenstein/)"
+      "Bash(cp -r books/frankenstein/chapter-* dist/books/frankenstein/)",
+      "Bash(node scripts/verify-accuracy.mjs)",
+      "Bash(node scripts/verify-frankenstein.mjs)",
+      "Bash(node -e \":*)"
     ]
   }
 }

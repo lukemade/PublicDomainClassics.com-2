@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-04-01T20:05:52.004Z",
+  "book": "Frankenstein; or, The Modern Prometheus",
+  "author": "Mary Shelley",
+  "source": "Project Gutenberg #84",
+  "status": "NEEDS_REVIEW",
+  "wordCount": {
+    "gutenberg": 74975,
+    "html": 74996,
+    "difference": 21
+  },
+  "sequenceDiff": {
+    "matched": 74876,
+    "sourceOnly": 99,
+    "htmlOnly": 100,
+    "similarity": "99.84"
+  },
+  "sectionHeadings": {
+    "expected": 28,
+    "found": 28,
+    "missing": []
+  }
+}
