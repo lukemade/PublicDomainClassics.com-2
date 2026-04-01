@@ -11,26 +11,173 @@
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/css/document-template.css">
   <style>
-    /* ── Site nav (always slim, always on top) ── */
+    /* ── Site nav ── */
     .site-nav {
       position: sticky;
       top: 0;
       z-index: 200;
       background: #1a1510;
-      height: 36px;
+      height: 44px;
       display: flex;
       align-items: center;
-      padding: 0 1.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .site-nav-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
     }
     .site-nav-brand {
-      font-family: 'IM Fell English SC', serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      color: rgba(232, 223, 208, 0.4);
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      color: rgba(232, 223, 208, 0.35);
       text-decoration: none;
+      flex-shrink: 0;
     }
     .site-nav-brand:hover { color: rgba(232, 223, 208, 0.7); }
+
+    /* Centered book title with library icon */
+    .book-switch {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .book-switch:hover {
+      color: #e8dfd0;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .book-switch-icon {
+      width: 16px; height: 16px;
+      stroke: #d4564c; fill: none;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .book-switch-label { color: rgba(232, 223, 208, 0.45); }
+    .book-switch-title { color: rgba(232, 223, 208, 0.85); }
+
+    /* ── Library overlay (fullscreen book picker) ── */
+    .library-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(26, 21, 16, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .library-overlay.is-open { display: flex; }
+    .library-overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .library-overlay-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.4rem;
+      color: #e8dfd0;
+    }
+    .library-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      color: rgba(232, 223, 208, 0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .library-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+    .library-close svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .library-list {
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 16px 24px 60px;
+    }
+    .library-card {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      text-decoration: none;
+      transition: background 0.15s;
+      border-radius: 6px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+    .library-card:hover { background: rgba(255, 255, 255, 0.04); }
+    .library-card.is-current {
+      background: rgba(107, 58, 42, 0.15);
+      border-left: 3px solid #d4564c;
+    }
+    .library-card-cover {
+      width: 70px; height: 100px;
+      object-fit: cover;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .library-card-info { flex: 1; min-width: 0; }
+    .library-card-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: 1.1rem;
+      color: #e8dfd0;
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+    .library-card-meta {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
+      color: rgba(196, 185, 154, 0.4);
+      margin-bottom: 8px;
+    }
+    .library-card-desc {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      color: rgba(196, 185, 154, 0.45);
+      line-height: 1.6;
+    }
+    .library-card-badge {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      color: #d4564c;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .library-card--placeholder .library-card-title {
+      color: rgba(232, 223, 208, 0.25);
+    }
+    .library-card--placeholder .library-card-desc {
+      color: rgba(196, 185, 154, 0.2);
+    }
 
     /* ── Book header (static hero) ── */
     .book-header {
@@ -51,17 +198,24 @@
     .book-header-inner {
       position: relative;
       z-index: 2;
-      max-width: 1000px;
+      max-width: 760px;
       margin: 0 auto;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      text-align: center;
-      padding: 40px 1.5rem 20px;
+      text-align: left;
+      gap: 24px;
+      padding: 40px 29px 36px;
+    }
+    .book-header-inner .book-header-cover-wrap {
+      flex: 0 0 auto;
+    }
+    .book-header-inner .book-header-text-wrap {
+      flex: 1;
     }
     .book-header-title {
-      font-family: 'IM Fell English SC', serif;
-      font-size: 0.7rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
       letter-spacing: 0.12em;
       color: rgba(196, 185, 154, 0.45);
       margin-bottom: 8px;
@@ -91,6 +245,7 @@
       justify-content: center;
       height: 56px;
       padding: 0 1rem;
+      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
     }
     .bottom-bar-inner {
       display: flex;
@@ -99,9 +254,10 @@
       max-width: 1000px;
     }
     .ch-prev, .ch-next {
-      font-family: 'IM Fell English SC', serif;
+      font-family: 'Libre Baskerville', serif;
       font-size: 0.75rem;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.02em;
+      transition: font-size 0.4s ease, color 0.4s ease;
       color: rgba(232, 223, 208, 0.7);
       text-decoration: none;
       padding: 10px 16px;
@@ -126,33 +282,55 @@
     }
     .ch-prev svg, .ch-next svg {
       width: 14px; height: 14px; flex-shrink: 0;
-      stroke: currentColor; fill: none;
+      stroke: #d4564c; fill: none;
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
+    .ch-prev[aria-disabled="true"] svg,
+    .ch-next[aria-disabled="true"] svg {
+      stroke: rgba(232, 223, 208, 0.15);
+    }
 
-    /* TOC toggle button (center of bottom bar) */
-    .toc-toggle {
+    /* Center of bottom bar: chapter name + colorful plus */
+    .bottom-bar-center {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: rgba(107, 58, 42, 0.8);
-      border: 2px solid rgba(232, 223, 208, 0.2);
-      color: #e8dfd0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .bottom-bar-center:hover { background: rgba(255, 255, 255, 0.06); }
+    .bottom-bar-chapter {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      transition: font-size 0.4s ease, color 0.4s ease;
+      color: rgba(232, 223, 208, 0.7);
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .toc-icon {
+      width: 24px; height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s, transform 0.2s;
+      flex-shrink: 0;
+      transition: transform 0.2s;
     }
-    .toc-toggle:hover {
-      background: rgba(107, 58, 42, 1);
-      transform: translateX(-50%) scale(1.1);
+    .bottom-bar-center:hover .toc-icon {
+      transform: scale(1.15);
     }
-    .toc-toggle svg {
+    .toc-icon svg {
       width: 20px; height: 20px;
-      stroke: currentColor; fill: none;
+      stroke: #d4564c; fill: none;
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
 
@@ -229,6 +407,41 @@
     /* Add bottom padding to body so content isn't hidden behind bottom bar */
     body { padding-bottom: 56px; }
 
+    /* Bottom bar expanded state — when user reaches end of chapter */
+    .bottom-bar.is-expanded {
+      height: 80px;
+      background: rgba(107, 58, 42, 0.97);
+      border-top-color: rgba(212, 86, 76, 0.3);
+      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
+    }
+    .bottom-bar.is-expanded .ch-prev,
+    .bottom-bar.is-expanded .ch-next {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .bottom-bar.is-expanded .ch-prev svg,
+    .bottom-bar.is-expanded .ch-next svg {
+      stroke: #fff;
+      width: 18px; height: 18px;
+    }
+    .bottom-bar.is-expanded .ch-next {
+      animation: pulseNext 2s ease infinite;
+    }
+    @keyframes pulseNext {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .bottom-bar.is-expanded .bottom-bar-chapter {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+    }
+    .bottom-bar.is-expanded .toc-icon svg {
+      stroke: #fff;
+    }
+    .bottom-bar.is-expanded .toc-icon svg circle {
+      fill: #fff;
+    }
+
 
     /* ── Cover page — side-by-side like Frankenstein ── */
     .book-header.is-cover .book-header-bg {
@@ -267,7 +480,7 @@
       align-items: flex-start;
     }
     .book-header.is-cover .book-header-title {
-      font-size: 0.8rem;
+      font-size: 0.875rem;
       margin-bottom: 10px;
       color: rgba(196, 185, 154, 0.5);
     }
@@ -279,20 +492,36 @@
       text-align: left;
     }
     .book-header-author {
-      font-family: 'IM Fell English SC', serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
       color: rgba(196, 185, 154, 0.45);
       margin-bottom: 24px;
     }
     .book-header.is-cover .chapter-selector {
       justify-content: flex-start;
     }
-    .book-header:not(.is-cover) .book-header-cover-wrap,
-    .book-header:not(.is-cover) .book-header-text-wrap,
-    .book-header:not(.is-cover) .book-header-cover,
     .book-header:not(.is-cover) .book-header-author {
       display: none;
+    }
+    .book-header:not(.is-cover) .book-header-cover {
+      width: 80px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 3px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+    .chapter-eyebrow {
+      font-family: 'IM Fell DW Pica SC', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: #d4564c;
+      margin-bottom: 8px;
+    }
+    .book-header:not(.is-cover) .book-header-chapter {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      margin-bottom: 0;
+      line-height: 1.05;
     }
     @media (max-width: 700px) {
       .book-header.is-cover .book-header-inner {
@@ -351,9 +580,9 @@
       pointer-events: none;
     }
     .chapter-bottom-nav .nav-direction {
-      font-family: 'IM Fell English SC', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.02em;
       color: rgba(90, 79, 66, 0.5);
     }
     .chapter-bottom-nav svg {
@@ -386,13 +615,16 @@
 
     /* ── Responsive ── */
     @media (max-width: 600px) {
-      .site-nav { padding: 0 1rem; height: 32px; }
+      .site-nav { padding: 0 0.75rem; height: 40px; }
+      .book-switch { font-size: 0.6rem; padding: 4px 8px; }
+      .book-switch-label { display: none; }
       .book-header-chapter { font-size: 2rem; }
       .book-header.is-cover .book-header-chapter { font-size: 1.8rem; }
       .book-header.is-cover .book-header-cover { max-width: 160px; }
       .book-header.is-cover .book-header-inner { padding: 24px 1rem 16px; }
       .ch-prev-title, .ch-next-title { display: none; }
       .bottom-bar { height: 50px; }
+      .bottom-bar-chapter { display: none; }
       body { padding-bottom: 50px; }
       .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
     }
@@ -402,25 +634,38 @@
   <a href="#main-content" class="skip-link">Skip to content</a>
 
   <nav class="site-nav" aria-label="Site navigation">
-    <a href="/" class="site-nav-brand">Public Domain Classics</a>
+    <div class="site-nav-inner">
+      <a href="/" class="site-nav-brand">PDC</a>
+      <button class="book-switch" id="library-open" aria-label="Switch book">
+        <svg class="book-switch-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="4" height="16" rx="0.5"/><rect x="7" y="2" width="4" height="18" rx="0.5"/><rect x="12" y="5" width="4" height="15" rx="0.5"/><rect x="17" y="3" width="4" height="17" rx="0.5"/></svg>
+        <span class="book-switch-title">Moby-Dick</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" style="stroke: #d4564c; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;"><path d="M2 4l3 3 3-3"/></svg>
+      </button>
+    </div>
   </nav>
   <div class="book-header" id="book-header">
     <div class="book-header-bg" aria-hidden="true"></div>
     <div class="book-header-overlay" aria-hidden="true"></div>
     <div class="book-header-inner">
       
-      <div class="book-header-title">Moby-Dick</div>
-      <h1 class="book-header-chapter">Chapter 116. The Dying Whale.</h1>
+      <div class="book-header-cover-wrap">
+        <img class="book-header-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="eager">
+      </div>
+      <div class="book-header-text-wrap">
+        <div class="chapter-eyebrow">Chapter 116</div>
+        <h1 class="book-header-chapter">The Dying Whale.</h1>
+      </div>
       
     </div>
   </div>
 
-  <!-- Bottom bar: prev / TOC button / next -->
+  <!-- Bottom bar: prev / chapter name + plus / next -->
   <div class="bottom-bar">
     <div class="bottom-bar-inner">
       <a class="ch-prev" href="/books/moby-dick/chapter-115-the-pequod-meets-the-bachelor/"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span class="ch-prev-title">Chapter 115. The Pequod Meets The Bachelor.</span></a>
-      <button class="toc-toggle" id="toc-open" aria-label="Open table of contents">
-        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
+        <span class="bottom-bar-chapter">Chapter 116. The Dying Whale.</span>
+        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#d4564c" stroke="none"/><circle cx="4" cy="12" r="1" fill="#d4564c" stroke="none"/><circle cx="4" cy="18" r="1" fill="#d4564c" stroke="none"/></svg></span>
       </button>
       <a class="ch-next" href="/books/moby-dick/chapter-117-the-whale-watch/"><span class="ch-next-title">Chapter 117. The Whale Watch.</span><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
@@ -437,7 +682,6 @@
     <ul class="toc-overlay-list">
       <li><a href="/books/moby-dick/">Cover</a></li>
       <li><a href="/books/moby-dick/etymology/">Etymology</a></li>
-      <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
       <li><a href="/books/moby-dick/extracts/">Extracts</a></li>
       <li><a href="/books/moby-dick/chapter-1-loomings/">Chapter 1. Loomings.</a></li>
       <li><a href="/books/moby-dick/chapter-2-the-carpet-bag/">Chapter 2. The Carpet-Bag.</a></li>
@@ -578,19 +822,60 @@
     </ul>
   </div>
 
+  <!-- Library overlay (book picker) -->
+  <div class="library-overlay" id="library-overlay">
+    <div class="library-overlay-header">
+      <div class="library-overlay-title">Library</div>
+      <button class="library-close" id="library-close" aria-label="Close library">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="library-list">
+      <a href="/books/moby-dick/" class="library-card is-current"><img class="library-card-cover" src="/books/moby-dick/images/default.jpg" alt="" loading="lazy"><div class="library-card-info"><div class="library-card-title">Moby-Dick; or, The Whale</div><div class="library-card-meta">Herman Melville · 1851 · Adventure</div><div class="library-card-desc">Captain Ahab\u2019s obsessive quest for the great white whale\u2014a towering work of American literature.</div><div class="library-card-badge">Currently Reading</div></div></a><a href="/books/frankenstein/" class="library-card"><img class="library-card-cover" src="/books/frankenstein/images/default.jpg" alt="" loading="lazy"><div class="library-card-info"><div class="library-card-title">Frankenstein; or, The Modern Prometheus</div><div class="library-card-meta">Mary Shelley · 1818 · Gothic Fiction</div><div class="library-card-desc">A tale of ambition, creation, and consequence\u2014widely considered the first science fiction novel.</div></div></a><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Pride and Prejudice</div><div class="library-card-meta">Jane Austen · 1813 · Romance</div><div class="library-card-desc">A witty exploration of love, class, and the perils of hasty judgment in Regency-era England.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Dracula</div><div class="library-card-meta">Bram Stoker · 1897 · Gothic Horror</div><div class="library-card-desc">The classic vampire tale told through diaries, letters, and newspaper clippings.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Great Gatsby</div><div class="library-card-meta">F. Scott Fitzgerald · 1925 · Literary Fiction</div><div class="library-card-desc">The decadence and disillusionment of the Jazz Age on Long Island.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Jane Eyre</div><div class="library-card-meta">Charlotte Bront\u00eb · 1847 · Gothic Romance</div><div class="library-card-desc">An orphan governess navigates love, independence, and dark secrets at Thornfield Hall.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Adventures of Sherlock Holmes</div><div class="library-card-meta">Arthur Conan Doyle · 1892 · Mystery</div><div class="library-card-desc">Twelve tales of the world\u2019s greatest consulting detective and his companion Dr. Watson.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">A Tale of Two Cities</div><div class="library-card-meta">Charles Dickens · 1859 · Historical Fiction</div><div class="library-card-desc">Paris and London during the turmoil of the French Revolution.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">The Picture of Dorian Gray</div><div class="library-card-meta">Oscar Wilde · 1890 · Philosophical Fiction</div><div class="library-card-desc">Beauty, corruption, and a portrait that ages so its subject never will.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div><div class="library-card library-card--placeholder"><div class="library-card-cover"></div><div class="library-card-info"><div class="library-card-title">Wuthering Heights</div><div class="library-card-meta">Emily Bront\u00eb · 1847 · Gothic Romance</div><div class="library-card-desc">A dark, passionate tale of obsession and revenge on the Yorkshire moors.</div><div class="library-card-badge" style="color: rgba(196,185,154,0.3);">Coming Soon</div></div></div>
+    </div>
+  </div>
+
   <script>
     (function() {
-      var openBtn = document.getElementById('toc-open');
-      var closeBtn = document.getElementById('toc-close');
-      var overlay = document.getElementById('toc-overlay');
-      if (!openBtn || !overlay) return;
-      openBtn.addEventListener('click', function() { overlay.classList.add('is-open'); });
-      closeBtn.addEventListener('click', function() { overlay.classList.remove('is-open'); });
-      overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) overlay.classList.remove('is-open');
-      });
+      // Bottom bar expand when near end of page
+      var bottomBar = document.querySelector('.bottom-bar');
+      if (bottomBar) {
+        var expanded = false;
+        window.addEventListener('scroll', function() {
+          var scrollBottom = window.scrollY + window.innerHeight;
+          var docHeight = document.documentElement.scrollHeight;
+          var nearEnd = (docHeight - scrollBottom) < 300;
+          if (nearEnd !== expanded) {
+            expanded = nearEnd;
+            bottomBar.classList.toggle('is-expanded', expanded);
+          }
+        }, { passive: true });
+      }
+
+      // TOC overlay
+      var tocOpen = document.getElementById('toc-open');
+      var tocClose = document.getElementById('toc-close');
+      var tocOverlay = document.getElementById('toc-overlay');
+      if (tocOpen && tocOverlay) {
+        tocOpen.addEventListener('click', function() { tocOverlay.classList.add('is-open'); });
+        tocClose.addEventListener('click', function() { tocOverlay.classList.remove('is-open'); });
+        tocOverlay.addEventListener('click', function(e) { if (e.target === tocOverlay) tocOverlay.classList.remove('is-open'); });
+      }
+      // Library overlay
+      var libOpen = document.getElementById('library-open');
+      var libClose = document.getElementById('library-close');
+      var libOverlay = document.getElementById('library-overlay');
+      if (libOpen && libOverlay) {
+        libOpen.addEventListener('click', function() { libOverlay.classList.add('is-open'); });
+        libClose.addEventListener('click', function() { libOverlay.classList.remove('is-open'); });
+        libOverlay.addEventListener('click', function(e) { if (e.target === libOverlay) libOverlay.classList.remove('is-open'); });
+      }
+      // Escape closes both
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') overlay.classList.remove('is-open');
+        if (e.key === 'Escape') {
+          if (tocOverlay) tocOverlay.classList.remove('is-open');
+          if (libOverlay) libOverlay.classList.remove('is-open');
+        }
       });
     })();
   </script>
@@ -607,11 +892,6 @@
     </div>
 
     
-
-    <div class="chapter-bottom-nav">
-      <a href="/books/moby-dick/chapter-115-the-pequod-meets-the-bachelor/"><span class="nav-direction"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Previous Chapter</span>Chapter 115. The Pequod Meets The Bachelor.</a>
-      <a href="/books/moby-dick/chapter-117-the-whale-watch/"><span class="nav-direction">Next Chapter <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>Chapter 117. The Whale Watch.</a>
-    </div>
   </main>
 
   <footer class="doc-footer">

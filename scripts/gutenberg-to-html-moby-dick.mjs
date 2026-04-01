@@ -47,9 +47,17 @@ function detectHeading(line) {
   return null;
 }
 
+let seenExtracts = false;
 for (let i = 0; i < lines.length; i++) {
   const heading = detectHeading(lines[i]);
   if (heading) {
+    // Merge the second "Extracts" heading into the first Extracts section
+    if (heading === 'Extracts' && seenExtracts && currentSection && currentSection.title === 'Extracts') {
+      // Skip this heading — content continues in the same section
+      continue;
+    }
+    if (heading === 'Extracts') seenExtracts = true;
+
     if (currentSection) sections.push(currentSection);
     // Check if the next line continues a chapter title (for multi-line titles)
     let title = heading;
@@ -181,9 +189,19 @@ for (let s = 0; s < sections.length; s++) {
   for (const block of blocks) {
     switch (block.type) {
       case 'paragraph': {
-        const cls = isFirstPara ? ' class="drop-cap"' : '';
+        let cls = '';
+        if (isFirstPara) {
+          // Drop cap rules:
+          // 1. Paragraph must be long enough (~3-4 lines, roughly 200+ chars)
+          // 2. Must start with a letter (no quotes, parens, or punctuation)
+          const startsWithLetter = /^[A-Za-z]/.test(block.text);
+          const longEnough = block.text.length >= 200;
+          if (startsWithLetter && longEnough) {
+            cls = ' class="drop-cap"';
+          }
+          isFirstPara = false;
+        }
         html += `      <p${cls}>${processInlineFormatting(escapeHtml(block.text))}</p>\n`;
-        isFirstPara = false;
         break;
       }
       case 'poetry':
