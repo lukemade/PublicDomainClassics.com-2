@@ -39,7 +39,8 @@
       "Bash(git branch:*)",
       "Bash(node scripts/build-moby-dick-chapters.mjs)",
       "Bash(node scripts/build-frankenstein-chapters.mjs)",
-      "Bash(ls -la books/frankenstein/images/*.jpg)"
+      "Bash(ls -la books/frankenstein/images/*.jpg)",
+      "Bash(grep -n 'fill=\"\"\\\\${accent}\"\"' scripts/build-frankenstein-chapters.mjs)"
     ]
   }
 }

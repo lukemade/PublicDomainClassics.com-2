@@ -56,7 +56,7 @@ function pageHead(chapter, chapterIdx, isCover) {
     :root { --chapter-accent: ${accent}; }
 
     /* Drop cap uses chapter accent */
-    .drop-cap::first-letter { color: var(--chapter-accent) !important; }
+    .drop-cap::first-letter { color: #d4564c !important; }
 
     /* ── Site nav ── */
     .site-nav {
@@ -489,26 +489,9 @@ function pageHead(chapter, chapterIdx, isCover) {
     }
 
 
-    /* ── Crossfade images on cover ── */
-    .crossfade-bg {
-      position: absolute; inset: 0; z-index: 0;
-      background-size: cover; background-position: center;
-      opacity: 0;
-      transition: opacity 1.5s ease;
-    }
-    .crossfade-bg.is-active { opacity: 0.3; }
-    .crossfade-thumb {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: contain;
-      opacity: 0;
-      transition: opacity 1.2s ease;
-    }
-    .crossfade-thumb.is-active { opacity: 1; }
-
     /* ── Cover page — side-by-side ── */
     .book-header.is-cover .book-header-bg {
-      opacity: 0;
+      opacity: 0.3;
     }
     .book-header.is-cover .book-header-inner {
       flex-direction: row;
@@ -831,32 +814,11 @@ function bookHeader(chapter, chapterIdx, isCover) {
   // On cover: side-by-side layout with cover image and text
   // On chapters: centered with book label + chapter title
   let innerContent;
-  // Cover images for crossfade
-  const coverImages = [
-    '/books/frankenstein/images/default.jpg',
-    '/books/frankenstein/images/3421default.jpg',
-    '/books/frankenstein/images/Frankenstein_engraved.jpg',
-    '/books/frankenstein/images/r23rdefault (1).jpg',
-  ];
-
   if (isCover) {
-    // Build crossfade background divs
-    let bgDivs = '';
-    for (let ci = 0; ci < coverImages.length; ci++) {
-      const active = ci === 0 ? ' is-active' : '';
-      bgDivs += `    <div class="crossfade-bg${active}" style="background-image: url('${coverImages[ci]}')" data-slide="${ci}"></div>\n`;
-    }
-
-    // Build crossfade thumbnail imgs
-    let thumbImgs = '';
-    for (let ci = 0; ci < coverImages.length; ci++) {
-      const active = ci === 0 ? ' is-active' : '';
-      thumbImgs += `        <img class="crossfade-thumb${active}" src="${coverImages[ci]}" alt="" loading="eager" data-slide="${ci}">\n`;
-    }
-
     innerContent = `
-      <div class="book-header-cover-wrap" style="position: relative;">
-${thumbImgs}      </div>
+      <div class="book-header-cover-wrap">
+        <img class="book-header-cover" src="/books/frankenstein/images/default.jpg" alt="Frankenstein cover" loading="eager">
+      </div>
       <div class="book-header-text-wrap">
         <div class="book-header-title">A Gothic Novel</div>
         <h1 class="book-header-chapter">Frankenstein;<br>or, The Modern<br>Prometheus</h1>
@@ -880,14 +842,9 @@ ${thumbImgs}      </div>
   // Close text-wrap div if cover
   const closeTextWrap = isCover ? `</div>` : '';
 
-  // Crossfade backgrounds for cover page
-  const bgHtml = isCover ? coverImages.map((img, ci) =>
-    `    <div class="crossfade-bg${ci === 0 ? ' is-active' : ''}" style="background-image: url('${img}')" data-slide="${ci}"></div>`
-  ).join('\n') : '    <div class="book-header-bg" aria-hidden="true"></div>';
-
   return `
   <div class="book-header${coverClass}" id="book-header">
-${bgHtml}
+    <div class="book-header-bg" aria-hidden="true"></div>
     <div class="book-header-overlay" aria-hidden="true"></div>
     <div class="book-header-inner">
       ${innerContent}
@@ -901,7 +858,7 @@ ${bgHtml}
       ${prevLink}
       <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
         <span class="bottom-bar-chapter">${chapter.title}</span>
-        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="${accent}" stroke="none"/><circle cx="4" cy="12" r="1" fill="${accent}" stroke="none"/><circle cx="4" cy="18" r="1" fill="${accent}" stroke="none"/></svg></span>
+        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#d4564c" stroke="none"/><circle cx="4" cy="12" r="1" fill="#d4564c" stroke="none"/><circle cx="4" cy="18" r="1" fill="#d4564c" stroke="none"/></svg></span>
       </button>
       <button class="sentence-toggle" id="sentence-toggle">Sentence</button>
       ${nextLink}
@@ -1071,19 +1028,6 @@ ${dropdownItems}    </ul>
             showSentence();
           }
         }, { passive: true });
-      }
-      // ── Crossfade images on cover page ──
-      var bgs = document.querySelectorAll('.crossfade-bg');
-      var thumbs = document.querySelectorAll('.crossfade-thumb');
-      if (bgs.length > 1) {
-        var slideIdx = 0;
-        setInterval(function() {
-          bgs[slideIdx].classList.remove('is-active');
-          if (thumbs[slideIdx]) thumbs[slideIdx].classList.remove('is-active');
-          slideIdx = (slideIdx + 1) % bgs.length;
-          bgs[slideIdx].classList.add('is-active');
-          if (thumbs[slideIdx]) thumbs[slideIdx].classList.add('is-active');
-        }, 3000);
       }
     })();
   </script>`;

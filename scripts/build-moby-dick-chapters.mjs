@@ -54,7 +54,7 @@ function pageHead(chapter, chapterIdx, isCover) {
   <link rel="stylesheet" href="/src/css/document-template.css">
   <style>
     :root { --chapter-accent: ${accent}; }
-    .drop-cap::first-letter { color: var(--chapter-accent) !important; }
+    .drop-cap::first-letter { color: #d4564c !important; }
 
     /* ── Site nav ── */
     .site-nav {
