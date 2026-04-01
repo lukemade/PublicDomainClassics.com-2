@@ -723,6 +723,7 @@ function pageHead(chapter, chapterIdx, isCover) {
       list-style: none;
       min-width: 140px;
     }
+    details.mode-dropdown[open] .mode-dropdown-list { display: block; }
     .mode-dropdown-list li a {
       display: block;
       padding: 8px 16px;
@@ -943,8 +944,11 @@ ${dropdownItems}    </ul>
       ${libraryOverlayHtml()}
     </div>
   </div>
+`;
+}
 
-  <script>
+function pageScript() {
+  return `  <script>
     (function() {
       // Bottom bar expand when near end of page
       var bottomBar = document.querySelector('.bottom-bar');
@@ -1167,6 +1171,7 @@ ${chapterContent}
       <div class="sentence-counter" id="sentence-counter"></div>
     </div>
   </div>
+${pageScript()}
 ` + pageFoot;
 
   writeFileSync(resolve(chapterDir, 'index.html'), page, 'utf-8');
