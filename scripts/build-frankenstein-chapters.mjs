@@ -134,6 +134,20 @@ function pageHead(chapter, chapterIdx, isCover) {
       transition: opacity 0.2s;
     }
     .site-nav-brand:hover .brand-logo { opacity: 1; }
+    .book-title-link {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Fraunces', serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(232, 223, 208, 0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .book-title-link:hover { color: #e8dfd0; }
     .brand-beta {
       position: absolute;
       right: 0;
@@ -198,7 +212,7 @@ function pageHead(chapter, chapterIdx, isCover) {
     }
     .book-header-overlay {
       position: fixed; inset: 0;
-      background: linear-gradient(180deg, rgba(10, 8, 5, 0.5) 0%, rgba(10, 8, 5, 1) 100%);
+      background: linear-gradient(180deg, rgba(15, 12, 35, 0.7) 0%, rgba(15, 12, 35, 0.95) 100%);
       z-index: 0;
     }
     .book-header-inner {
@@ -450,7 +464,7 @@ function pageHead(chapter, chapterIdx, isCover) {
     .book-header.is-cover .book-header-title {
       font-size: 0.875rem;
       margin-bottom: 10px;
-      color: rgba(196, 185, 154, 0.5);
+      color: #e8dfd0;
     }
     .book-header.is-cover .book-header-chapter {
       font-family: 'IM Fell French Canon', serif;
@@ -612,17 +626,43 @@ function pageHead(chapter, chapterIdx, isCover) {
 
     /* ── Responsive ── */
     @media (max-width: 600px) {
-      .site-nav { padding: 8px 0.75rem; height: auto; }
-      .brand-logo { height: 20px; }
+      .site-nav { padding: 0 0.75rem; height: 44px; }
+      .site-nav-inner { flex-direction: row; align-items: center; gap: 0; }
+      .brand-logo { height: 24px; }
+      .brand-beta { display: none; }
+      .book-title-link {
+        position: static !important;
+        transform: none !important;
+        font-size: 0.65rem;
+        margin-left: 10px;
+        padding-left: 10px;
+        border-left: 1px solid rgba(232, 223, 208, 0.2);
+      }
+      .epigraph { font-size: 0.85rem !important; border-left: none !important; padding-left: 0 !important; }
+      .epigraph-attribution { font-size: 0.7rem !important; }
       .book-switch { font-size: 0.6rem; padding: 4px 8px; }
       .book-switch-label { display: none; }
-      .book-header-chapter { font-size: 2rem; }
+      .book-header-chapter { font-size: 1.5rem; }
+      .book-header-inner { padding: 40px 16px 40px !important; gap: 16px; }
+      .book-header:not(.is-cover) .book-header-cover { width: 50px; }
+      .article-body, .toc-section { margin-top: 0 !important; border-radius: 0; max-width: 100%; }
+      .book-header-title { font-size: 0.65rem; margin-bottom: 6px; }
+      .book-header-author { font-size: 0.65rem; margin-bottom: 6px; }
       .book-header.is-cover .book-header-chapter { font-size: 1.8rem; }
-      .book-header.is-cover .book-header-cover { max-width: 200px; }
+      .book-header.is-cover .book-header-cover { max-width: 120px; }
       .book-header.is-cover .book-header-inner { padding: 24px 1rem 16px; }
+      .book-header-overlay { background: linear-gradient(180deg, rgba(15, 12, 35, 0.8) 0%, rgba(15, 12, 35, 0.98) 100%) !important; }
       .ch-prev-title, .ch-next-title { display: none; }
-      .bottom-bar { height: 50px; }
-      .bottom-bar-chapter { display: inline-block; font-size: 0.7rem; max-width: 120px; }
+      .bottom-bar { height: 44px; background: rgba(26, 21, 16, 0.95); border-top: none; }
+      .bottom-bar-chapter { display: inline-block; font-size: 0.65rem; max-width: 120px; }
+      .ch-prev, .ch-next {
+        width: auto; height: auto;
+        border-radius: 0;
+        background: none !important;
+        padding: 8px;
+      }
+      .ch-prev svg, .ch-next svg { width: 18px; height: 18px; stroke: rgba(232,223,208,0.6); }
+      .ch-prev:hover svg, .ch-next:hover svg { stroke: #d4564c; }
       body { padding-bottom: 50px; }
       .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
     }
@@ -631,9 +671,11 @@ function pageHead(chapter, chapterIdx, isCover) {
     .epigraph {
       font-family: 'Libre Baskerville', serif !important;
       font-style: italic !important;
-      font-size: 1.15rem !important;
+      font-size: 1rem !important;
       line-height: 1.8 !important;
       color: #5a4f42 !important;
+      border-left: none !important;
+      padding-left: 0 !important;
     }
     .epigraph-attribution {
       font-size: 0.9rem !important;
@@ -652,7 +694,7 @@ function pageHead(chapter, chapterIdx, isCover) {
         <img class="brand-logo" src="/assets/logo.svg" alt="Public Domain Classics">
       </a>
       <span class="brand-beta">Beta</span>
-      <a href="/books/frankenstein/" style="position:absolute;left:50%;transform:translateX(-50%);font-family:'Fraunces',serif;font-size:0.8rem;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,223,208,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='rgba(232,223,208,1)'" onmouseout="this.style.color='rgba(232,223,208,0.7)'">Frankenstein</a>
+      <a href="/books/frankenstein/" class="book-title-link">Frankenstein</a>
     </div>
   </nav>`;
 }
@@ -761,7 +803,25 @@ function pageScript() {
   return `  <script>
     (function() {
 
-      // Arrow buttons — show black on mouse movement, fade after 3s idle
+      // Hide top/bottom bars on scroll down, show on scroll up
+      var siteNav = document.querySelector('.site-nav');
+      var bottomBar = document.querySelector('.bottom-bar');
+      var lastScrollY = 0;
+      if (siteNav) siteNav.style.transition = 'transform 0.3s ease';
+      if (bottomBar) bottomBar.style.transition += ', transform 0.3s ease';
+      window.addEventListener('scroll', function() {
+        var y = window.scrollY;
+        if (y > lastScrollY && y > 100) {
+          if (siteNav) siteNav.style.transform = 'translateY(-100%)';
+          if (bottomBar) bottomBar.style.transform = 'translateY(100%)';
+        } else {
+          if (siteNav) siteNav.style.transform = 'translateY(0)';
+          if (bottomBar) bottomBar.style.transform = 'translateY(0)';
+        }
+        lastScrollY = y;
+      }, { passive: true });
+
+      // Arrow buttons — show on mouse movement, fade after 3s idle
       var arrows = document.querySelectorAll('.ch-prev:not([aria-disabled]), .ch-next:not([aria-disabled])');
       var arrowTimer = null;
       function showArrows() {
@@ -818,14 +878,6 @@ function chapterBottomNav(chapterIdx) {
 }
 
 const pageFoot = `
-  <footer class="doc-footer">
-    <div class="brand">Public Domain Classics</div>
-    <p class="disclaimer">
-      This text is sourced from <a href="https://www.gutenberg.org/ebooks/84">Project Gutenberg</a>
-      and is in the public domain in the United States.
-      <br>Formatted for readability &mdash; original text preserved verbatim.
-    </p>
-  </footer>
 </body>
 </html>`;
 
