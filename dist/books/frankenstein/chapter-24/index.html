@@ -67,6 +67,8 @@
     }
     .site-nav-brand:hover .brand-logo { opacity: 1; }
     .brand-beta {
+      position: absolute;
+      right: 0;
       font-family: 'Fraunces', serif;
       font-size: 0.5rem;
       font-weight: 700;
@@ -118,17 +120,19 @@
       background: #111;
       position: relative;
       overflow: hidden;
+      clip-path: inset(0);
     }
     .book-header-bg {
-      position: absolute; inset: 0;
-      background: url('/books/frankenstein/images/default.jpg') center/cover no-repeat;
-      opacity: 0.25;
+      position: fixed; inset: 0;
+      background: url('/books/frankenstein/images/default.jpg') 0 40%/cover no-repeat;
+      opacity: 0.9;
+      z-index: 0;
     }
     .book-header-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(10, 8, 5, 0) 0%, rgba(10, 8, 5, 0.5) 100%);
+      position: fixed; inset: 0;
+      background: linear-gradient(180deg, rgba(10, 8, 5, 0.5) 0%, rgba(10, 8, 5, 1) 100%);
+      z-index: 0;
     }
-
     .book-header-inner {
       position: relative;
       z-index: 2;
@@ -139,7 +143,7 @@
       align-items: center;
       text-align: left;
       gap: 24px;
-      padding: 40px 29px 36px;
+      padding: 120px 32px 120px;
     }
     .book-header-inner .book-header-cover-wrap {
       flex: 0 0 auto;
@@ -148,11 +152,12 @@
       flex: 1;
     }
     .book-header-title {
-      font-family: 'Libre Baskerville', serif;
+      font-family: 'Fraunces', serif;
       font-size: 0.875rem;
       letter-spacing: 0.12em;
-      color: rgba(196, 185, 154, 0.45);
-      margin-bottom: 8px;
+      color: #e8dfd0;
+      margin-bottom: 12px;
+      text-transform: uppercase;
     }
     .book-header-chapter {
       font-family: 'IM Fell French Canon', serif;
@@ -160,7 +165,8 @@
       font-weight: 400;
       color: #e8dfd0;
       line-height: 1.05;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      text-align: left;
     }
 
     /* ── Bottom bar — sticky to bottom ── */
@@ -190,40 +196,34 @@
       gap: 8px;
     }
     .ch-prev, .ch-next {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.02em;
-      transition: font-size 0.4s ease, color 0.4s ease;
-      color: rgba(232, 223, 208, 0.7);
-      text-decoration: none;
-      padding: 10px 16px;
-      transition: color 0.2s;
-      white-space: nowrap;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(232, 223, 208, 0.12);
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: background 0.2s;
     }
-    .ch-prev { flex-shrink: 0; }
-    .ch-next { flex-shrink: 0; }
-    .ch-prev:hover, .ch-next:hover { color: #fff; }
+    .ch-prev:hover, .ch-next:hover {
+      background: #d4564c;
+    }
     .ch-prev[aria-disabled="true"],
     .ch-next[aria-disabled="true"] {
-      color: rgba(232, 223, 208, 0.15);
+      opacity: 0.2;
       pointer-events: none;
     }
     .ch-prev-title, .ch-next-title {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 200px;
+      display: none;
     }
     .ch-prev svg, .ch-next svg {
-      width: 14px; height: 14px; flex-shrink: 0;
-      stroke: #d4564c; fill: none;
+      width: 16px; height: 16px;
+      stroke: rgba(232, 223, 208, 0.9); fill: none;
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
-    .ch-prev[aria-disabled="true"] svg,
-    .ch-next[aria-disabled="true"] svg {
-      stroke: rgba(232, 223, 208, 0.15);
+    .ch-prev:hover svg, .ch-next:hover svg {
+      stroke: #fff;
     }
 
     /* Center of bottom bar: chapter name + colorful plus */
@@ -241,10 +241,11 @@
     .bottom-bar-center:hover { background: rgba(255, 255, 255, 0.06); }
     .bottom-bar-chapter {
       font-family: 'Libre Baskerville', serif;
-      font-size: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 700;
       letter-spacing: 0.02em;
-      transition: font-size 0.4s ease, color 0.4s ease;
-      color: rgba(232, 223, 208, 0.7);
+      text-transform: uppercase;
+      color: rgba(232, 223, 208, 1);
       max-width: 220px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -349,7 +350,7 @@
     .book-header.is-cover .book-header-inner {
       flex-direction: row;
       text-align: left;
-      padding: 48px 2rem 44px;
+      padding: 48px 2rem 84px;
       gap: 40px;
       align-items: center;
     }
@@ -391,18 +392,19 @@
       text-align: left;
     }
     .book-header-author {
-      font-family: 'Libre Baskerville', serif;
+      font-family: 'Fraunces', serif;
       font-size: 0.875rem;
-      letter-spacing: 0.04em;
-      color: rgba(196, 185, 154, 0.45);
-      margin-bottom: 24px;
+      letter-spacing: 0.1em;
+      color: rgba(232, 223, 208, 0.9);
+      margin-bottom: 12px;
+      text-transform: uppercase;
     }
     .book-header.is-cover .chapter-selector {
       justify-content: flex-start;
     }
     .begin-reading {
       display: inline-block;
-      margin-top: 20px;
+      margin-top: 12px;
       font-family: 'Fraunces', serif;
       font-size: 1rem;
       font-weight: 400;
@@ -441,22 +443,28 @@
       margin-bottom: 0;
       line-height: 1.05;
     }
-    @media (max-width: 700px) {
+    @media (max-width: 480px) {
       .book-header.is-cover .book-header-inner {
         flex-direction: column;
         text-align: center;
         gap: 24px;
       }
       .book-header.is-cover .book-header-cover { max-width: 200px; }
-      .book-header-text-wrap { align-items: center; }
-      .book-header.is-cover .book-header-chapter { text-align: center; }
+      .book-header-text-wrap { align-items: flex-start; }
+      .book-header.is-cover .book-header-chapter { text-align: left; }
       .book-header.is-cover .chapter-selector { justify-content: center; }
     }
 
     /* ── Reading area ── */
-    .article-body {
-      margin-top: 0 !important;
-      border-radius: 0;
+    .article-body, .toc-section {
+      margin-top: -30px;
+      border-radius: 12px 12px 0 0;
+      position: relative;
+      z-index: 3;
+    }
+    body {
+      background: linear-gradient(180deg, #ede4d6 0%, #faf8f4 40%) no-repeat;
+      background-color: #faf8f4;
     }
 
     /* ── Bottom chapter nav ── */
@@ -513,6 +521,9 @@
     .toc-section {
       background: var(--bg, #faf8f4);
       padding: 3rem 2rem 4rem;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .toc-inner { max-width: 680px; margin: 0 auto; }
     .toc-inner h2 {
@@ -533,18 +544,32 @@
 
     /* ── Responsive ── */
     @media (max-width: 600px) {
-      .site-nav { padding: 0 0.75rem; height: 40px; }
+      .site-nav { padding: 8px 0.75rem; height: auto; }
+      .brand-logo { height: 20px; }
       .book-switch { font-size: 0.6rem; padding: 4px 8px; }
       .book-switch-label { display: none; }
       .book-header-chapter { font-size: 2rem; }
       .book-header.is-cover .book-header-chapter { font-size: 1.8rem; }
-      .book-header.is-cover .book-header-cover { max-width: 160px; }
+      .book-header.is-cover .book-header-cover { max-width: 200px; }
       .book-header.is-cover .book-header-inner { padding: 24px 1rem 16px; }
       .ch-prev-title, .ch-next-title { display: none; }
       .bottom-bar { height: 50px; }
-      .bottom-bar-chapter { display: none; }
+      .bottom-bar-chapter { display: inline-block; font-size: 0.7rem; max-width: 120px; }
       body { padding-bottom: 50px; }
       .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
+    }
+
+    /* Epigraph override — more legible */
+    .epigraph {
+      font-family: 'Libre Baskerville', serif !important;
+      font-style: italic !important;
+      font-size: 1.15rem !important;
+      line-height: 1.8 !important;
+      color: #5a4f42 !important;
+    }
+    .epigraph-attribution {
+      font-size: 0.9rem !important;
+      font-style: normal !important;
     }
 
     /* Sentence mode removed for MVP launch — saved for later */
@@ -557,9 +582,9 @@
     <div class="site-nav-inner">
       <a href="/" class="site-nav-brand">
         <img class="brand-logo" src="/assets/logo.svg" alt="Public Domain Classics">
-        <span class="brand-beta">Beta</span>
       </a>
-      <span class="book-switch-title" style="position:absolute;left:50%;transform:translateX(-50%);font-family:'Libre Baskerville',serif;font-size:0.875rem;color:rgba(232,223,208,0.7);">Frankenstein</span>
+      <span class="brand-beta">Beta</span>
+      <a href="/books/frankenstein/" style="position:absolute;left:50%;transform:translateX(-50%);font-family:'Fraunces',serif;font-size:0.8rem;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,223,208,0.7);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='rgba(232,223,208,1)'" onmouseout="this.style.color='rgba(232,223,208,0.7)'">Frankenstein</a>
     </div>
   </nav>
   <div class="book-header" id="book-header">
@@ -725,6 +750,20 @@
 
   <script>
     (function() {
+
+      // Arrow buttons — show black on mouse movement, fade after 3s idle
+      var arrows = document.querySelectorAll('.ch-prev:not([aria-disabled]), .ch-next:not([aria-disabled])');
+      var arrowTimer = null;
+      function showArrows() {
+        arrows.forEach(function(a) { a.style.background = 'rgba(212, 86, 76, 0.25)'; });
+        arrows.forEach(function(a) { var s = a.querySelector('svg'); if (s) s.style.stroke = '#fff'; });
+        clearTimeout(arrowTimer);
+        arrowTimer = setTimeout(function() {
+          arrows.forEach(function(a) { a.style.background = ''; });
+          arrows.forEach(function(a) { var s = a.querySelector('svg'); if (s) s.style.stroke = ''; });
+        }, 3000);
+      }
+      document.addEventListener('mousemove', showArrows, { passive: true });
 
       // TOC overlay
       var tocOpen = document.getElementById('toc-open');
