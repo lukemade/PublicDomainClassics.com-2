@@ -540,8 +540,7 @@ function pageHead(chapter, chapterIdx, isCover) {
       z-index: 3;
     }
     body {
-      background: linear-gradient(180deg, #f0ece4 0%, #ffffff 30%) no-repeat;
-      background-color: #faf8f4;
+      background: #ffffff;
     }
 
     /* ── Bottom chapter nav ── */
@@ -633,8 +632,8 @@ function pageHead(chapter, chapterIdx, isCover) {
         padding-left: 10px;
         border-left: 1px solid rgba(0, 0, 0, 0.12);
       }
-      .epigraph { font-size: 0.85rem !important; border-left: none !important; padding-left: 0 !important; }
-      .epigraph-attribution { font-size: 0.7rem !important; }
+      .epigraph { font-size: 0.85rem !important; }
+      .epigraph-attribution { font-size: 0.75rem !important; }
       .book-switch { font-size: 0.6rem; padding: 4px 8px; }
       .book-switch-label { display: none; }
       .book-header-chapter { font-size: 1.5rem; }
@@ -662,19 +661,24 @@ function pageHead(chapter, chapterIdx, isCover) {
       .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
     }
 
-    /* Epigraph override — more legible */
+    /* Epigraph override — Libre Franklin with accent border */
     .epigraph {
-      font-family: 'Libre Baskerville', serif !important;
+      font-family: 'Libre Franklin', sans-serif !important;
+      font-weight: 300 !important;
       font-style: italic !important;
       font-size: 1rem !important;
-      line-height: 1.8 !important;
+      line-height: 1.7 !important;
       color: #5a4f42 !important;
-      border-left: none !important;
-      padding-left: 0 !important;
+      border-left: 3px solid #C25335 !important;
+      padding: 16px 0 16px 20px !important;
+      margin-left: 0 !important;
     }
     .epigraph-attribution {
-      font-size: 0.9rem !important;
+      font-family: 'Libre Franklin', sans-serif !important;
+      font-size: 0.85rem !important;
+      font-weight: 400 !important;
       font-style: normal !important;
+      color: #8a7e6e !important;
     }
 
     /* Sentence mode removed for MVP launch — saved for later */
@@ -1063,21 +1067,23 @@ const coverPage = pageHead(coverChapter, -1, true) + `
 
     /* Blockquote */
     .cover-quote {
-      font-family: 'IM Fell French Canon', serif;
-      font-size: clamp(1.2rem, 3vw, 1.6rem);
-      font-weight: 400;
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      font-weight: 300;
       font-style: italic;
-      color: #2c2420;
-      line-height: 1.5;
+      color: #5a4f42;
+      line-height: 1.7;
       margin: 0 0 16px;
-      padding: 0;
+      padding: 16px 0 16px 20px;
       border: none;
+      border-left: 3px solid #C25335;
     }
     .cover-quote-attr {
-      font-family: 'Fraunces', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.8rem;
-      color: #5a4f42;
-      letter-spacing: 0.04em;
+      font-weight: 400;
+      color: #8a7e6e;
+      letter-spacing: 0.02em;
     }
 
     /* Author bio — 67/33 split */
@@ -1089,25 +1095,19 @@ const coverPage = pageHead(coverChapter, -1, true) + `
     .cover-bio-text {
       flex: 2;
     }
-    .cover-bio-slideshow {
+    .cover-bio-portrait {
       flex: 1;
-      position: relative;
-      min-height: 269px;
-      max-height: 269px;
       border-radius: 6px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
-    .cover-bio-slideshow img {
-      position: absolute;
-      top: 0; left: 0;
+    .cover-bio-portrait img {
       width: 100%;
-      height: 100%;
+      height: auto;
+      display: block;
       object-fit: cover;
-      opacity: 0;
-      transition: opacity 1.5s ease;
+      max-height: 269px;
     }
-    .cover-bio-slideshow img.is-active { opacity: 1; }
     .cover-bio-name {
       font-family: 'IM Fell French Canon', serif;
       font-size: 1.3rem;
@@ -1116,7 +1116,6 @@ const coverPage = pageHead(coverChapter, -1, true) + `
     }
     @media (max-width: 600px) {
       .cover-bio-layout { flex-direction: column; }
-      .cover-bio-slideshow { min-height: 250px; }
     }
 
     /* Edition details */
@@ -1248,9 +1247,8 @@ const coverPage = pageHead(coverChapter, -1, true) + `
           <p>Daughter of the philosopher William Godwin and the pioneering feminist writer Mary Wollstonecraft, who died eleven days after her birth. Mary began writing Frankenstein at the age of eighteen during a stay near Lake Geneva with Percy Bysshe Shelley, Lord Byron, and John Polidori. The novel was published anonymously two years later, when she was just twenty years old. She married the poet Percy Bysshe Shelley and continued writing novels, short stories, and biographical works throughout her life.</p>
           <div class="cover-source">Biographical facts from <a href="https://en.wikipedia.org/wiki/Mary_Shelley" target="_blank" rel="noopener">Wikipedia: Mary Shelley</a>.</div>
         </div>
-        <div class="cover-bio-slideshow" id="bio-slideshow">
-          <img src="/books/frankenstein/images/RothwellMaryShelley.jpg" alt="Portrait of Mary Shelley by Richard Rothwell, 1840" class="is-active">
-          <img src="/books/frankenstein/images/Mary_Shelley_by_Reginald_Easton..jpg" alt="Portrait of Mary Shelley by Reginald Easton">
+        <div class="cover-bio-portrait">
+          <img src="/books/frankenstein/images/RothwellMaryShelley.jpg" alt="Portrait of Mary Shelley by Richard Rothwell, 1840">
         </div>
       </div>
     </div>
@@ -1275,9 +1273,10 @@ const coverPage = pageHead(coverChapter, -1, true) + `
   <div class="bottom-bar">
     <div class="bottom-bar-inner">
       <a class="ch-prev" aria-disabled="true"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
-      <span class="bottom-bar-center" style="cursor: default;">
-        <span class="bottom-bar-chapter">Frankenstein</span>
-      </span>
+      <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
+        <span class="bottom-bar-chapter">Cover</span>
+        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="12" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="18" r="1" fill="#C25335" stroke="none"/></svg></span>
+      </button>
       <a class="ch-next" href="/books/frankenstein/${chapters[0].id}/"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
   </div>
@@ -1304,16 +1303,6 @@ ${pageScript()}
           hi = (hi + 1) % heads.length;
           heads[hi].classList.add('is-active');
         }, 4000);
-      }
-      // Bio portrait slideshow
-      var bios = document.querySelectorAll('#bio-slideshow img');
-      if (bios.length > 1) {
-        var bi = 0;
-        setInterval(function() {
-          bios[bi].classList.remove('is-active');
-          bi = (bi + 1) % bios.length;
-          bios[bi].classList.add('is-active');
-        }, 5000);
       }
     })();
   </script>

@@ -5,7 +5,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #faf8f4;
+  --bg: #ffffff;
   --text: #2c2420;
   --accent: #6b3a2a;
   --muted: #5a4f42;
@@ -585,20 +585,21 @@ blockquote {
 
 /* ── LITERATURE FORMATTING ───────────────── */
 .epigraph {
-  margin: 0 0 2.5em 2em;
-  padding-left: 1.2em;
-  border-left: 2px solid rgba(107, 58, 42, 0.25);
-  font-family: 'Cormorant Unicase', serif;
-  font-weight: 400;
-  font-style: normal;
+  margin: 0 0 2.5em 0;
+  padding: 16px 0 16px 20px;
+  border-left: 3px solid #C25335;
+  font-family: 'Libre Franklin', sans-serif;
+  font-weight: 300;
+  font-style: italic;
   color: #5a4f42;
-  font-size: 1.05em;
+  font-size: 0.95em;
   line-height: 1.7;
 }
 .epigraph-attribution {
   display: block;
   margin-top: 0.5em;
   font-style: normal;
+  font-weight: 400;
   font-size: 0.85em;
   color: #8a7e6e;
 }
