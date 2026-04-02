@@ -86,7 +86,7 @@ function pageHead(chapter, chapterIdx, isCover) {
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X3J8M8XNSJ');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/css/document-template.css">
   <style>
     :root { --chapter-accent: ${accent}; }
@@ -1049,8 +1049,9 @@ const coverPage = pageHead(coverChapter, -1, true) + `
       margin-top: 16px;
     }
     .cover-tag {
-      font-family: 'Fraunces', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.7rem;
+      font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #5a4f42;
@@ -1078,16 +1079,33 @@ const coverPage = pageHead(coverChapter, -1, true) + `
       letter-spacing: 0.04em;
     }
 
-    /* Author bio */
-    .cover-bio-portrait {
-      width: 200px;
-      height: 200px;
-      object-fit: cover;
+    /* Author bio — 67/33 split */
+    .cover-bio-layout {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+    .cover-bio-text {
+      flex: 2;
+    }
+    .cover-bio-slideshow {
+      flex: 1;
+      position: relative;
+      min-height: 300px;
       border-radius: 6px;
-      float: right;
-      margin: 0 0 16px 24px;
+      overflow: hidden;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
+    .cover-bio-slideshow img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+    .cover-bio-slideshow img.is-active { opacity: 1; }
     .cover-bio-name {
       font-family: 'IM Fell French Canon', serif;
       font-size: 1.3rem;
@@ -1095,7 +1113,8 @@ const coverPage = pageHead(coverChapter, -1, true) + `
       margin-bottom: 12px;
     }
     @media (max-width: 600px) {
-      .cover-bio-portrait { width: 120px; height: 120px; margin: 0 0 12px 16px; }
+      .cover-bio-layout { flex-direction: column; }
+      .cover-bio-slideshow { min-height: 250px; }
     }
 
     /* Edition details */
@@ -1105,15 +1124,17 @@ const coverPage = pageHead(coverChapter, -1, true) + `
       flex-wrap: wrap;
     }
     .cover-detail {
-      font-family: 'Libre Baskerville', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.85rem;
+      font-weight: 400;
       color: #5a4f42;
       line-height: 1.6;
     }
     .cover-detail strong {
       display: block;
-      font-family: 'Fraunces', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.7rem;
+      font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #2c2420;
@@ -1123,8 +1144,9 @@ const coverPage = pageHead(coverChapter, -1, true) + `
     /* Bottom CTA */
     /* Source citations */
     .cover-source {
-      font-family: 'Libre Baskerville', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.75rem;
+      font-weight: 400;
       color: #8a7e6e;
       margin-top: 16px;
       line-height: 1.6;
@@ -1136,7 +1158,7 @@ const coverPage = pageHead(coverChapter, -1, true) + `
     .cover-source a:hover { text-decoration: underline; }
     .cover-ai-label {
       display: inline-block;
-      font-family: 'Fraunces', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.6rem;
       font-weight: 700;
       letter-spacing: 0.08em;
@@ -1191,8 +1213,6 @@ const coverPage = pageHead(coverChapter, -1, true) + `
         <div class="cover-author">
           <span class="author-headshot">
             <img src="/books/frankenstein/images/shelley-headshot.jpg" alt="Mary Shelley" class="is-active">
-            <img src="/books/frankenstein/images/RothwellMaryShelley.jpg" alt="">
-            <img src="/books/frankenstein/images/Mary_Shelley_by_Reginald_Easton..jpg" alt="">
             <img src="/books/frankenstein/images/shelley-2.jpg" alt="">
           </span>
           Mary Shelley &middot; 1818
@@ -1220,10 +1240,17 @@ const coverPage = pageHead(coverChapter, -1, true) + `
 
     <div class="cover-section">
       <div class="cover-section-label">About the Author</div>
-      <img class="cover-bio-portrait" src="/books/frankenstein/images/RothwellMaryShelley.jpg" alt="Portrait of Mary Shelley by Richard Rothwell, 1840">
-      <h2 class="cover-bio-name">Mary Wollstonecraft Shelley (1797&ndash;1851)</h2>
-      <p>Daughter of the philosopher William Godwin and the pioneering feminist writer Mary Wollstonecraft, who died eleven days after her birth. Mary began writing Frankenstein at the age of eighteen during a stay near Lake Geneva with Percy Bysshe Shelley, Lord Byron, and John Polidori. The novel was published anonymously two years later, when she was just twenty years old. She married the poet Percy Bysshe Shelley and continued writing novels, short stories, and biographical works throughout her life.</p>
-      <div class="cover-source">Biographical facts from <a href="https://en.wikipedia.org/wiki/Mary_Shelley" target="_blank" rel="noopener">Wikipedia: Mary Shelley</a>.</div>
+      <div class="cover-bio-layout">
+        <div class="cover-bio-text">
+          <h2 class="cover-bio-name">Mary Wollstonecraft Shelley (1797&ndash;1851)</h2>
+          <p>Daughter of the philosopher William Godwin and the pioneering feminist writer Mary Wollstonecraft, who died eleven days after her birth. Mary began writing Frankenstein at the age of eighteen during a stay near Lake Geneva with Percy Bysshe Shelley, Lord Byron, and John Polidori. The novel was published anonymously two years later, when she was just twenty years old. She married the poet Percy Bysshe Shelley and continued writing novels, short stories, and biographical works throughout her life.</p>
+          <div class="cover-source">Biographical facts from <a href="https://en.wikipedia.org/wiki/Mary_Shelley" target="_blank" rel="noopener">Wikipedia: Mary Shelley</a>.</div>
+        </div>
+        <div class="cover-bio-slideshow" id="bio-slideshow">
+          <img src="/books/frankenstein/images/RothwellMaryShelley.jpg" alt="Portrait of Mary Shelley by Richard Rothwell, 1840" class="is-active">
+          <img src="/books/frankenstein/images/Mary_Shelley_by_Reginald_Easton..jpg" alt="Portrait of Mary Shelley by Reginald Easton">
+        </div>
+      </div>
     </div>
 
     <div class="cover-section">
@@ -1265,6 +1292,16 @@ ${pageScript()}
           hi = (hi + 1) % heads.length;
           heads[hi].classList.add('is-active');
         }, 4000);
+      }
+      // Bio portrait slideshow
+      var bios = document.querySelectorAll('#bio-slideshow img');
+      if (bios.length > 1) {
+        var bi = 0;
+        setInterval(function() {
+          bios[bi].classList.remove('is-active');
+          bi = (bi + 1) % bios.length;
+          bios[bi].classList.add('is-active');
+        }, 5000);
       }
     })();
   </script>
