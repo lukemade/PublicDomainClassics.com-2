@@ -53,7 +53,10 @@
       "Bash(cp -r books/frankenstein/chapter-* dist/books/frankenstein/)",
       "Bash(node scripts/verify-accuracy.mjs)",
       "Bash(node scripts/verify-frankenstein.mjs)",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Bash(ls books/frankenstein/images/*.jpg)",
+      "mcp__mcp-registry__search_mcp_registry",
+      "Bash(ls books/frankenstein/images/mary* books/frankenstein/images/Mary* books/frankenstein/images/shelley* books/frankenstein/images/Shelley*)"
     ]
   }
 }
