@@ -81,9 +81,9 @@ function pageHead(chapter, chapterIdx, isCover) {
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">${jsonLd}</script>
   <link rel="canonical" href="${chapterUrl}">
-  <!-- Google Analytics 4 — replace G-X3J8M8XNSJ with your ID -->
+  <!-- Cookie Consent + Google Analytics 4 (Consent Mode v2) -->
+  <script src="/src/js/cookie-consent.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X3J8M8XNSJ"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X3J8M8XNSJ');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
