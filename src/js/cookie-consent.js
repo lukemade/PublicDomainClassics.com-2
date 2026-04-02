@@ -11,6 +11,7 @@
   'use strict';
 
   var GA_ID = 'G-X3J8M8XNSJ';
+  var ADS_ID = 'AW-835823373';
   var STORAGE_KEY = 'cookie_consent';
 
   // 1. Set consent defaults (denied) — must happen before gtag('config')
@@ -37,9 +38,10 @@
   }
   // If 'declined' or 'accepted', no banner needed
 
-  // 3. Configure GA (runs after consent state is set)
+  // 3. Configure GA + Google Ads (runs after consent state is set)
   gtag('js', new Date());
   gtag('config', GA_ID);
+  gtag('config', ADS_ID);
 
   // 4. Show banner if no stored preference
   if (!stored) {

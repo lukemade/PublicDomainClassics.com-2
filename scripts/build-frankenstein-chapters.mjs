@@ -81,9 +81,10 @@ function pageHead(chapter, chapterIdx, isCover) {
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">${jsonLd}</script>
   <link rel="canonical" href="${chapterUrl}">
-  <!-- Cookie Consent + Google Analytics 4 (Consent Mode v2) -->
+  <!-- Cookie Consent + Google Analytics 4 + Google Ads (Consent Mode v2) -->
   <script src="/src/js/cookie-consent.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X3J8M8XNSJ"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-835823373"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
@@ -1091,7 +1092,8 @@ const coverPage = pageHead(coverChapter, -1, true) + `
     .cover-bio-slideshow {
       flex: 1;
       position: relative;
-      min-height: 300px;
+      min-height: 269px;
+      max-height: 269px;
       border-radius: 6px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
@@ -1269,6 +1271,16 @@ const coverPage = pageHead(coverChapter, -1, true) + `
     </div>
 
   </main>
+
+  <div class="bottom-bar">
+    <div class="bottom-bar-inner">
+      <a class="ch-prev" aria-disabled="true"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
+      <span class="bottom-bar-center" style="cursor: default;">
+        <span class="bottom-bar-chapter">Frankenstein</span>
+      </span>
+      <a class="ch-next" href="/books/frankenstein/${chapters[0].id}/"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
 
 ${pageScript()}
   <script>
