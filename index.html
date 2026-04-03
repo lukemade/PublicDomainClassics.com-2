@@ -14,24 +14,13 @@
   <meta property="og:url" content="https://publicdomainclassics.com/">
   <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://publicdomainclassics.com/">
-  <!-- Cookie Consent (Consent Mode v2) -->
+  <!-- Cookie Consent + Google Tags -->
   <script src="/src/js/cookie-consent.js"></script>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-835823373"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'AW-835823373');
-    gtag('config', 'G-X3J8M8XNSJ');
-  </script>
-  <!-- Event snippet for Page view conversion page -->
-  <script>
-    gtag('event', 'conversion', {'send_to': 'AW-835823373/67QnCKC-vJQcEI3Oxo4D'});
-  </script>
+  <script src="/src/js/gtag.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/css/book-chrome.css">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -55,40 +44,7 @@
     }
     .skip-link:focus { top: 0.5rem; }
 
-    /* --- Nav (minimal) --- */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: #faf8f4;
-      padding: 0 2rem; height: 64px;
-      display: flex; align-items: center;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-    .nav-brand:hover { opacity: 1; }
-    .brand-logo {
-      height: 40px;
-      width: auto;
-      opacity: 0.85;
-      transition: opacity 0.2s;
-    }
-    .nav-brand:hover .brand-logo { opacity: 1; }
-    .brand-beta {
-      font-family: 'Fraunces', serif;
-      font-size: 0.5rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #C25335;
-      border: 1px solid rgba(194, 83, 53, 0.4);
-      border-radius: 3px;
-      padding: 1px 5px;
-      line-height: 1.4;
-    }
+    /* Nav styles are in /src/css/book-chrome.css */
 
     /* --- Header (compact) --- */
     .site-header {
@@ -337,12 +293,8 @@
 
   <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <nav aria-label="Main navigation">
-    <a href="/" class="nav-brand">
-      <img class="brand-logo" src="/assets/logo.svg" alt="Public Domain Classics">
-      <span class="brand-beta">Beta</span>
-    </a>
-  </nav>
+  <script src="/src/js/site-nav.js"></script>
+  <nav id="site-nav-mount"></nav>
 
   <header class="site-header">
     <div class="eyebrow">Public Domain Classics</div>
