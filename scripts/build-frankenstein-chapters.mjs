@@ -71,6 +71,8 @@ function pageHead(chapter, chapterIdx, isCover) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
   <title>${plainTitle} \u2014 Frankenstein \u2014 Public Domain Classics</title>
   <meta name="description" content="${metaDesc}">
   <meta property="og:title" content="${plainTitle} \u2014 Frankenstein \u2014 Public Domain Classics">
