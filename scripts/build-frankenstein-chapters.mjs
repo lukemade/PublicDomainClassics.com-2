@@ -121,7 +121,7 @@ function pageHead(chapter, chapterIdx, isCover) {
       top: 0;
       z-index: 200;
       background: #faf8f4;
-      height: 56px;
+      height: 64px;
       display: flex;
       align-items: center;
       padding: 10px 1.25rem;
@@ -142,7 +142,7 @@ function pageHead(chapter, chapterIdx, isCover) {
     }
     .site-nav-brand:hover { opacity: 1; }
     .brand-logo {
-      height: 32px;
+      height: 40px;
       width: auto;
       opacity: 0.85;
       transition: opacity 0.2s;
@@ -646,7 +646,7 @@ function pageHead(chapter, chapterIdx, isCover) {
     @media (max-width: 600px) {
       .site-nav { padding: 0 0.75rem; height: 44px; }
       .site-nav-inner { flex-direction: row; align-items: center; gap: 0; }
-      .brand-logo { height: 24px; }
+      .brand-logo { height: 28px; }
       .brand-beta { display: none; }
       .book-title-link {
         position: static !important;
