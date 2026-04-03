@@ -85,6 +85,7 @@ function pageHead(chapter, chapterIdx, isCover) {
   <script src="/src/js/cookie-consent.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X3J8M8XNSJ"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-835823373"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-835823373"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
