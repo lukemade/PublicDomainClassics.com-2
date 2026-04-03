@@ -33,7 +33,10 @@
 
   if (stored === 'accepted') {
     gtag('consent', 'update', {
-      analytics_storage: 'granted'
+      analytics_storage: 'granted',
+      ad_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted'
     });
   }
   // If 'declined' or 'accepted', no banner needed
@@ -87,7 +90,10 @@
     banner.querySelector('.consent-btn--accept').addEventListener('click', function () {
       savePreference('accepted');
       gtag('consent', 'update', {
-        analytics_storage: 'granted'
+        analytics_storage: 'granted',
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted'
       });
       hideBanner(banner);
     });
