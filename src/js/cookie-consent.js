@@ -41,12 +41,8 @@
   }
   // If 'declined' or 'accepted', no banner needed
 
-  // 3. Configure GA + Google Ads (runs after consent state is set)
-  gtag('js', new Date());
-  gtag('config', GA_ID);
-  gtag('config', ADS_ID);
-
-  // 4. Show banner if no stored preference
+  // 3. Show banner if no stored preference
+  // Note: gtag('config') calls are in the inline Google tag on each page
   if (!stored) {
     showBanner();
   }
