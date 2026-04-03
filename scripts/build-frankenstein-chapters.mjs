@@ -279,13 +279,13 @@ function pageHead(chapter, chapterIdx, isCover) {
       justify-content: center;
       width: 36px; height: 36px;
       border-radius: 50%;
-      background: rgba(232, 223, 208, 0.12);
+      background: transparent;
       text-decoration: none;
       flex-shrink: 0;
       transition: background 0.2s;
     }
     .ch-prev:hover, .ch-next:hover {
-      background: #C25335;
+      background: rgba(0, 0, 0, 0.06);
     }
     .ch-prev[aria-disabled="true"],
     .ch-next[aria-disabled="true"] {
@@ -297,11 +297,8 @@ function pageHead(chapter, chapterIdx, isCover) {
     }
     .ch-prev svg, .ch-next svg {
       width: 16px; height: 16px;
-      stroke: rgba(44, 36, 32, 0.7); fill: none;
+      stroke: #2c2420; fill: none;
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    }
-    .ch-prev:hover svg, .ch-next:hover svg {
-      stroke: #2c2420;
     }
 
     /* Center of bottom bar: chapter name + colorful plus */
@@ -502,12 +499,26 @@ function pageHead(chapter, chapterIdx, isCover) {
     .book-header:not(.is-cover) .book-header-author {
       display: none;
     }
-    .book-header:not(.is-cover) .book-header-cover {
-      width: 80px;
-      height: auto;
-      object-fit: contain;
+    .book-header:not(.is-cover) .book-header-cover-wrap {
+      position: relative;
+      width: 120px;
+      height: 180px;
+      flex-shrink: 0;
+      overflow: hidden;
       border-radius: 3px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+    .book-header:not(.is-cover) .book-header-cover {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+    .book-header:not(.is-cover) .book-header-cover.is-active {
+      opacity: 1;
     }
     .chapter-eyebrow {
       font-family: 'IM Fell DW Pica SC', serif;
@@ -639,7 +650,7 @@ function pageHead(chapter, chapterIdx, isCover) {
       .book-switch-label { display: none; }
       .book-header-chapter { font-size: 1.5rem; }
       .book-header-inner { padding: 40px 16px 40px !important; gap: 16px; }
-      .book-header:not(.is-cover) .book-header-cover { width: 50px; }
+      .book-header:not(.is-cover) .book-header-cover-wrap { width: 80px; height: 120px; }
       .article-body, .toc-section { margin-top: 0 !important; border-radius: 0; max-width: 100%; }
       .book-header-title { font-size: 0.65rem; margin-bottom: 6px; }
       .book-header-author { font-size: 0.65rem; margin-bottom: 6px; }
@@ -656,7 +667,7 @@ function pageHead(chapter, chapterIdx, isCover) {
         background: none !important;
         padding: 8px;
       }
-      .ch-prev svg, .ch-next svg { width: 18px; height: 18px; stroke: rgba(44,36,32,0.5); }
+      .ch-prev svg, .ch-next svg { width: 18px; height: 18px; stroke: #2c2420; }
       .ch-prev:hover svg, .ch-next:hover svg { stroke: #C25335; }
       body { padding-bottom: 50px; }
       .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
@@ -750,7 +761,10 @@ function bookHeader(chapter, chapterIdx, isCover) {
     const eyebrowHtml = '';
     innerContent = `
       <div class="book-header-cover-wrap">
-        <img class="book-header-cover" src="/books/frankenstein/images/default.jpg" alt="" loading="eager">
+        <img class="book-header-cover is-active" src="/books/frankenstein/images/default.jpg" alt="Frankenstein cover" loading="eager">
+        <img class="book-header-cover" src="/books/frankenstein/images/3421default.jpg" alt="" loading="lazy">
+        <img class="book-header-cover" src="/books/frankenstein/images/Frankenstein_engraved.jpg" alt="" loading="lazy">
+        <img class="book-header-cover" src="/books/frankenstein/images/r23rdefault (1).jpg" alt="" loading="lazy">
       </div>
       <div class="book-header-text-wrap">
         ${eyebrowHtml}
@@ -823,19 +837,16 @@ function pageScript() {
         lastScrollY = y;
       }, { passive: true });
 
-      // Arrow buttons — show on mouse movement, fade after 3s idle
-      var arrows = document.querySelectorAll('.ch-prev:not([aria-disabled]), .ch-next:not([aria-disabled])');
-      var arrowTimer = null;
-      function showArrows() {
-        arrows.forEach(function(a) { a.style.background = 'rgba(194, 83, 53, 0.25)'; });
-        arrows.forEach(function(a) { var s = a.querySelector('svg'); if (s) s.style.stroke = '#C25335'; });
-        clearTimeout(arrowTimer);
-        arrowTimer = setTimeout(function() {
-          arrows.forEach(function(a) { a.style.background = ''; });
-          arrows.forEach(function(a) { var s = a.querySelector('svg'); if (s) s.style.stroke = ''; });
+      // Cover slideshow in chapter headers
+      var headerCovers = document.querySelectorAll('.book-header:not(.is-cover) .book-header-cover');
+      if (headerCovers.length > 1) {
+        var hci = 0;
+        setInterval(function() {
+          headerCovers[hci].classList.remove('is-active');
+          hci = (hci + 1) % headerCovers.length;
+          headerCovers[hci].classList.add('is-active');
         }, 3000);
       }
-      document.addEventListener('mousemove', showArrows, { passive: true });
 
       // TOC overlay
       var tocOpen = document.getElementById('toc-open');

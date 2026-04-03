@@ -12,16 +12,21 @@
   <meta property="og:url" content="https://publicdomainclassics.com/">
   <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://publicdomainclassics.com/">
+  <!-- Cookie Consent + Google Analytics 4 + Google Ads (Consent Mode v2) -->
+  <script src="/src/js/cookie-consent.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X3J8M8XNSJ"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-835823373"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-835823373"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Libre Baskerville', 'Georgia', serif;
       color: #2c2420;
-      background: #1a1510;
+      background: #faf8f4;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
@@ -41,10 +46,10 @@
     /* --- Nav (minimal) --- */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: #1a1510;
+      background: #faf8f4;
       padding: 0 2rem; height: 56px;
       display: flex; align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     }
     .nav-brand {
       display: flex;
@@ -75,8 +80,8 @@
 
     /* --- Header (compact) --- */
     .site-header {
-      background: #1a1510;
-      color: #faf8f4;
+      background: #faf8f4;
+      color: #2c2420;
       padding: 2.5rem 2rem 2rem;
       text-align: center;
     }
@@ -86,7 +91,7 @@
       font-size: 0.8rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(232, 223, 208, 0.6);
+      color: rgba(44, 36, 32, 0.65);
       margin-bottom: 0.75rem;
     }
     .site-header h1 {
@@ -94,12 +99,12 @@
       font-weight: 400;
       font-size: clamp(2rem, 5vw, 3.2rem);
       line-height: 1.15;
-      color: #e8dfd0;
+      color: #2c2420;
     }
 
     /* --- Book Grid (the star) --- */
     .library {
-      background: #1a1510;
+      background: #faf8f4;
       padding: 2rem 2rem 4rem;
     }
     .library-grid {
@@ -112,8 +117,8 @@
 
     /* --- Book Card --- */
     .book-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.08);
       border-radius: 6px;
       overflow: hidden;
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -123,7 +128,7 @@
     }
     .book-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
       border-color: rgba(107, 58, 42, 0.3);
     }
 
@@ -132,7 +137,7 @@
       aspect-ratio: 2 / 3;
       object-fit: cover;
       display: block;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(0, 0, 0, 0.02);
     }
 
     .book-card-info {
@@ -143,10 +148,11 @@
     }
 
     .book-card-meta {
-      font-family: 'IM Fell English SC', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.7rem;
+      font-weight: 500;
       letter-spacing: 0.08em;
-      color: rgba(196, 185, 154, 0.5);
+      color: rgba(44, 36, 32, 0.6);
       margin-bottom: 0.5rem;
     }
 
@@ -155,60 +161,64 @@
       font-weight: 400;
       font-size: 1.15rem;
       line-height: 1.3;
-      color: #e8dfd0;
+      color: #2c2420;
       margin-bottom: 0.6rem;
     }
 
     .book-card-author {
-      font-family: 'Libre Baskerville', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.8rem;
-      color: rgba(196, 185, 154, 0.45);
+      font-weight: 400;
+      color: rgba(44, 36, 32, 0.58);
       margin-top: auto;
     }
 
     /* Coming soon placeholder cards */
     .book-card--placeholder {
       border-style: dashed;
-      border-color: rgba(255, 255, 255, 0.04);
+      border-color: rgba(0, 0, 0, 0.06);
       background: transparent;
       cursor: default;
     }
     .book-card--placeholder:hover {
       transform: none;
       box-shadow: none;
-      border-color: rgba(255, 255, 255, 0.04);
+      border-color: rgba(0, 0, 0, 0.08);
     }
     .book-card--placeholder .book-card-cover {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(0, 0, 0, 0.02);
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .book-card--placeholder .placeholder-label {
-      font-family: 'IM Fell English SC', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.75rem;
+      font-weight: 500;
       letter-spacing: 0.1em;
-      color: rgba(196, 185, 154, 0.2);
+      color: rgba(44, 36, 32, 0.45);
     }
 
     /* --- Footer --- */
     footer {
       padding: 2.5rem 2rem;
       text-align: center;
-      background: #1a1510;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: #faf8f4;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
     }
     .footer-brand {
-      font-family: 'IM Fell English SC', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.7rem;
+      font-weight: 500;
       letter-spacing: 0.12em;
-      color: rgba(232, 223, 208, 0.4);
+      color: rgba(44, 36, 32, 0.58);
       margin-bottom: 0.5rem;
     }
     .footer-note {
-      font-family: 'Libre Baskerville', serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 0.8rem;
-      color: rgba(196, 185, 154, 0.3);
+      font-weight: 400;
+      color: rgba(44, 36, 32, 0.55);
       max-width: 480px;
       margin: 0 auto;
       line-height: 1.7;
@@ -236,6 +246,79 @@
       .book-card-author { font-size: 0.7rem; }
       footer { padding: 2rem 1.25rem; }
     }
+
+    /* --- Cookie Consent Banner --- */
+    .consent-banner {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .consent-banner.is-visible { opacity: 1; pointer-events: auto; }
+    .consent-banner-inner {
+      max-width: 480px;
+      width: calc(100% - 40px);
+      background: #faf8f4;
+      border-radius: 8px;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+      padding: 28px 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .consent-banner-text {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #5a4f42;
+      flex: 1;
+    }
+    .consent-banner-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .consent-btn {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 8px 20px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .consent-btn--accept {
+      background: #C25335;
+      color: #ffffff;
+      border: 1px solid #C25335;
+    }
+    .consent-btn--accept:hover {
+      background: #a8452c;
+      border-color: #a8452c;
+    }
+    .consent-btn--decline {
+      background: transparent;
+      color: #5a4f42;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+    .consent-btn--decline:hover {
+      border-color: rgba(0, 0, 0, 0.3);
+      color: #2c2420;
+    }
+    @media (max-width: 600px) {
+      .consent-banner-inner {
+        padding: 22px 20px 20px;
+        gap: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -259,7 +342,7 @@
 
       <!-- Frankenstein -->
       <a href="/books/frankenstein/" class="book-card">
-        <img class="book-card-cover" src="/books/frankenstein/images/default.jpg" alt="Frankenstein book cover" loading="eager">
+        <img class="book-card-cover" src="/assets/default-Cfr9IUme.jpg" alt="Frankenstein book cover" loading="eager">
         <div class="book-card-info">
           <div class="book-card-meta">Gothic Fiction &middot; 1818</div>
           <h3>Frankenstein; or, The Modern Prometheus</h3>
