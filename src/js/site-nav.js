@@ -43,8 +43,8 @@
               '<span class="settings-option-desc">Read by scrolling through the full text</span>' +
             '</a>' +
             '<a href="#" data-mode="sentence" class="settings-option">' +
-              '<span class="settings-option-name">Sentence at a Time</span>' +
-              '<span class="settings-option-desc">Focus on one sentence at a time with navigation</span>' +
+              '<span class="settings-option-name">Sentence</span>' +
+              '<span class="settings-option-desc">Focus on one sentence at a time</span>' +
             '</a>' +
           '</div>' +
         '</div>';
