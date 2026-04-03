@@ -497,28 +497,9 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     body.innerHTML = '<div class="sentence-reader-text" id="sr-text"></div>';
     reader.appendChild(body);
 
-    // Nav
-    var nav = document.createElement('div');
-    nav.className = 'sentence-reader-nav';
-    nav.innerHTML =
-      '<span class="sentence-reader-hint">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> arrow keys</span>' +
-      '<span class="sentence-reader-counter" id="sr-counter"></span>' +
-      '<button class="sentence-reader-btn" id="sr-prev" aria-label="Previous sentence">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
-      '</button>' +
-      '<div class="sr-next-wrap">' +
-        '<div class="sr-start-tooltip" id="sr-start-tooltip"><span class="sr-tooltip-desktop">Press <kbd>&rarr;</kbd> or click to begin</span><span class="sr-tooltip-mobile">Swipe left or tap to begin</span></div>' +
-        '<button class="sentence-reader-btn" id="sr-next" aria-label="Next sentence">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>' +
-        '</button>' +
-      '</div>';
-    reader.appendChild(nav);
+    // No nav inside reader — bottom bar is repurposed instead
 
     document.body.appendChild(reader);
-
-    document.getElementById('sr-prev').addEventListener('click', function () { go(-1); });
-    document.getElementById('sr-next').addEventListener('click', function () { go(1); });
-    document.getElementById('sr-start-tooltip').addEventListener('click', function (e) { e.stopPropagation(); go(1); });
 
     // Clicking anywhere on the cover advances
     cover.addEventListener('click', function () { go(1); });
@@ -571,43 +552,15 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     var coverEl = document.getElementById('sr-cover');
     var bodyEl = document.getElementById('sr-body');
     var textEl = document.getElementById('sr-text');
-    var counterEl = document.getElementById('sr-counter');
+    var counterEl = document.getElementById('sr-bar-counter');
 
     // Clear any pending fragment timers
     fragmentTimers.forEach(function (t) { clearTimeout(t); });
     fragmentTimers = [];
 
-    var navEl = reader.querySelector('.sentence-reader-nav');
-    var tooltip = document.getElementById('sr-start-tooltip');
-
-    // Cover slide at index -1
-    if (sentenceIndex === -1) {
-      coverEl.style.display = '';
-      bodyEl.style.display = 'none';
-      // Show nav but only the next button, styled for dark bg
-      if (navEl) {
-        navEl.style.display = '';
-        navEl.classList.add('on-cover');
-      }
-      document.getElementById('sr-prev').style.display = 'none';
-      document.getElementById('sr-counter').style.display = 'none';
-      var hintEl = reader.querySelector('.sentence-reader-hint');
-      if (hintEl) hintEl.style.display = 'none';
-      if (tooltip) tooltip.classList.add('is-visible');
-      return;
-    }
-
+    // No cover slide — go straight to sentences
     coverEl.style.display = 'none';
     bodyEl.style.display = '';
-    if (navEl) {
-      navEl.style.display = '';
-      navEl.classList.remove('on-cover');
-    }
-    document.getElementById('sr-prev').style.display = '';
-    document.getElementById('sr-counter').style.display = '';
-    var hintEl2 = reader.querySelector('.sentence-reader-hint');
-    if (hintEl2) hintEl2.style.display = '';
-    if (tooltip) tooltip.classList.remove('is-visible');
 
     var s = sentences[sentenceIndex];
     if (!s) return;
@@ -625,51 +578,24 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       textEl.style.color = '';
     }
 
-    // Crossfade: fade out, swap content, fade in with fragment reveal
+    // Simple crossfade: fade out, swap content, fade in
+    var rawText = s.text;
     textEl.classList.add('is-fading');
 
     setTimeout(function () {
-      // Build fragment HTML
-      var rawText = s.text;
-      var fragments = splitFragments(rawText);
-
-      if (fragments.length <= 1) {
-        // Simple content, no fragment animation
-        if (rawText.indexOf('\n') >= 0) {
-          textEl.innerHTML = escHtml(rawText).replace(/\n/g, '<br>');
-        } else {
-          textEl.textContent = rawText;
-        }
+      if (rawText.indexOf('\n') >= 0) {
+        textEl.innerHTML = escHtml(rawText).replace(/\n/g, '<br>');
       } else {
-        // Wrap each fragment in a span for staggered reveal
-        var html = '';
-        fragments.forEach(function (frag, idx) {
-          var fragHtml = escHtml(frag);
-          // Line-break fragments get <br> between them, clause fragments get a space
-          var separator = (rawText.indexOf('\n') >= 0) ? '<br>' : ' ';
-          if (idx > 0) html += separator;
-          html += '<span class="sr-fragment" data-idx="' + idx + '">' + fragHtml + '</span>';
-        });
-        textEl.innerHTML = html;
+        textEl.textContent = rawText;
       }
-
-      // Fade in
       textEl.classList.remove('is-fading');
+    }, 250);
 
-      // Stagger fragment reveals — slow and gentle
-      var fragEls = textEl.querySelectorAll('.sr-fragment');
-      fragEls.forEach(function (f, idx) {
-        var timer = setTimeout(function () {
-          f.classList.add('is-visible');
-        }, 150 + idx * 350);
-        fragmentTimers.push(timer);
-      });
-
-    }, 250); // matches the CSS fade-out duration
-
-    counterEl.textContent = (sentenceIndex + 1) + ' / ' + sentences.length;
-    document.getElementById('sr-prev').disabled = sentenceIndex === -1;
-    document.getElementById('sr-next').disabled = sentenceIndex === sentences.length - 1;
+    if (counterEl) counterEl.textContent = (sentenceIndex + 1) + ' / ' + sentences.length;
+    var prevBtn = document.getElementById('sr-bar-prev');
+    var nextBtn = document.getElementById('sr-bar-next');
+    if (prevBtn) prevBtn.setAttribute('aria-disabled', sentenceIndex <= 0 ? 'true' : 'false');
+    if (nextBtn) nextBtn.setAttribute('aria-disabled', sentenceIndex === sentences.length - 1 ? 'true' : 'false');
   }
 
   // Build a map of chapter-local sentence indices for URL hashing
@@ -759,19 +685,42 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     }
   };
 
+  var savedBottomBarHTML = null;
+
   function enterSentenceMode() {
     extractSentences();
     if (!sentences.length) return;
 
     buildReader();
 
+    // Swap bottom bar to sentence mode
+    var bottomBar = document.querySelector('.bottom-bar');
+    if (bottomBar) {
+      var inner = bottomBar.querySelector('.bottom-bar-inner');
+      if (inner) {
+        savedBottomBarHTML = inner.innerHTML;
+        inner.innerHTML =
+          '<a class="ch-prev" id="sr-bar-prev" role="button" aria-label="Previous sentence"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>' +
+          '<div class="bottom-bar-sentence-info">' +
+            '<span class="bottom-bar-sentence-counter" id="sr-bar-counter">0 / ' + sentences.length + '</span>' +
+            '<span class="bottom-bar-sentence-hint">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> arrow keys</span>' +
+          '</div>' +
+          '<a class="ch-next" id="sr-bar-next" role="button" aria-label="Next sentence"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>';
+        document.getElementById('sr-bar-prev').addEventListener('click', function () { go(-1); });
+        document.getElementById('sr-bar-next').addEventListener('click', function () { go(1); });
+      }
+      bottomBar.classList.add('sentence-mode');
+      bottomBar.style.transform = 'translateY(0)';
+    }
+
+    // Start at first sentence (skip cover slide)
+    sentenceIndex = 0;
+
     // Restore from URL hash if it's a sentence hash
     var hash = window.location.hash;
     if (hash.indexOf('#sentence/') === 0) {
       var restored = findSentenceByHash(hash);
-      sentenceIndex = restored >= 0 ? restored : -1;
-    } else {
-      sentenceIndex = -1; // cover slide
+      if (restored >= 0) sentenceIndex = restored;
     }
 
     renderSentence(1);
@@ -792,6 +741,16 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     document.body.style.overflow = '';
     var topNav = document.getElementById('top-nav');
     if (topNav) topNav.classList.remove('is-locked');
+
+    // Restore bottom bar
+    var bottomBar = document.querySelector('.bottom-bar');
+    if (bottomBar) {
+      bottomBar.classList.remove('sentence-mode');
+      var inner = bottomBar.querySelector('.bottom-bar-inner');
+      if (inner && savedBottomBarHTML) {
+        inner.innerHTML = savedBottomBarHTML;
+      }
+    }
 
     // Scroll to the chapter the user was reading
     if (sentenceIndex >= 0 && sentences[sentenceIndex] && sentences[sentenceIndex].chapterId) {
