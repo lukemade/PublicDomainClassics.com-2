@@ -571,3 +571,78 @@ body.has-bottom-bar { padding-bottom: 56px; }
   .book-header.is-cover .book-header-chapter { text-align: left; }
   .book-header.is-cover .chapter-selector { justify-content: center; }
 }
+
+/* ── Settings dropdown (cog icon) ── */
+.settings-dropdown {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+}
+.settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(44, 36, 32, 0.5);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.settings-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #2c2420;
+}
+.settings-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 260px;
+  background: #faf8f4;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  padding: 12px 0;
+  z-index: 300;
+}
+.settings-dropdown.is-open .settings-panel,
+#mode-dropdown.is-open .settings-panel { display: block; }
+.settings-section-label {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(44, 36, 32, 0.4);
+  padding: 4px 16px 8px;
+}
+.settings-option {
+  display: block;
+  padding: 10px 16px;
+  text-decoration: none;
+  transition: background 0.12s;
+}
+.settings-option:hover { background: rgba(0, 0, 0, 0.04); }
+.settings-option.active { background: rgba(194, 83, 53, 0.08); }
+.settings-option-name {
+  display: block;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2c2420;
+}
+.settings-option-desc {
+  display: block;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: #8a7e6e;
+  margin-top: 2px;
+}
+@media (max-width: 600px) {
+  .settings-panel { min-width: 220px; right: -8px; }
+}

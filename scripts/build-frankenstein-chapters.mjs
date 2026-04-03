@@ -110,8 +110,8 @@ function pageHead(chapter, chapterIdx, isCover) {
 </head>
 <body class="book-frankenstein has-bottom-bar">
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <script src="/src/js/site-nav.js"></script>
-  <nav id="site-nav-mount" data-book-title="Frankenstein" data-book-url="/books/frankenstein/"></nav>`;
+  <nav id="site-nav-mount" data-book-title="Frankenstein" data-book-url="/books/frankenstein/" data-settings="true"></nav>
+  <script src="/src/js/site-nav.js"></script>`;
 
 }
 
@@ -219,7 +219,8 @@ ${dropdownItems}    </ul>
 }
 
 function pageScript() {
-  return `  <script src="/src/js/book-chrome.js"></script>`;
+  return `  <script src="/src/js/book-chrome.js"></script>
+  <script src="/src/js/document-template.js"></script>`;
 }
 
 function chapterBottomNav(chapterIdx) {

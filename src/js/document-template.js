@@ -318,13 +318,30 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
     // Walk all section headings and their body paragraphs
     var headings = Array.from(article.querySelectorAll('h2.section-heading'));
+
+    // Fallback for individual chapter pages (no h2.section-heading)
+    if (headings.length === 0) {
+      var chapterTitle = document.querySelector('.book-header-chapter');
+      var chapterId = chapterTitle ? chapterTitle.textContent.trim().toLowerCase().replace(/\s+/g, '-') : 'chapter';
+      if (chapterTitle) {
+        sentences.push({ text: chapterTitle.textContent.trim(), type: 'heading', chapterId: chapterId });
+      }
+      var bodies = article.querySelectorAll('.section-body');
+      bodies.forEach(function (body) {
+        extractFromBody(body, chapterId);
+      });
+    }
+
     headings.forEach(function (h2) {
       var label = h2.textContent.replace(/^[+\u2212]\s*/, '').trim();
       sentences.push({ text: label, type: 'heading', chapterId: h2.id });
 
       var body = h2.nextElementSibling;
       if (!body || !body.classList.contains('section-body')) return;
+      extractFromBody(body, h2.id);
+    });
 
+    function extractFromBody(body, chapterId) {
       // Get all text-bearing elements
       var children = body.children;
       var c = 0;
@@ -341,7 +358,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
             c++;
           }
           if (groupParts.length) {
-            sentences.push({ text: groupParts.join('\n'), type: 'sentence', chapterId: h2.id });
+            sentences.push({ text: groupParts.join('\n'), type: 'sentence', chapterId: chapterId });
           }
           continue;
         }
@@ -354,7 +371,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
             if (lt) lines.push(lt);
           });
           if (lines.length) {
-            sentences.push({ text: lines.join('\n'), type: 'sentence', chapterId: h2.id });
+            sentences.push({ text: lines.join('\n'), type: 'sentence', chapterId: chapterId });
           }
           c++;
           continue;
@@ -370,13 +387,15 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         if (el.tagName === 'P') {
           var raw = el.textContent.trim();
           if (raw) {
-            splitIntoSentences(raw, h2.id);
+            splitIntoSentences(raw, chapterId);
           }
         }
 
         c++;
       }
-    });
+    }
+
+    // (headings.forEach already calls extractFromBody above)
 
     var MAX_SENTENCE_LEN = 450;
 
@@ -456,8 +475,8 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     cover.className = 'sentence-reader-cover';
     cover.id = 'sr-cover';
 
-    // Clone the actual hero element
-    var heroEl = document.querySelector('.hero');
+    // Clone the actual hero element (or book header on chapter pages)
+    var heroEl = document.querySelector('.hero') || document.querySelector('.book-header');
     if (heroEl) {
       var heroClone = heroEl.cloneNode(true);
       heroClone.removeAttribute('id');
