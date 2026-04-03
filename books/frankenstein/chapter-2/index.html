@@ -13,12 +13,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Chapter","name":"Chapter 2","isPartOf":{"@type":"Book","name":"Frankenstein; or, The Modern Prometheus","author":{"@type":"Person","name":"Mary Shelley"},"datePublished":"1818","genre":"Gothic Fiction","inLanguage":"en","url":"https://publicdomainclassics.com/books/frankenstein/"},"position":6,"url":"https://publicdomainclassics.com/books/frankenstein/chapter-2/"}</script>
   <link rel="canonical" href="https://publicdomainclassics.com/books/frankenstein/chapter-2/">
-  <!-- Google Analytics 4 — replace G-X3J8M8XNSJ with your ID -->
+  <!-- Cookie Consent + Google Analytics 4 + Google Ads (Consent Mode v2) -->
+  <script src="/src/js/cookie-consent.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X3J8M8XNSJ"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-X3J8M8XNSJ');</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-835823373"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600;700&family=Cormorant+Unicase:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=IM+Fell+French+Canon:ital@0;1&family=IM+Fell+DW+Pica+SC&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/css/document-template.css">
   <style>
     :root { --chapter-accent: #2eb8a6; }
@@ -131,7 +132,7 @@
 
     /* ── Book header (static hero) ── */
     .book-header {
-      background: #f0ece4;
+      background: #ffffff;
       position: relative;
       overflow: hidden;
     }
@@ -465,14 +466,13 @@
 
     /* ── Reading area ── */
     .article-body, .toc-section {
-      margin-top: -30px;
-      border-radius: 12px 12px 0 0;
+      margin-top: 0;
+      border-radius: 0;
       position: relative;
       z-index: 3;
     }
     body {
-      background: linear-gradient(180deg, #f0ece4 0%, #ffffff 30%) no-repeat;
-      background-color: #faf8f4;
+      background: #ffffff;
     }
 
     /* ── Bottom chapter nav ── */
@@ -564,8 +564,8 @@
         padding-left: 10px;
         border-left: 1px solid rgba(0, 0, 0, 0.12);
       }
-      .epigraph { font-size: 0.85rem !important; border-left: none !important; padding-left: 0 !important; }
-      .epigraph-attribution { font-size: 0.7rem !important; }
+      .epigraph { font-size: 0.85rem !important; }
+      .epigraph-attribution { font-size: 0.75rem !important; }
       .book-switch { font-size: 0.6rem; padding: 4px 8px; }
       .book-switch-label { display: none; }
       .book-header-chapter { font-size: 1.5rem; }
@@ -593,19 +593,24 @@
       .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
     }
 
-    /* Epigraph override — more legible */
+    /* Epigraph override — Libre Franklin with accent border */
     .epigraph {
-      font-family: 'Libre Baskerville', serif !important;
+      font-family: 'Libre Franklin', sans-serif !important;
+      font-weight: 300 !important;
       font-style: italic !important;
       font-size: 1rem !important;
-      line-height: 1.8 !important;
+      line-height: 1.7 !important;
       color: #5a4f42 !important;
-      border-left: none !important;
-      padding-left: 0 !important;
+      border-left: 3px solid #C25335 !important;
+      padding: 16px 0 16px 20px !important;
+      margin-left: 0 !important;
     }
     .epigraph-attribution {
-      font-size: 0.9rem !important;
+      font-family: 'Libre Franklin', sans-serif !important;
+      font-size: 0.85rem !important;
+      font-weight: 400 !important;
       font-style: normal !important;
+      color: #8a7e6e !important;
     }
 
     /* Sentence mode removed for MVP launch — saved for later */
@@ -724,7 +729,7 @@
   <script>
     (function() {
 
-      // Hide top/bottom bars on scroll down, show on scroll up
+      // Hide top/bottom bars on scroll down, show on scroll up or bottom 10%
       var siteNav = document.querySelector('.site-nav');
       var bottomBar = document.querySelector('.bottom-bar');
       var lastScrollY = 0;
@@ -732,7 +737,9 @@
       if (bottomBar) bottomBar.style.transition += ', transform 0.3s ease';
       window.addEventListener('scroll', function() {
         var y = window.scrollY;
-        if (y > lastScrollY && y > 100) {
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var nearBottom = docHeight > 0 && y / docHeight >= 0.9;
+        if (y > lastScrollY && y > 100 && !nearBottom) {
           if (siteNav) siteNav.style.transform = 'translateY(-100%)';
           if (bottomBar) bottomBar.style.transform = 'translateY(100%)';
         } else {

@@ -132,7 +132,7 @@
 
     /* ── Book header (static hero) ── */
     .book-header {
-      background: #f0ece4;
+      background: #ffffff;
       position: relative;
       overflow: hidden;
     }
@@ -466,8 +466,8 @@
 
     /* ── Reading area ── */
     .article-body, .toc-section {
-      margin-top: -30px;
-      border-radius: 12px 12px 0 0;
+      margin-top: 0;
+      border-radius: 0;
       position: relative;
       z-index: 3;
     }
@@ -718,11 +718,75 @@
       color: #fff;
       background: #C25335;
       padding: 14px 32px;
+      border: 1px solid #C25335;
       border-radius: 5px;
       text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.2s, transform 0.2s, border-color 0.2s;
     }
     .cover-cta:hover { background: #a8472e; transform: translateY(-1px); }
+
+    /* Download button */
+    .cover-download-wrap { position: relative; display: inline-block; }
+    .cover-download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.85;
+      color: #5a4f42;
+      background: #f0ece4;
+      padding: 14px 28px;
+      border-radius: 5px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, border-color 0.2s;
+    }
+    .cover-download-btn:hover { background: #e8dfd0; border-color: rgba(0, 0, 0, 0.15); transform: translateY(-1px); }
+    .cover-download-btn svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .cover-download-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 240px;
+      background: #faf8f4;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      padding: 8px 0;
+      z-index: 100;
+    }
+    .cover-download-menu.is-open { display: block; }
+    .cover-download-menu a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #2c2420;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    .cover-download-menu a:hover { background: rgba(0, 0, 0, 0.04); }
+    .cover-download-menu .dl-size { font-weight: 400; color: #8a7e6e; font-size: 12px; }
+    .cover-download-menu .dl-source {
+      padding: 8px 16px 4px;
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 11px;
+      color: #8a7e6e;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      margin-top: 4px;
+    }
+    .cover-download-menu .dl-source a { display: inline; padding: 0; font-size: 11px; color: #C25335; }
 
     /* Content sections */
     .cover-section {
@@ -920,7 +984,23 @@
           </span>
           Mary Shelley &middot; 1818
         </div>
-        <a href="/books/frankenstein/letter-1/" class="cover-cta">Begin Reading &rarr;</a>
+        <div style="display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap;">
+          <a href="/books/frankenstein/letter-1/" class="cover-cta">Begin Reading &rarr;</a>
+          <div class="cover-download-wrap">
+            <button class="cover-download-btn" id="download-toggle" aria-expanded="false" aria-haspopup="true">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+            <div class="cover-download-menu" id="download-menu">
+              <a href="/books/frankenstein/downloads/pg84.epub" download>EPUB <span class="dl-size">349 KB</span></a>
+              <a href="/books/frankenstein/downloads/pg84-images.epub" download>EPUB (with images) <span class="dl-size">463 KB</span></a>
+              <a href="/books/frankenstein/downloads/pg84-images-3.epub" download>EPUB3 (with images) <span class="dl-size">463 KB</span></a>
+              <a href="/books/frankenstein/downloads/pg84-images.mobi" download>MOBI (with images) <span class="dl-size">639 KB</span></a>
+              <a href="/books/frankenstein/downloads/pg84-images-kf8.mobi" download>Kindle KF8 (with images) <span class="dl-size">667 KB</span></a>
+              <div class="dl-source">Files from <a href="https://www.gutenberg.org/ebooks/84" target="_blank" rel="noopener">Project Gutenberg</a></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1068,12 +1148,31 @@
         tocClose.addEventListener('click', function() { tocOverlay.classList.remove('is-open'); });
         tocOverlay.addEventListener('click', function(e) { if (e.target === tocOverlay) tocOverlay.classList.remove('is-open'); });
       }
-      // Escape closes TOC
+      // Escape closes TOC + download menu
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           if (tocOverlay) tocOverlay.classList.remove('is-open');
+          var dlMenu = document.getElementById('download-menu');
+          if (dlMenu) dlMenu.classList.remove('is-open');
         }
       });
+
+      // Download dropdown
+      var dlToggle = document.getElementById('download-toggle');
+      var dlMenu = document.getElementById('download-menu');
+      if (dlToggle && dlMenu) {
+        dlToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var open = dlMenu.classList.toggle('is-open');
+          dlToggle.setAttribute('aria-expanded', open);
+        });
+        document.addEventListener('click', function(e) {
+          if (!dlMenu.contains(e.target) && e.target !== dlToggle) {
+            dlMenu.classList.remove('is-open');
+            dlToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
     })();
   </script>
   <script>

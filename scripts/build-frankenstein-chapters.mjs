@@ -200,7 +200,7 @@ function pageHead(chapter, chapterIdx, isCover) {
 
     /* ── Book header (static hero) ── */
     .book-header {
-      background: #f0ece4;
+      background: #ffffff;
       position: relative;
       overflow: hidden;
     }
@@ -534,8 +534,8 @@ function pageHead(chapter, chapterIdx, isCover) {
 
     /* ── Reading area ── */
     .article-body, .toc-section {
-      margin-top: -30px;
-      border-radius: 12px 12px 0 0;
+      margin-top: 0;
+      border-radius: 0;
       position: relative;
       z-index: 3;
     }
@@ -802,7 +802,7 @@ function pageScript() {
   return `  <script>
     (function() {
 
-      // Hide top/bottom bars on scroll down, show on scroll up
+      // Hide top/bottom bars on scroll down, show on scroll up or bottom 10%
       var siteNav = document.querySelector('.site-nav');
       var bottomBar = document.querySelector('.bottom-bar');
       var lastScrollY = 0;
@@ -810,7 +810,9 @@ function pageScript() {
       if (bottomBar) bottomBar.style.transition += ', transform 0.3s ease';
       window.addEventListener('scroll', function() {
         var y = window.scrollY;
-        if (y > lastScrollY && y > 100) {
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var nearBottom = docHeight > 0 && y / docHeight >= 0.9;
+        if (y > lastScrollY && y > 100 && !nearBottom) {
           if (siteNav) siteNav.style.transform = 'translateY(-100%)';
           if (bottomBar) bottomBar.style.transform = 'translateY(100%)';
         } else {
@@ -1074,9 +1076,9 @@ const coverPage = pageHead(coverChapter, -1, true) + `
       color: #5a4f42;
       line-height: 1.7;
       margin: 0 0 16px;
-      padding: 16px 0 16px 20px;
+      padding: 16px 0 16px 24px;
       border: none;
-      border-left: 3px solid #C25335;
+      border-left: 4px double #C25335;
     }
     .cover-quote-attr {
       font-family: 'Libre Franklin', sans-serif;

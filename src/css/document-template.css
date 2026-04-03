@@ -245,7 +245,7 @@ body {
 .hero {
   position: relative;
   width: 100%;
-  background: #f0ece4;
+  background: #ffffff;
   color: #2c2420;
   padding: 72px 6vw 120px 6vw;
   box-sizing: border-box;
@@ -436,10 +436,10 @@ body {
   position: relative;
   z-index: 2;
   max-width: var(--max-w);
-  margin: -60px auto 0;
+  margin: 0 auto;
   padding: 48px 29px 96px;
   background: var(--bg);
-  border-radius: 12px 12px 0 0;
+  border-radius: 0;
   box-shadow: none;
   overflow: visible;
 }
