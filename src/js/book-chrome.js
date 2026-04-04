@@ -63,12 +63,11 @@
   }
 
   // ── TOC overlay ──
-  var tocOpen = document.getElementById('toc-open');
+  // TOC overlay close handlers (opened by nav-toc-btn in site-nav.js)
   var tocClose = document.getElementById('toc-close');
   var tocOverlay = document.getElementById('toc-overlay');
-  if (tocOpen && tocOverlay) {
-    tocOpen.addEventListener('click', function () { tocOverlay.classList.add('is-open'); });
-    tocClose.addEventListener('click', function () { tocOverlay.classList.remove('is-open'); });
+  if (tocOverlay) {
+    if (tocClose) tocClose.addEventListener('click', function () { tocOverlay.classList.remove('is-open'); });
     tocOverlay.addEventListener('click', function (e) {
       if (e.target === tocOverlay) tocOverlay.classList.remove('is-open');
     });

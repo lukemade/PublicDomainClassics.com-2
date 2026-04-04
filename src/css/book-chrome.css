@@ -589,11 +589,39 @@ body.has-bottom-bar { padding-bottom: 56px; }
   color: #2c2420;
   letter-spacing: 0.02em;
 }
-.bottom-bar-sentence-hint {
+.bottom-bar-sentence-sep {
+  color: rgba(44, 36, 32, 0.25);
+  font-size: 0.75rem;
+  margin: 0 2px;
+}
+
+/* ── Sentence mode toast ── */
+.sentence-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  background: rgba(44, 36, 32, 0.85);
+  color: #faf8f4;
   font-family: 'Libre Franklin', sans-serif;
-  font-size: 0.6rem;
+  font-size: 1rem;
   font-weight: 400;
-  color: #8a7e6e;
+  padding: 16px 28px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.sentence-toast.is-visible { opacity: 1; }
+.sentence-toast kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1px solid rgba(250, 248, 244, 0.3);
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 1rem;
+  background: rgba(250, 248, 244, 0.1);
 }
 .bottom-bar-sentence-hint kbd {
   display: inline-block;
@@ -616,10 +644,47 @@ body.has-bottom-bar { padding-bottom: 56px; }
   pointer-events: none;
 }
 
-/* ── Settings dropdown (cog icon) ── */
-.settings-dropdown {
+/* ── Nav actions (TOC + settings, top right) ── */
+.nav-actions {
   position: absolute;
   right: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nav-toc-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(44, 36, 32, 0.5);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0;
+  white-space: nowrap;
+}
+.nav-toc-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #2c2420;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.nav-toc-btn::after {
+  content: 'Contents';
+  font-size: 0;
+  transition: font-size 0.15s;
+}
+.nav-toc-btn:hover::after { font-size: 0.65rem; }
+
+/* ── Settings dropdown (cog icon) ── */
+.settings-dropdown {
   display: flex;
   align-items: center;
 }
@@ -627,19 +692,32 @@ body.has-bottom-bar { padding-bottom: 56px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
+  gap: 6px;
   height: 36px;
+  padding: 0 8px;
   border: none;
-  border-radius: 50%;
+  border-radius: 4px;
   background: transparent;
   color: rgba(44, 36, 32, 0.5);
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0;
+  white-space: nowrap;
 }
 .settings-btn:hover {
   background: rgba(0, 0, 0, 0.06);
   color: #2c2420;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
 }
+.settings-btn::after {
+  content: 'Settings';
+  font-size: 0;
+  transition: font-size 0.15s;
+}
+.settings-btn:hover::after { font-size: 0.65rem; }
 .settings-panel {
   display: none;
   position: absolute;

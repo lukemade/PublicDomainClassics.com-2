@@ -299,10 +299,95 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   var sentenceIndex = -1;
   var reader = null;
 
-  function extractSentences() {
-    if (sentences.length) return sentences;
+  // Get all chapter URLs from the TOC overlay
+  function getChapterUrls() {
+    var urls = [];
+    var links = document.querySelectorAll('.toc-overlay-list a');
+    links.forEach(function (a) {
+      var href = a.getAttribute('href');
+      // Skip cover page
+      if (href && href !== '/books/frankenstein/' && !a.textContent.match(/cover/i)) {
+        urls.push({ url: href, title: a.textContent.trim() });
+      }
+    });
+    return urls;
+  }
+
+  // Extract sentences from a DOM element
+  function extractSentencesFromElement(article, chapterTitle) {
+    var result = [];
+    var chapterId = chapterTitle ? chapterTitle.toLowerCase().replace(/\s+/g, '-') : 'chapter';
+
+    // Add chapter heading
+    if (chapterTitle) {
+      result.push({ text: chapterTitle, type: 'heading', chapterId: chapterId, chapterLabel: chapterTitle });
+    }
+
+    // Check for epigraph
+    var epigraph = article.querySelector('.epigraph');
+    if (epigraph) {
+      var clone = epigraph.cloneNode(true);
+      clone.querySelectorAll('br').forEach(function (br) { br.replaceWith(' '); });
+      var epText = clone.textContent.trim().replace(/\s+/g, ' ');
+      if (epText) {
+        result.push({ text: epText, type: 'sentence', chapterId: chapterId, chapterLabel: chapterTitle });
+      }
+    }
+
+    // Extract from section bodies
+    var bodies = article.querySelectorAll('.section-body');
+    bodies.forEach(function (body) {
+      extractFromBody(body, chapterId, chapterTitle, result);
+    });
+
+    return result;
+  }
+
+  // Fetch all chapters and build full-book sentence list
+  function extractAllChapters(callback) {
+    if (sentences.length) { callback(); return; }
+
+    var chapters = getChapterUrls();
+    if (!chapters.length) {
+      // Fallback: extract from current page only
+      extractSentencesFromCurrentPage();
+      callback();
+      return;
+    }
+
+    var loaded = 0;
+    var allResults = new Array(chapters.length);
+
+    chapters.forEach(function (ch, idx) {
+      fetch(ch.url)
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+          var article = doc.getElementById('main-content') || doc.querySelector('.article-body');
+          if (article) {
+            allResults[idx] = extractSentencesFromElement(article, ch.title);
+          } else {
+            allResults[idx] = [];
+          }
+        })
+        .catch(function () { allResults[idx] = []; })
+        .finally(function () {
+          loaded++;
+          if (loaded === chapters.length) {
+            // Flatten in order
+            for (var i = 0; i < allResults.length; i++) {
+              sentences = sentences.concat(allResults[i]);
+            }
+            callback();
+          }
+        });
+    });
+  }
+
+  function extractSentencesFromCurrentPage() {
     var article = document.getElementById('main-content');
-    if (!article) return [];
+    if (!article) return;
 
     // Start with the epigraph if present
     var epigraph = article.querySelector('.epigraph');
@@ -316,148 +401,114 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       }
     }
 
-    // Walk all section headings and their body paragraphs
-    var headings = Array.from(article.querySelectorAll('h2.section-heading'));
+    // Fallback: extract from current page only
+    var chapterTitleEl = document.querySelector('.book-header-chapter');
+    var chTitle = chapterTitleEl ? chapterTitleEl.textContent.trim() : 'Chapter';
+    var chId = chTitle.toLowerCase().replace(/\s+/g, '-');
+    sentences.push({ text: chTitle, type: 'heading', chapterId: chId, chapterLabel: chTitle });
 
-    // Fallback for individual chapter pages (no h2.section-heading)
-    if (headings.length === 0) {
-      var chapterTitle = document.querySelector('.book-header-chapter');
-      var chapterId = chapterTitle ? chapterTitle.textContent.trim().toLowerCase().replace(/\s+/g, '-') : 'chapter';
-      if (chapterTitle) {
-        sentences.push({ text: chapterTitle.textContent.trim(), type: 'heading', chapterId: chapterId });
-      }
-      var bodies = article.querySelectorAll('.section-body');
-      bodies.forEach(function (body) {
-        extractFromBody(body, chapterId);
-      });
-    }
-
-    headings.forEach(function (h2) {
-      var label = h2.textContent.replace(/^[+\u2212]\s*/, '').trim();
-      sentences.push({ text: label, type: 'heading', chapterId: h2.id });
-
-      var body = h2.nextElementSibling;
-      if (!body || !body.classList.contains('section-body')) return;
-      extractFromBody(body, h2.id);
+    var bodies = article.querySelectorAll('.section-body');
+    bodies.forEach(function (body) {
+      extractFromBody(body, chId, chTitle, sentences);
     });
 
-    function extractFromBody(body, chapterId) {
-      // Get all text-bearing elements
-      var children = body.children;
-      var c = 0;
-      while (c < children.length) {
-        var el = children[c];
-
-        // Group consecutive salutation + dateline into one "sentence" with line breaks
-        if (el.classList.contains('letter-salutation') || el.classList.contains('letter-dateline')) {
-          var groupParts = [];
-          while (c < children.length &&
-            (children[c].classList.contains('letter-salutation') || children[c].classList.contains('letter-dateline'))) {
-            var t = children[c].textContent.trim();
-            if (t) groupParts.push(t);
-            c++;
-          }
-          if (groupParts.length) {
-            sentences.push({ text: groupParts.join('\n'), type: 'sentence', chapterId: chapterId });
-          }
-          continue;
-        }
-
-        // Poetry block — treat as one sentence with line breaks
-        if (el.classList.contains('poetry-block')) {
-          var lines = [];
-          el.querySelectorAll('.poetry-line').forEach(function (pl) {
-            var lt = pl.textContent.trim();
-            if (lt) lines.push(lt);
-          });
-          if (lines.length) {
-            sentences.push({ text: lines.join('\n'), type: 'sentence', chapterId: chapterId });
-          }
-          c++;
-          continue;
-        }
-
-        // Poetry attribution — skip (context from poetry block)
-        if (el.classList.contains('poetry-attribution')) {
-          c++;
-          continue;
-        }
-
-        // Regular paragraphs
-        if (el.tagName === 'P') {
-          var raw = el.textContent.trim();
-          if (raw) {
-            splitIntoSentences(raw, chapterId);
-          }
-        }
-
-        c++;
-      }
-    }
-
-    // (headings.forEach already calls extractFromBody above)
-
-    var MAX_SENTENCE_LEN = 450;
-
-    function maybeSplitLong(text, chapterId) {
-      if (text.length <= MAX_SENTENCE_LEN) {
-        sentences.push({ text: text, type: 'sentence', chapterId: chapterId });
-        return;
-      }
-      // Split at clause boundaries: semicolons, colons, em-dashes, or commas near the midpoint
-      var delimiters = /([;:\u2014—])\s+|,\s+(?=[a-z])/g;
-      var bestSplit = -1;
-      var mid = text.length / 2;
-      var match;
-      while ((match = delimiters.exec(text)) !== null) {
-        var pos = match.index + match[0].length;
-        if (bestSplit === -1 || Math.abs(pos - mid) < Math.abs(bestSplit - mid)) {
-          bestSplit = pos;
-        }
-      }
-      if (bestSplit > 40 && bestSplit < text.length - 40) {
-        var part1 = text.substring(0, bestSplit).trim();
-        var part2 = text.substring(bestSplit).trim();
-        // Recursively split if still too long
-        maybeSplitLong(part1, chapterId);
-        maybeSplitLong(part2, chapterId);
-      } else {
-        // Can't find a good split point — just push it
-        sentences.push({ text: text, type: 'sentence', chapterId: chapterId });
-      }
-    }
-
-    // Common abbreviations that shouldn't end a sentence
-    var ABBREVS = /(?:Mrs?|Ms|Dr|St|Jr|Sr|Prof|Rev|Gen|Col|Sgt|Lt|Mt|Ft|etc|vs|vol|ed|dept|div|approx)\.\s*/i;
-
-    function splitIntoSentences(raw, chapterId) {
-      // Protect abbreviations by temporarily replacing their periods
-      var protected_ = raw.replace(/\b(Mrs?|Ms|Dr|St|Jr|Sr|Prof|Rev|Gen|Col|Sgt|Lt|Mt|Ft)\.\s/gi, function(m, abbr) {
-        return abbr + '\x00 ';
-      });
-      var parts = protected_.match(/[^.!?]*[.!?]+(?=\s+[A-Z"\u201c\u2018(]|$)/g);
-      // Restore periods
-      if (parts) {
-        parts = parts.map(function(p) { return p.replace(/\x00/g, '.'); });
-      }
-      if (!parts || parts.length === 0) {
-        maybeSplitLong(raw, chapterId);
-        return;
-      }
-      var captured = parts.join('').length;
-      if (captured < protected_.length) {
-        var remainder = protected_.substring(captured).replace(/\x00/g, '.').trim();
-        if (remainder) parts.push(remainder);
-      }
-      parts.forEach(function (s) {
-        var trimmed = s.trim();
-        if (trimmed) {
-          maybeSplitLong(trimmed, chapterId);
-        }
-      });
-    }
-
     return sentences;
+  }
+
+  var MAX_SENTENCE_LEN = 180;
+
+  function extractFromBody(body, chapterId, chapterLabel, result) {
+    var children = body.children;
+    var c = 0;
+    while (c < children.length) {
+      var el = children[c];
+
+      if (el.classList.contains('letter-salutation') || el.classList.contains('letter-dateline')) {
+        var groupParts = [];
+        while (c < children.length &&
+          (children[c].classList.contains('letter-salutation') || children[c].classList.contains('letter-dateline'))) {
+          var t = children[c].textContent.trim();
+          if (t) groupParts.push(t);
+          c++;
+        }
+        if (groupParts.length) {
+          result.push({ text: groupParts.join('\n'), type: 'sentence', chapterId: chapterId, chapterLabel: chapterLabel });
+        }
+        continue;
+      }
+
+      if (el.classList.contains('poetry-block')) {
+        var lines = [];
+        el.querySelectorAll('.poetry-line').forEach(function (pl) {
+          var lt = pl.textContent.trim();
+          if (lt) lines.push(lt);
+        });
+        if (lines.length) {
+          result.push({ text: lines.join('\n'), type: 'sentence', chapterId: chapterId, chapterLabel: chapterLabel });
+        }
+        c++;
+        continue;
+      }
+
+      if (el.classList.contains('poetry-attribution')) { c++; continue; }
+
+      if (el.tagName === 'P') {
+        var raw = el.textContent.trim();
+        if (raw) {
+          splitIntoSentences(raw, chapterId, chapterLabel, result);
+        }
+      }
+
+      c++;
+    }
+  }
+
+  function maybeSplitLong(text, chapterId, chapterLabel, result) {
+    if (text.length <= MAX_SENTENCE_LEN) {
+      result.push({ text: text, type: 'sentence', chapterId: chapterId, chapterLabel: chapterLabel });
+      return;
+    }
+    var delimiters = /([;:\u2014—])\s+|,\s+(?:and|but|or|for|nor|yet|so|which|where|when|while|though|although|if|because|as|since)\s+|,\s+(?=[a-z])/gi;
+    var bestSplit = -1;
+    var mid = text.length / 2;
+    var match;
+    while ((match = delimiters.exec(text)) !== null) {
+      var pos = match.index + match[0].length;
+      if (bestSplit === -1 || Math.abs(pos - mid) < Math.abs(bestSplit - mid)) {
+        bestSplit = pos;
+      }
+    }
+    if (bestSplit > 25 && bestSplit < text.length - 25) {
+      maybeSplitLong(text.substring(0, bestSplit).trim(), chapterId, chapterLabel, result);
+      maybeSplitLong(text.substring(bestSplit).trim(), chapterId, chapterLabel, result);
+    } else {
+      result.push({ text: text, type: 'sentence', chapterId: chapterId, chapterLabel: chapterLabel });
+    }
+  }
+
+  function splitIntoSentences(raw, chapterId, chapterLabel, result) {
+    var protected_ = raw.replace(/\b(Mrs?|Ms|Dr|St|Jr|Sr|Prof|Rev|Gen|Col|Sgt|Lt|Mt|Ft)\.\s/gi, function(m, abbr) {
+      return abbr + '\x00 ';
+    });
+    var parts = protected_.match(/[^.!?]*[.!?]+(?=\s+[A-Z"\u201c\u2018(]|$)/g);
+    if (parts) {
+      parts = parts.map(function(p) { return p.replace(/\x00/g, '.'); });
+    }
+    if (!parts || parts.length === 0) {
+      maybeSplitLong(raw, chapterId, chapterLabel, result);
+      return;
+    }
+    var captured = parts.join('').length;
+    if (captured < protected_.length) {
+      var remainder = protected_.substring(captured).replace(/\x00/g, '.').trim();
+      if (remainder) parts.push(remainder);
+    }
+    parts.forEach(function (s) {
+      var trimmed = s.trim();
+      if (trimmed) {
+        maybeSplitLong(trimmed, chapterId, chapterLabel, result);
+      }
+    });
   }
 
   var transitioning = false;
@@ -592,6 +643,8 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     }, 250);
 
     if (counterEl) counterEl.textContent = (sentenceIndex + 1) + ' / ' + sentences.length;
+    var chapterLabel = document.getElementById('sr-bar-chapter-label');
+    if (chapterLabel && s && s.chapterLabel) chapterLabel.textContent = s.chapterLabel;
     var prevBtn = document.getElementById('sr-bar-prev');
     var nextBtn = document.getElementById('sr-bar-next');
     if (prevBtn) prevBtn.setAttribute('aria-disabled', sentenceIndex <= 0 ? 'true' : 'false');
@@ -687,49 +740,65 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
   var savedBottomBarHTML = null;
 
-  function enterSentenceMode() {
-    extractSentences();
-    if (!sentences.length) return;
-
-    buildReader();
-
-    // Swap bottom bar to sentence mode
+  function setupSentenceBottomBar() {
     var bottomBar = document.querySelector('.bottom-bar');
-    if (bottomBar) {
-      var inner = bottomBar.querySelector('.bottom-bar-inner');
-      if (inner) {
-        savedBottomBarHTML = inner.innerHTML;
-        inner.innerHTML =
-          '<a class="ch-prev" id="sr-bar-prev" role="button" aria-label="Previous sentence"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>' +
-          '<div class="bottom-bar-sentence-info">' +
-            '<span class="bottom-bar-sentence-counter" id="sr-bar-counter">0 / ' + sentences.length + '</span>' +
-            '<span class="bottom-bar-sentence-hint">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> arrow keys</span>' +
-          '</div>' +
-          '<a class="ch-next" id="sr-bar-next" role="button" aria-label="Next sentence"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>';
-        document.getElementById('sr-bar-prev').addEventListener('click', function () { go(-1); });
-        document.getElementById('sr-bar-next').addEventListener('click', function () { go(1); });
-      }
-      bottomBar.classList.add('sentence-mode');
-      bottomBar.style.transform = 'translateY(0)';
-    }
+    if (!bottomBar) return;
+    var inner = bottomBar.querySelector('.bottom-bar-inner');
+    if (!inner) return;
 
-    // Start at first sentence (skip cover slide)
-    sentenceIndex = 0;
+    savedBottomBarHTML = inner.innerHTML;
+    inner.innerHTML =
+      '<a class="ch-prev" id="sr-bar-prev" role="button" aria-label="Previous sentence"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>' +
+      '<div class="bottom-bar-sentence-info">' +
+        '<span class="bottom-bar-chapter" id="sr-bar-chapter-label">Loading...</span>' +
+        '<span class="bottom-bar-sentence-sep">&middot;</span>' +
+        '<span class="bottom-bar-sentence-counter" id="sr-bar-counter">0 / 0</span>' +
+      '</div>' +
+      '<a class="ch-next" id="sr-bar-next" role="button" aria-label="Next sentence"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>';
 
-    // Restore from URL hash if it's a sentence hash
-    var hash = window.location.hash;
-    if (hash.indexOf('#sentence/') === 0) {
-      var restored = findSentenceByHash(hash);
-      if (restored >= 0) sentenceIndex = restored;
-    }
+    document.getElementById('sr-bar-prev').addEventListener('click', function () { go(-1); });
+    document.getElementById('sr-bar-next').addEventListener('click', function () { go(1); });
 
-    renderSentence(1);
-    if (sentenceIndex >= 0) updateBreadcrumbForSentence();
-    window._sentenceModeActive = true;
+    bottomBar.classList.add('sentence-mode');
+    bottomBar.style.transform = 'translateY(0)';
+  }
+
+  function enterSentenceMode() {
+    buildReader();
+    setupSentenceBottomBar();
+
+    // Show loading state
     reader.classList.add('is-active');
     document.body.style.overflow = 'hidden';
-    var topNav = document.getElementById('top-nav');
-    if (topNav) topNav.classList.add('is-locked');
+    window._sentenceModeActive = true;
+
+    // Show keyboard hint toast
+    var toast = document.createElement('div');
+    toast.className = 'sentence-toast';
+    toast.innerHTML = 'Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> arrow keys to navigate';
+    document.body.appendChild(toast);
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { toast.classList.add('is-visible'); });
+    });
+    setTimeout(function () {
+      toast.classList.remove('is-visible');
+      setTimeout(function () { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 400);
+    }, 3000);
+
+    extractAllChapters(function () {
+      if (!sentences.length) return;
+
+      sentenceIndex = 0;
+
+      // Restore from URL hash
+      var hash = window.location.hash;
+      if (hash.indexOf('#sentence/') === 0) {
+        var restored = findSentenceByHash(hash);
+        if (restored >= 0) sentenceIndex = restored;
+      }
+
+      renderSentence(1);
+    });
   }
 
   function exitSentenceMode() {

@@ -25,10 +25,14 @@
       ? '<a href="' + bookUrl + '" class="book-title-link">' + bookTitle.toUpperCase() + '</a>'
       : '';
 
-    var settingsHtml = '';
+    var navActionsHtml = '';
     if (showSettings) {
-      settingsHtml =
-        '<div id="mode-dropdown" class="settings-dropdown">' +
+      var tocBtnHtml =
+        '<button class="nav-toc-btn" id="nav-toc-btn" aria-label="Table of contents">' +
+          '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="12" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="18" r="1" fill="#C25335" stroke="none"/></svg>' +
+        '</button>';
+      var settingsBtnHtml =
+        '<div id="mode-dropdown" class="settings-dropdown" style="position:relative">' +
           '<button id="mode-toggle" class="settings-btn" aria-label="Reading settings" aria-expanded="false">' +
             '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
               '<circle cx="12" cy="12" r="3"/>' +
@@ -48,6 +52,11 @@
             '</a>' +
           '</div>' +
         '</div>';
+      navActionsHtml =
+        '<div class="nav-actions">' +
+          tocBtnHtml +
+          settingsBtnHtml +
+        '</div>';
     }
 
     mount.innerHTML =
@@ -56,8 +65,17 @@
           '<img class="brand-logo" src="/assets/logo.svg" alt="Public Domain Classics">' +
         '</a>' +
         titleLink +
-        settingsHtml +
+        navActionsHtml +
       '</div>';
+
+    // Wire up TOC button
+    var tocBtn = document.getElementById('nav-toc-btn');
+    if (tocBtn) {
+      tocBtn.addEventListener('click', function () {
+        var overlay = document.getElementById('toc-overlay');
+        if (overlay) overlay.classList.add('is-open');
+      });
+    }
   }
 
   // Run immediately if mount exists, otherwise wait for DOM

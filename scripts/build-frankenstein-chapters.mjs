@@ -194,10 +194,9 @@ function bookHeader(chapter, chapterIdx, isCover) {
   <div class="bottom-bar">
     <div class="bottom-bar-inner">
       ${prevLink}
-      <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
+      <span class="bottom-bar-center">
         <span class="bottom-bar-chapter">${chapter.title}</span>
-        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="12" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="18" r="1" fill="#C25335" stroke="none"/></svg></span>
-      </button>
+      </span>
       ${nextLink}
     </div>
   </div>
@@ -643,10 +642,9 @@ const coverPage = pageHead(coverChapter, -1, true) + `
   <div class="bottom-bar">
     <div class="bottom-bar-inner">
       <a class="ch-prev" aria-disabled="true"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
-      <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
+      <span class="bottom-bar-center">
         <span class="bottom-bar-chapter">Cover</span>
-        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="12" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="18" r="1" fill="#C25335" stroke="none"/></svg></span>
-      </button>
+      </span>
       <a class="ch-next" href="/books/frankenstein/${chapters[0].id}/"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
   </div>
