@@ -719,6 +719,38 @@
     }
     .cover-cta:hover { background: #a8472e; transform: translateY(-1px); }
 
+    /* Reading mode links */
+    .cover-reading-modes {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 8px;
+    }
+    .cover-mode-link {
+      display: block;
+      padding: 14px 0;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      transition: background 0.15s;
+    }
+    .cover-mode-link:last-of-type { border-bottom: none; }
+    .cover-mode-link:hover { background: rgba(0, 0, 0, 0.02); }
+    .cover-mode-name {
+      display: block;
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #C25335;
+    }
+    .cover-mode-desc {
+      display: block;
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #8a7e6e;
+      margin-top: 2px;
+    }
+
     /* Download button */
     .cover-download-wrap { position: relative; display: inline-block; }
     .cover-download-btn {
@@ -978,22 +1010,19 @@
           </span>
           Mary Shelley &middot; 1818
         </div>
-        <div style="display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap;">
-          <a href="/books/frankenstein/letter-1/" class="cover-cta">Begin Reading &rarr;</a>
-          <div class="cover-download-wrap">
-            <button class="cover-download-btn" id="download-toggle" aria-expanded="false" aria-haspopup="true">
-              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download
-            </button>
-            <div class="cover-download-menu" id="download-menu">
-              <a href="/books/frankenstein/downloads/pg84.epub" download>EPUB <span class="dl-size">349 KB</span></a>
-              <a href="/books/frankenstein/downloads/pg84-images.epub" download>EPUB (with images) <span class="dl-size">463 KB</span></a>
-              <a href="/books/frankenstein/downloads/pg84-images-3.epub" download>EPUB3 (with images) <span class="dl-size">463 KB</span></a>
-              <a href="/books/frankenstein/downloads/pg84-images.mobi" download>MOBI (with images) <span class="dl-size">639 KB</span></a>
-              <a href="/books/frankenstein/downloads/pg84-images-kf8.mobi" download>Kindle KF8 (with images) <span class="dl-size">667 KB</span></a>
-              <div class="dl-source">Files from <a href="https://www.gutenberg.org/ebooks/84" target="_blank" rel="noopener">Project Gutenberg</a></div>
-            </div>
-          </div>
+        <div class="cover-reading-modes">
+          <a href="/books/frankenstein/letter-1/#sentence/letter-1/0" class="cover-mode-link cover-mode-link--primary">
+            <span class="cover-mode-name">Sentence Mode &rarr;</span>
+            <span class="cover-mode-desc">Focus on one sentence at a time</span>
+          </a>
+          <a href="/books/frankenstein/letter-1/" class="cover-mode-link">
+            <span class="cover-mode-name">Chapter Mode &rarr;</span>
+            <span class="cover-mode-desc">Read by scrolling through the full text</span>
+          </a>
+          <a href="/books/frankenstein/downloads/pg84-images.epub" class="cover-mode-link" download>
+            <span class="cover-mode-name">Download &darr;</span>
+            <span class="cover-mode-desc">EPUB with images (463 KB) &middot; from Project Gutenberg</span>
+          </a>
         </div>
       </div>
     </div>
@@ -1041,7 +1070,16 @@
     </div>
 
     <div class="cover-bottom-cta">
-      <a href="/books/frankenstein/letter-1/" class="cover-cta">Begin Reading &rarr;</a>
+      <div class="cover-reading-modes">
+        <a href="/books/frankenstein/letter-1/#sentence/letter-1/0" class="cover-mode-link cover-mode-link--primary">
+          <span class="cover-mode-name">Sentence Mode &rarr;</span>
+          <span class="cover-mode-desc">Focus on one sentence at a time</span>
+        </a>
+        <a href="/books/frankenstein/letter-1/" class="cover-mode-link">
+          <span class="cover-mode-name">Chapter Mode &rarr;</span>
+          <span class="cover-mode-desc">Read by scrolling through the full text</span>
+        </a>
+      </div>
     </div>
 
   </main>
