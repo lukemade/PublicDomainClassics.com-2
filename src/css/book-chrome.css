@@ -578,9 +578,8 @@ body.has-bottom-bar { padding-bottom: 56px; }
 }
 .bottom-bar-sentence-info {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
 }
 .bottom-bar-sentence-counter {
   font-family: 'Libre Franklin', sans-serif;
