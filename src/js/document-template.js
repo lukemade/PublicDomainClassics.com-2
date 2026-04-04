@@ -801,6 +801,36 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     });
   }
 
+  // Jump to a chapter's first sentence (used by TOC in sentence mode)
+  function goToChapterInSentenceMode(chapterLabel) {
+    for (var i = 0; i < sentences.length; i++) {
+      if (sentences[i].chapterLabel === chapterLabel) {
+        sentenceIndex = i;
+        renderSentence(1);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Expose for TOC interception
+  window._sentenceGoToChapter = null;
+
+  // Intercept TOC overlay clicks when in sentence mode
+  document.addEventListener('click', function (e) {
+    if (!window._sentenceModeActive) return;
+    var link = e.target.closest('.toc-overlay-list a');
+    if (!link) return;
+    var text = link.textContent.trim();
+    // Skip cover link
+    if (text.toLowerCase() === 'cover') return;
+    if (goToChapterInSentenceMode(text)) {
+      e.preventDefault();
+      var tocOverlay = document.getElementById('toc-overlay');
+      if (tocOverlay) tocOverlay.classList.remove('is-open');
+    }
+  });
+
   function exitSentenceMode() {
     window._sentenceModeActive = false;
     window._sentenceGoToChapter = null;
