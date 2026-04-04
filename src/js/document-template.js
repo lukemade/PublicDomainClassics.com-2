@@ -642,7 +642,10 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       textEl.classList.remove('is-fading');
     }, 250);
 
-    if (counterEl) counterEl.textContent = (sentenceIndex + 1) + ' / ' + sentences.length;
+    if (counterEl) {
+      var pct = Math.round(((sentenceIndex + 1) / sentences.length) * 100);
+      counterEl.textContent = (sentenceIndex + 1) + ' / ' + sentences.length + '  (' + pct + '%)';
+    }
     var chapterLabel = document.getElementById('sr-bar-chapter-label');
     if (chapterLabel && s && s.chapterLabel) chapterLabel.textContent = s.chapterLabel;
     var prevBtn = document.getElementById('sr-bar-prev');
