@@ -3,6 +3,14 @@
    Breadcrumb chapter nav, scroll spy, back-to-top
    ============================================ */
 
+// ── SENTENCE MODE AUTO-ENTER (must run before anything else) ──
+(function () {
+  if (window.location.hash.indexOf('#sentence/') === 0) {
+    window._autoEnterSentenceMode = true;
+    window._sentenceModeActive = true;
+  }
+})();
+
 // ── URL HASH ROUTING — unique URL per chapter ──
 (function () {
   var headings = document.querySelectorAll('h2.section-heading[id]');
@@ -29,12 +37,6 @@
       history.replaceState(null, '', '#' + id);
     }, 300);
   };
-
-  // If URL has a sentence hash, auto-enter sentence mode after page loads
-  if (window.location.hash.indexOf('#sentence/') === 0) {
-    window._autoEnterSentenceMode = true;
-    window._sentenceModeActive = true; // suppress scroll spy immediately
-  }
 })();
 
 // ── BREADCRUMB CHAPTER DROPDOWN + SCROLL SPY + PROGRESS ──
