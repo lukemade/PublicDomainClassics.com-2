@@ -620,7 +620,7 @@
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <nav id="site-nav-mount" data-book-title="Frankenstein" data-book-url="/books/frankenstein/"></nav>
+  <nav id="site-nav-mount" data-book-title="Frankenstein" data-book-url="/books/frankenstein/" data-settings="true"></nav>
   <script src="/src/js/site-nav.js"></script>
 
   <style>
@@ -729,10 +729,10 @@
     .cover-reading-label {
       font-family: 'Libre Franklin', sans-serif;
       font-size: 0.65rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(44, 36, 32, 0.4);
+      color: #2c2420;
       margin-bottom: 8px;
     }
     .cover-mode-link {
@@ -751,8 +751,18 @@
       font-weight: 400;
       color: #C25335;
     }
+    .cover-mode-link--primary {
+      background: #C25335;
+      border-radius: 6px;
+      padding: 16px 20px;
+    }
+    .cover-mode-link--primary:hover { background: #a8452c; }
     .cover-mode-link--primary .cover-mode-name {
       font-size: 1.2rem;
+      color: #ffffff;
+    }
+    .cover-mode-link--primary .cover-mode-desc {
+      color: rgba(255, 255, 255, 0.7);
     }
     .cover-mode-desc {
       display: block;
@@ -1013,7 +1023,6 @@
         <img src="/books/frankenstein/images/r23rdefault (1).jpg" alt="">
       </div>
       <div class="cover-hero-text">
-        <div class="cover-label">A Gothic Novel</div>
         <h1 class="cover-title">Frankenstein; or, The Modern Prometheus</h1>
         <div class="cover-author">
           <span class="author-headshot">
@@ -1096,17 +1105,6 @@
     </div>
 
   </main>
-
-  <div class="bottom-bar">
-    <div class="bottom-bar-inner">
-      <a class="ch-prev" aria-disabled="true"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
-      <button class="bottom-bar-center" id="toc-open" aria-label="Open table of contents">
-        <span class="bottom-bar-chapter">Cover</span>
-        <span class="toc-icon"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="12" r="1" fill="#C25335" stroke="none"/><circle cx="4" cy="18" r="1" fill="#C25335" stroke="none"/></svg></span>
-      </button>
-      <a class="ch-next" href="/books/frankenstein/letter-1/"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-    </div>
-  </div>
 
   <!-- Fullscreen TOC overlay -->
   <div class="toc-overlay" id="toc-overlay">
