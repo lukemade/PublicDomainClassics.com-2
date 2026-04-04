@@ -597,9 +597,9 @@ body.has-bottom-bar { padding-bottom: 56px; }
 /* ── Sentence mode toast ── */
 .sentence-toast {
   position: fixed;
-  top: 50%;
+  top: 84px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   z-index: 10000;
   background: rgba(44, 36, 32, 0.85);
   color: #faf8f4;

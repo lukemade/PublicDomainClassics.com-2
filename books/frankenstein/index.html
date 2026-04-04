@@ -726,6 +726,15 @@
       gap: 0;
       margin-top: 8px;
     }
+    .cover-reading-label {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(44, 36, 32, 0.4);
+      margin-bottom: 8px;
+    }
     .cover-mode-link {
       display: block;
       padding: 14px 0;
@@ -738,9 +747,12 @@
     .cover-mode-name {
       display: block;
       font-family: 'Fraunces', serif;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 400;
       color: #C25335;
+    }
+    .cover-mode-link--primary .cover-mode-name {
+      font-size: 1.2rem;
     }
     .cover-mode-desc {
       display: block;
@@ -1011,8 +1023,9 @@
           Mary Shelley &middot; 1818
         </div>
         <div class="cover-reading-modes">
+          <div class="cover-reading-label">Reading Options</div>
           <a href="/books/frankenstein/letter-1/#sentence/letter-1/0" class="cover-mode-link cover-mode-link--primary">
-            <span class="cover-mode-name">Sentence Mode &rarr;</span>
+            <span class="cover-mode-name">Sentence Focus &rarr;</span>
             <span class="cover-mode-desc">Focus on one sentence at a time</span>
           </a>
           <a href="/books/frankenstein/letter-1/" class="cover-mode-link">
