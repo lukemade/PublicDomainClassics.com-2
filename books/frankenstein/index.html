@@ -26,684 +26,141 @@
   <style>
     :root { --chapter-accent: #2eb8a6; }
 
-    /* Fraunces for all headings */
-    h1, h2, h3, .book-header-chapter, .hero-title,
-    .toc-inner h2, .book-header-title {
-      font-family: 'Fraunces', serif !important;
+    /* Frankenstein-specific: Fraunces headings */
+    .book-frankenstein h1, .book-frankenstein h2, .book-frankenstein h3,
+    .book-frankenstein .book-header-chapter, .book-frankenstein .hero-title,
+    .book-frankenstein .toc-inner h2, .book-frankenstein .book-header-title {
+      font-family: 'Fraunces', serif;
       font-optical-sizing: auto;
     }
 
-    /* Drop cap uses chapter accent */
-    .drop-cap::first-letter { color: #C25335 !important; }
+    /* Drop cap accent color */
+    .drop-cap::first-letter { color: #C25335; }
 
-    /* ── Site nav ── */
-    .site-nav {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      background: #faf8f4;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      padding: 10px 1.25rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    }
-    .site-nav-inner {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      position: relative;
-    }
-    .site-nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-    .site-nav-brand:hover { opacity: 1; }
-    .brand-logo {
-      height: 40px;
-      width: auto;
-      opacity: 0.85;
-      transition: opacity 0.2s;
-    }
-    .site-nav-brand:hover .brand-logo { opacity: 1; }
-    .book-title-link {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Fraunces', serif;
-      font-size: 0.8rem;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(44, 36, 32, 0.6);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .book-title-link:hover { color: #2c2420; }
-    .brand-beta {
-      position: absolute;
-      right: 0;
-      font-family: 'Fraunces', serif;
-      font-size: 0.5rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #C25335;
-      border: 1px solid rgba(194, 83, 53, 0.4);
-      border-radius: 3px;
-      padding: 1px 5px;
-      line-height: 1.4;
-    }
-
-    /* Centered book title with library icon */
-    .book-switch {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.02em;
-      color: rgba(44, 36, 32, 0.6);
-      text-decoration: none;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 4px;
-      transition: color 0.2s, background 0.2s;
-    }
-    .book-switch:hover {
-      color: #2c2420;
-      background: rgba(0, 0, 0, 0.04);
-    }
-    .book-switch-icon {
-      width: 16px; height: 16px;
-      stroke: #C25335; fill: none;
-      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
-    }
-    .book-switch-label { color: rgba(44, 36, 32, 0.4); }
-    .book-switch-title { color: rgba(44, 36, 32, 0.8); }
-
-    /* Library overlay removed for MVP launch — saved for later */
-
-    /* ── Book header (static hero) ── */
-    .book-header {
-      background: #ffffff;
-      position: relative;
-      overflow: hidden;
-    }
-    .book-header-bg {
-      display: none;
-    }
-    .book-header-overlay {
-      display: none;
-    }
-    .book-header-inner {
-      position: relative;
-      z-index: 2;
-      max-width: 760px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      text-align: left;
-      gap: 24px;
-      padding: 120px 32px 120px;
-    }
-    .book-header-inner .book-header-cover-wrap {
-      flex: 0 0 auto;
-    }
-    .book-header-inner .book-header-text-wrap {
-      flex: 1;
-    }
-    .book-header-title {
-      font-family: 'Fraunces', serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.12em;
-      color: #5a4f42;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-    }
-    .book-header-chapter {
-      font-family: 'IM Fell French Canon', serif;
-      font-size: 3.8rem;
-      font-weight: 400;
-      color: #2c2420;
-      line-height: 1.05;
-      margin-bottom: 12px;
-      text-align: left;
-    }
-
-    /* ── Bottom bar — sticky to bottom ── */
-    .bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 500;
-      background: rgba(250, 248, 244, 0.97);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 56px;
-      padding: 0 1rem;
-      transition: height 0.4s ease, background 0.4s ease, border-top-color 0.4s ease;
-    }
-    .bottom-bar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 1000px;
-      gap: 8px;
-    }
-    .ch-prev, .ch-next {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: rgba(232, 223, 208, 0.12);
-      text-decoration: none;
-      flex-shrink: 0;
-      transition: background 0.2s;
-    }
-    .ch-prev:hover, .ch-next:hover {
-      background: #C25335;
-    }
-    .ch-prev[aria-disabled="true"],
-    .ch-next[aria-disabled="true"] {
-      opacity: 0.2;
-      pointer-events: none;
-    }
-    .ch-prev-title, .ch-next-title {
-      display: none;
-    }
-    .ch-prev svg, .ch-next svg {
-      width: 16px; height: 16px;
-      stroke: rgba(44, 36, 32, 0.7); fill: none;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    }
-    .ch-prev:hover svg, .ch-next:hover svg {
-      stroke: #2c2420;
-    }
-
-    /* Center of bottom bar: chapter name + colorful plus */
-    .bottom-bar-center {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-    .bottom-bar-center:hover { background: rgba(0, 0, 0, 0.04); }
-    .bottom-bar-chapter {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      color: #2c2420;
-      max-width: 220px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .toc-icon {
-      width: 24px; height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: transform 0.2s;
-    }
-    .bottom-bar-center:hover .toc-icon {
-      transform: scale(1.15);
-    }
-    .toc-icon svg {
-      width: 20px; height: 20px;
-      stroke: #C25335; fill: none;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    }
-
-    /* ── Fullscreen TOC overlay ── */
-    .toc-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(250, 248, 244, 0.98);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      display: none;
-      flex-direction: column;
-      overflow-y: auto;
-    }
-    .toc-overlay.is-open { display: flex; }
-    .toc-overlay-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 24px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    }
-    .toc-overlay-title {
-      font-family: 'IM Fell French Canon', serif;
-      font-size: 1.2rem;
-      color: #2c2420;
-    }
-    .toc-close {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.04);
-      border: none;
-      color: rgba(44, 36, 32, 0.6);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-    .toc-close:hover { background: rgba(0, 0, 0, 0.08); color: #2c2420; }
-    .toc-close svg {
-      width: 18px; height: 18px;
-      stroke: currentColor; fill: none;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    }
-    .toc-overlay-list {
-      list-style: none;
-      padding: 12px 0;
-      max-width: 600px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .toc-overlay-list a {
-      display: block;
-      padding: 12px 24px;
-      font-family: 'Libre Baskerville', serif;
-      font-size: 1rem;
-      color: rgba(44, 36, 32, 0.5);
-      text-decoration: none;
-      transition: color 0.15s, background 0.15s;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    }
-    .toc-overlay-list a:hover {
-      color: #2c2420;
-      background: rgba(0, 0, 0, 0.03);
-    }
-    .toc-overlay-list a.active {
-      color: #2c2420;
-      background: rgba(107, 58, 42, 0.2);
-      border-left: 3px solid rgba(107, 58, 42, 0.6);
-    }
-
-    /* Add bottom padding to body so content isn't hidden behind bottom bar */
-    body { padding-bottom: 56px; }
-
-
-
-    /* ── Cover page — side-by-side ── */
-    .book-header.is-cover .book-header-bg {
-      opacity: 0.3;
-    }
-    .book-header.is-cover .book-header-inner {
-      flex-direction: row;
-      text-align: left;
-      padding: 48px 2rem 84px;
-      gap: 40px;
-      align-items: center;
-    }
-    .book-header-cover-wrap {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .book-header.is-cover .book-header-cover {
-      width: 100%;
-      max-width: 300px;
-      max-height: 400px;
-      object-fit: contain;
-      border-radius: 4px;
-      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.55), 0 4px 16px rgba(0, 0, 0, 0.35);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .book-header.is-cover .book-header-cover:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.65);
-    }
-    .book-header-text-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .book-header.is-cover .book-header-title {
-      font-size: 0.875rem;
-      margin-bottom: 10px;
-      color: #2c2420;
-    }
-    .book-header.is-cover .book-header-chapter {
-      font-family: 'IM Fell French Canon', serif;
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      margin-bottom: 10px;
-      line-height: 1.1;
-      text-align: left;
-    }
-    .book-header-author {
-      font-family: 'Fraunces', serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.1em;
-      color: rgba(44, 36, 32, 0.85);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-    }
-    .book-header.is-cover .chapter-selector {
-      justify-content: flex-start;
-    }
-    .begin-reading {
-      display: inline-block;
-      margin-top: 12px;
-      font-family: 'Fraunces', serif;
-      font-size: 1rem;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: #fff;
-      background: #C25335;
-      padding: 14px 32px;
-      border-radius: 5px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .begin-reading:hover {
-      background: #a8472e;
-      transform: translateY(-1px);
-    }
-    .book-header:not(.is-cover) .begin-reading { display: none; }
-    .book-header:not(.is-cover) .book-header-author {
-      display: none;
-    }
-    .book-header:not(.is-cover) .book-header-cover {
-      width: 80px;
-      height: auto;
-      object-fit: contain;
-      border-radius: 3px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    }
-    .chapter-eyebrow {
-      font-family: 'IM Fell DW Pica SC', serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.1em;
-      color: #C25335;
-      margin-bottom: 8px;
-    }
-    .book-header:not(.is-cover) .book-header-chapter {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      margin-bottom: 0;
-      line-height: 1.05;
-    }
-    @media (max-width: 480px) {
-      .book-header.is-cover .book-header-inner {
-        flex-direction: column;
-        text-align: center;
-        gap: 24px;
-      }
-      .book-header.is-cover .book-header-cover { max-width: 200px; }
-      .book-header-text-wrap { align-items: flex-start; }
-      .book-header.is-cover .book-header-chapter { text-align: left; }
-      .book-header.is-cover .chapter-selector { justify-content: center; }
-    }
-
-    /* ── Reading area ── */
-    .article-body, .toc-section {
-      margin-top: 0;
-      border-radius: 0;
-      position: relative;
-      z-index: 3;
-    }
-    body {
-      background: #ffffff;
-    }
-
-    /* ── Bottom chapter nav ── */
-    .chapter-bottom-nav {
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      gap: 1px;
-      max-width: 780px;
-      margin: 3rem auto 0;
-      padding: 0;
-      background: rgba(107, 58, 42, 0.12);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .chapter-bottom-nav a {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.95rem;
-      color: var(--text, #2c2420);
-      text-decoration: none;
-      padding: 20px 16px;
-      background: var(--bg, #faf8f4);
-      transition: background 0.2s, color 0.2s;
-      text-align: center;
-      line-height: 1.3;
-    }
-    .chapter-bottom-nav a:hover {
-      background: var(--surface, #f0ece4);
-      color: var(--accent, #6b3a2a);
-    }
-    .chapter-bottom-nav a[aria-disabled="true"] {
-      color: rgba(90, 79, 66, 0.25);
-      pointer-events: none;
-    }
-    .chapter-bottom-nav .nav-direction {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.02em;
-      color: rgba(90, 79, 66, 0.5);
-    }
-    .chapter-bottom-nav svg {
-      width: 16px; height: 16px;
-      stroke: currentColor; fill: none;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    }
-
-    /* ── TOC page styles ── */
-    .toc-section {
-      background: var(--bg, #faf8f4);
-      padding: 3rem 2rem 4rem;
-      max-width: 760px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .toc-inner { max-width: 680px; margin: 0 auto; }
-    .toc-inner h2 {
-      font-family: 'IM Fell French Canon', serif;
-      font-size: 1.6rem; font-weight: 400;
-      color: var(--text, #2c2420);
-      margin-bottom: 1.5rem;
-    }
-    .toc-list { list-style: none; padding: 0; }
-    .toc-list li { border-bottom: 1px solid rgba(107, 58, 42, 0.1); }
-    .toc-list li:last-child { border-bottom: none; }
-    .toc-list a {
-      display: block; padding: 0.75rem 0;
-      font-family: 'Libre Baskerville', serif; font-size: 0.95rem;
-      color: var(--text, #2c2420); text-decoration: none; transition: color 0.2s;
-    }
-    .toc-list a:hover { color: var(--accent, #6b3a2a); }
-
-    /* ── Responsive ── */
-    @media (max-width: 600px) {
-      .site-nav { padding: 0 0.75rem; height: 44px; }
-      .site-nav-inner { flex-direction: row; align-items: center; gap: 0; }
-      .brand-logo { height: 28px; }
-      .brand-beta { display: none; }
-      .book-title-link {
-        position: static !important;
-        transform: none !important;
-        font-size: 0.65rem;
-        margin-left: 10px;
-        padding-left: 10px;
-        border-left: 1px solid rgba(0, 0, 0, 0.12);
-      }
-      .epigraph { font-size: 0.85rem !important; }
-      .epigraph-attribution { font-size: 0.75rem !important; }
-      .book-switch { font-size: 0.6rem; padding: 4px 8px; }
-      .book-switch-label { display: none; }
-      .book-header-chapter { font-size: 1.5rem; }
-      .book-header-inner { padding: 40px 16px 40px !important; gap: 16px; }
-      .book-header:not(.is-cover) .book-header-cover { width: 50px; }
-      .article-body, .toc-section { margin-top: 0 !important; border-radius: 0; max-width: 100%; }
-      .book-header-title { font-size: 0.65rem; margin-bottom: 6px; }
-      .book-header-author { font-size: 0.65rem; margin-bottom: 6px; }
-      .book-header.is-cover .book-header-chapter { font-size: 1.8rem; }
-      .book-header.is-cover .book-header-cover { max-width: 120px; }
-      .book-header.is-cover .book-header-inner { padding: 24px 1rem 16px; }
-      .book-header-overlay { display: none !important; }
-      .ch-prev-title, .ch-next-title { display: none; }
-      .bottom-bar { height: 44px; background: rgba(250, 248, 244, 0.97); border-top: 1px solid rgba(0,0,0,0.08); }
-      .bottom-bar-chapter { display: inline-block; font-size: 0.65rem; max-width: 120px; }
-      .ch-prev, .ch-next {
-        width: auto; height: auto;
-        border-radius: 0;
-        background: none !important;
-        padding: 8px;
-      }
-      .ch-prev svg, .ch-next svg { width: 18px; height: 18px; stroke: rgba(44,36,32,0.5); }
-      .ch-prev:hover svg, .ch-next:hover svg { stroke: #C25335; }
-      body { padding-bottom: 50px; }
-      .chapter-bottom-nav a { font-size: 0.85rem; padding: 16px 12px; }
-    }
-
-    /* Epigraph override — Libre Franklin with accent border */
-    .epigraph {
-      font-family: 'Libre Franklin', sans-serif !important;
-      font-weight: 300 !important;
-      font-style: italic !important;
-      font-size: 1rem !important;
-      line-height: 1.7 !important;
-      color: #5a4f42 !important;
-      border-left: 3px solid #C25335 !important;
-      padding: 16px 0 16px 20px !important;
-      margin-left: 0 !important;
-    }
-    .epigraph-attribution {
-      font-family: 'Libre Franklin', sans-serif !important;
-      font-size: 0.85rem !important;
-      font-weight: 400 !important;
-      font-style: normal !important;
-      color: #8a7e6e !important;
-    }
-
-    /* Sentence mode removed for MVP launch — saved for later */
+    /* All page-shell styles are in /src/css/book-chrome.css */
   </style>
 </head>
-<body>
+<body class="book-frankenstein has-bottom-bar">
   <a href="#main-content" class="skip-link">Skip to content</a>
   <nav id="site-nav-mount" data-book-title="Frankenstein" data-book-url="/books/frankenstein/" data-settings="true"></nav>
   <script src="/src/js/site-nav.js"></script>
 
   <style>
+    /* ── Skeuomorphic Book Cover Hero ── */
     .cover-hero {
-      background: #f0ece4;
-      padding: 48px 2rem 72px;
-    }
-    .cover-hero-inner {
-      max-width: 760px;
-      margin: 0 auto;
+      background: #1a1510;
+      padding: 60px 2rem 80px;
       display: flex;
-      gap: 48px;
-      align-items: center;
+      justify-content: center;
     }
-    .cover-hero-img {
-      flex: 0 0 auto;
-    }
-    .cover-hero-img {
+    .book-cover {
       position: relative;
-      width: 220px;
-      height: 330px;
-    }
-    .cover-hero-img img {
-      position: absolute;
-      top: 0; left: 0;
-      width: 220px;
-      border-radius: 4px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-      opacity: 0;
-      transition: opacity 1.5s ease;
-    }
-    .cover-hero-img img.is-active {
-      opacity: 1;
-    }
-    .cover-hero-text {
-      flex: 1;
-    }
-    .cover-label {
-      font-family: 'Fraunces', serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #5a4f42;
-      margin-bottom: 12px;
-    }
-    .cover-title {
-      font-family: 'IM Fell French Canon', serif;
-      font-size: clamp(2.2rem, 4.8vw, 3.1rem);
-      font-weight: 400;
-      color: #2c2420;
-      line-height: 1.1;
-      margin-bottom: 12px;
-    }
-    .cover-author {
-      font-family: 'Fraunces', serif;
-      font-size: 0.875rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #5a4f42;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .author-headshot {
-      position: relative;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+      width: 420px;
+      aspect-ratio: 2 / 3;
+      border-radius: 3px 6px 6px 3px;
       overflow: hidden;
-      flex-shrink: 0;
-      border: 2px solid rgba(44, 36, 32, 0.1);
+      box-shadow:
+        -4px 0 0 0 #2a2018,
+        -6px 0 0 0 #1a1510,
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 8px 24px rgba(0, 0, 0, 0.3);
     }
-    .author-headshot img {
+    .book-cover-bg {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 1.2s ease;
+      inset: 0;
+      background-image: url('/books/frankenstein/images/Frankenstein_engraved.jpg');
+      background-size: cover;
+      background-position: center top;
     }
-    .author-headshot img.is-active { opacity: 1; }
+    .book-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.15) 0%,
+        rgba(0, 0, 0, 0.05) 30%,
+        rgba(0, 0, 0, 0.2) 60%,
+        rgba(0, 0, 0, 0.7) 100%
+      );
+    }
+    .book-cover-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px 28px;
+    }
+    .book-cover-top {
+      text-align: center;
+    }
+    .book-cover-label {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(232, 223, 208, 0.7);
+    }
+    .book-cover-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.15;
+      text-align: center;
+      margin-top: 8px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+    }
+    .book-cover-author {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(232, 223, 208, 0.8);
+      text-align: center;
+      margin-top: 10px;
+    }
+    .book-cover-bottom {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+    .book-cover-cta {
+      font-family: 'Fraunces', serif;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      transition: background 0.2s, border-color 0.2s;
+      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .book-cover-cta:hover {
+      background: rgba(194, 83, 53, 0.8);
+      border-color: rgba(194, 83, 53, 0.8);
+      color: #ffffff;
+    }
+    /* Spine edge detail */
+    .book-cover::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 0;
+      width: 6px;
+      background: linear-gradient(90deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, transparent 100%);
+      z-index: 10;
+    }
+    @media (max-width: 600px) {
+      .cover-hero { padding: 40px 1rem 60px; }
+      .book-cover { width: 280px; }
+      .book-cover-content { padding: 24px 20px; }
+      .book-cover-title { font-size: 1.4rem; }
+    }
+
     .cover-cta {
       display: inline-block;
       font-family: 'Fraunces', serif;
@@ -712,129 +169,11 @@
       color: #fff;
       background: #C25335;
       padding: 14px 32px;
-      border: 1px solid #C25335;
       border-radius: 5px;
       text-decoration: none;
-      transition: background 0.2s, transform 0.2s, border-color 0.2s;
+      transition: background 0.2s, transform 0.2s;
     }
     .cover-cta:hover { background: #a8472e; transform: translateY(-1px); }
-
-    /* Reading mode links */
-    .cover-reading-modes {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-top: 8px;
-    }
-    .cover-reading-label {
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #2c2420;
-      margin-bottom: 8px;
-    }
-    .cover-mode-link {
-      display: block;
-      padding: 10px 0;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .cover-mode-link:hover { background: rgba(0, 0, 0, 0.02); }
-    .cover-mode-name {
-      display: block;
-      font-family: 'Fraunces', serif;
-      font-size: 1rem;
-      font-weight: 400;
-      color: #C25335;
-    }
-    a.cover-mode-link.cover-mode-link--primary {
-      display: inline-block;
-      max-width: fit-content;
-      background: #C25335;
-      border-radius: 6px;
-      padding: 8px 16px;
-    }
-    .cover-mode-link--primary:hover { background: #a8452c; }
-    .cover-mode-link--primary .cover-mode-name {
-      font-size: 1.2rem;
-      color: #ffffff;
-    }
-    .cover-mode-link--primary .cover-mode-desc {
-      color: rgba(255, 255, 255, 0.7);
-    }
-    .cover-mode-desc {
-      display: block;
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: #8a7e6e;
-      margin-top: -3px;
-    }
-
-    /* Download button */
-    .cover-download-wrap { position: relative; display: inline-block; }
-    .cover-download-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Fraunces', serif;
-      font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.85;
-      color: #5a4f42;
-      background: #f0ece4;
-      padding: 14px 28px;
-      border-radius: 5px;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s, border-color 0.2s;
-    }
-    .cover-download-btn:hover { background: #e8dfd0; border-color: rgba(0, 0, 0, 0.15); transform: translateY(-1px); }
-    .cover-download-btn svg {
-      width: 18px; height: 18px;
-      stroke: currentColor; fill: none;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    }
-    .cover-download-menu {
-      display: none;
-      position: absolute;
-      top: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      min-width: 240px;
-      background: #faf8f4;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      border-radius: 6px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-      padding: 8px 0;
-      z-index: 100;
-    }
-    .cover-download-menu.is-open { display: block; }
-    .cover-download-menu a {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      color: #2c2420;
-      text-decoration: none;
-      transition: background 0.12s;
-    }
-    .cover-download-menu a:hover { background: rgba(0, 0, 0, 0.04); }
-    .cover-download-menu .dl-size { font-weight: 400; color: #8a7e6e; font-size: 12px; }
-    .cover-download-menu .dl-source {
-      padding: 8px 16px 4px;
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 11px;
-      color: #8a7e6e;
-      border-top: 1px solid rgba(0, 0, 0, 0.06);
-      margin-top: 4px;
-    }
-    .cover-download-menu .dl-source a { display: inline; padding: 0; font-size: 11px; color: #C25335; }
 
     /* Content sections */
     .cover-section {
@@ -888,9 +227,9 @@
       color: #5a4f42;
       line-height: 1.7;
       margin: 0 0 16px;
-      padding: 16px 0 16px 20px;
+      padding: 16px 0 16px 24px;
       border: none;
-      border-left: 3px solid #C25335;
+      border-left: 4px double #C25335;
     }
     .cover-quote-attr {
       font-family: 'Libre Franklin', sans-serif;
@@ -966,13 +305,6 @@
       margin-top: 16px;
       line-height: 1.6;
     }
-    .cover-source p {
-      font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.8rem;
-      line-height: 1.6;
-      color: #8a7e6e;
-      margin-bottom: 0.5em;
-    }
     .cover-source a {
       color: #C25335;
       text-decoration: none;
@@ -1022,36 +354,17 @@
   </style>
 
   <div class="cover-hero">
-    <div class="cover-hero-inner">
-      <div class="cover-hero-img">
-        <img src="/books/frankenstein/images/default.jpg" alt="Frankenstein book cover" class="is-active">
-        <img src="/books/frankenstein/images/3421default.jpg" alt="">
-        <img src="/books/frankenstein/images/Frankenstein_engraved.jpg" alt="">
-        <img src="/books/frankenstein/images/r23rdefault (1).jpg" alt="">
-      </div>
-      <div class="cover-hero-text">
-        <h1 class="cover-title">Frankenstein; or, The Modern Prometheus</h1>
-        <div class="cover-author">
-          <span class="author-headshot">
-            <img src="/books/frankenstein/images/shelley-headshot.jpg" alt="Mary Shelley" class="is-active">
-            <img src="/books/frankenstein/images/shelley-2.jpg" alt="">
-          </span>
-          Mary Shelley &middot; 1818
+    <div class="book-cover">
+      <div class="book-cover-bg"></div>
+      <div class="book-cover-overlay"></div>
+      <div class="book-cover-content">
+        <div class="book-cover-top">
+          <div class="book-cover-label">A Gothic Novel</div>
+          <h1 class="book-cover-title">Frankenstein;<br>or, The Modern<br>Prometheus</h1>
+          <div class="book-cover-author">Mary Shelley &middot; 1818</div>
         </div>
-        <div class="cover-reading-modes">
-          <div class="cover-reading-label">Reading Options</div>
-          <a href="/books/frankenstein/letter-1/#sentence/letter-1/0" class="cover-mode-link cover-mode-link--primary">
-            <span class="cover-mode-name">Read in Sentence Focus &rarr;</span>
-            <span class="cover-mode-desc">Focus on one sentence at a time: a sublime new reading experience.</span>
-          </a>
-          <a href="/books/frankenstein/letter-1/" class="cover-mode-link">
-            <span class="cover-mode-name">Chapter Mode &rarr;</span>
-            <span class="cover-mode-desc">Vertically scroll each chapter</span>
-          </a>
-          <a href="/books/frankenstein/downloads/pg84-images.epub" class="cover-mode-link" download>
-            <span class="cover-mode-name">Download &darr;</span>
-            <span class="cover-mode-desc">EPUB with images (463 KB) &middot; from Project Gutenberg</span>
-          </a>
+        <div class="book-cover-bottom">
+          <a href="/books/frankenstein/letter-1/" class="book-cover-cta">Begin Reading &rarr;</a>
         </div>
       </div>
     </div>
@@ -1060,29 +373,29 @@
   <main id="main-content" class="cover-content">
 
     <div class="cover-section">
+      <div class="cover-section-label">About</div>
       <blockquote class="cover-quote">&ldquo;An extraordinary tale, in which the author seems to us to disclose uncommon powers of poetic imagination.&rdquo;</blockquote>
       <div class="cover-quote-attr">&mdash; Sir Walter Scott, 1818</div>
-      <div style="margin-top: 20px;">
-        <div class="cover-section-label" style="margin-bottom: 8px;">Summary <span class="cover-ai-label">AI Generated</span> <a href="#sources" class="cover-ai-label" style="color: #C25335; text-decoration: none;">View Sources &darr;</a></div>
-        <p>A young scientist, consumed by ambition, pushes the boundaries of nature and creates something he never expected. Told through letters and confessions, Shelley&rsquo;s novel asks questions about responsibility, compassion, and what it means to be human that remain unsettling two centuries later. Widely considered one of the greatest Romantic and Gothic novels, and one of the first works of science fiction ever written. First published anonymously in January 1818. Mary Shelley&rsquo;s name appeared on the revised edition of 1831.</p>
-      </div>
+      <p style="margin-top: 20px;">A young scientist, consumed by ambition, pushes the boundaries of nature and creates something he never expected. Told through letters and confessions, Shelley&rsquo;s novel asks questions about responsibility, compassion, and what it means to be human that remain unsettling two centuries later. Widely considered one of the greatest Romantic and Gothic novels, and one of the first works of science fiction ever written. First published anonymously in January 1818. Mary Shelley&rsquo;s name appeared on the revised edition of 1831.</p>
       <div class="cover-tags">
         <span class="cover-tag">Gothic Fiction</span>
         <span class="cover-tag">Science Fiction</span>
         <span class="cover-tag">Horror</span>
         <span class="cover-tag">Romantic Literature</span>
       </div>
+      <div class="cover-source">Quote from Walter Scott&rsquo;s review in <em>Blackwood&rsquo;s Edinburgh Magazine</em>, March 1818. Summary <span class="cover-ai-label">AI Generated</span>. Publication facts from <a href="https://en.wikipedia.org/wiki/Frankenstein" target="_blank" rel="noopener">Wikipedia</a>. Genre categories from <a href="https://www.gutenberg.org/ebooks/84" target="_blank" rel="noopener">Project Gutenberg</a>.</div>
     </div>
 
     <div class="cover-section">
-      <div class="cover-section-label">Author</div>
+      <div class="cover-section-label">About the Author</div>
       <div class="cover-bio-layout">
-        <div class="cover-bio-portrait">
-          <img src="/books/frankenstein/images/RothwellMaryShelley.jpg" alt="Portrait of Mary Shelley by Richard Rothwell, 1840">
-        </div>
         <div class="cover-bio-text">
           <h2 class="cover-bio-name">Mary Wollstonecraft Shelley (1797&ndash;1851)</h2>
           <p>Daughter of the philosopher William Godwin and the pioneering feminist writer Mary Wollstonecraft, who died eleven days after her birth. Mary began writing Frankenstein at the age of eighteen during a stay near Lake Geneva with Percy Bysshe Shelley, Lord Byron, and John Polidori. The novel was published anonymously two years later, when she was just twenty years old. She married the poet Percy Bysshe Shelley and continued writing novels, short stories, and biographical works throughout her life.</p>
+          <div class="cover-source">Biographical facts from <a href="https://en.wikipedia.org/wiki/Mary_Shelley" target="_blank" rel="noopener">Wikipedia: Mary Shelley</a>.</div>
+        </div>
+        <div class="cover-bio-portrait">
+          <img src="/books/frankenstein/images/RothwellMaryShelley.jpg" alt="Portrait of Mary Shelley by Richard Rothwell, 1840">
         </div>
       </div>
     </div>
@@ -1095,163 +408,28 @@
         <div class="cover-detail"><strong>Popularity</strong>176,000+ monthly downloads</div>
         <div class="cover-detail"><strong>Accuracy</strong>Every word verified verbatim</div>
       </div>
+      <div class="cover-source">Download statistics from <a href="https://www.gutenberg.org/ebooks/84" target="_blank" rel="noopener">Project Gutenberg</a> (as of March 2026). Text accuracy verified using word-level diff against the original Gutenberg source.</div>
     </div>
 
     <div class="cover-bottom-cta">
-      <a href="/books/frankenstein/letter-1/#sentence/letter-1/0" class="cover-cta">Begin Reading &rarr;</a>
-    </div>
-
-    <div class="cover-section" id="sources">
-      <div class="cover-section-label">Sources</div>
-      <div class="cover-source">
-        <p>Book summary is <span class="cover-ai-label">AI Generated</span>.</p>
-        <p>Quote from Walter Scott&rsquo;s review in <em>Blackwood&rsquo;s Edinburgh Magazine</em>, March 1818.</p>
-        <p>Publication facts from <a href="https://en.wikipedia.org/wiki/Frankenstein" target="_blank" rel="noopener">Wikipedia: Frankenstein</a>.</p>
-        <p>Genre categories from <a href="https://www.gutenberg.org/ebooks/84" target="_blank" rel="noopener">Project Gutenberg</a>.</p>
-        <p>Biographical facts from <a href="https://en.wikipedia.org/wiki/Mary_Shelley" target="_blank" rel="noopener">Wikipedia: Mary Shelley</a>.</p>
-        <p>Download statistics from <a href="https://www.gutenberg.org/ebooks/84" target="_blank" rel="noopener">Project Gutenberg</a> (as of March 2026).</p>
-        <p>Text accuracy verified using word-level diff against the original Gutenberg source.</p>
-      </div>
+      <a href="/books/frankenstein/letter-1/" class="cover-cta">Begin Reading &rarr;</a>
     </div>
 
   </main>
 
-  <!-- Fullscreen TOC overlay -->
-  <div class="toc-overlay" id="toc-overlay">
-    <div class="toc-overlay-header">
-      <div class="toc-overlay-title">Frankenstein &mdash; Table of Contents</div>
-      <button class="toc-close" id="toc-close" aria-label="Close table of contents">
-        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
+  <div class="bottom-bar">
+    <div class="bottom-bar-inner">
+      <a class="ch-prev" aria-disabled="true"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>
+      <span class="bottom-bar-center">
+        <span class="bottom-bar-chapter">Cover</span>
+      </span>
+      <a class="ch-next" href="/books/frankenstein/letter-1/"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
-    <ul class="toc-overlay-list">
-      <li><a class="active" href="/books/frankenstein/">Cover</a></li>
-      <li><a href="/books/frankenstein/letter-1/">Letter 1</a></li>
-      <li><a href="/books/frankenstein/letter-2/">Letter 2</a></li>
-      <li><a href="/books/frankenstein/letter-3/">Letter 3</a></li>
-      <li><a href="/books/frankenstein/letter-4/">Letter 4</a></li>
-      <li><a href="/books/frankenstein/chapter-1/">Chapter 1</a></li>
-      <li><a href="/books/frankenstein/chapter-2/">Chapter 2</a></li>
-      <li><a href="/books/frankenstein/chapter-3/">Chapter 3</a></li>
-      <li><a href="/books/frankenstein/chapter-4/">Chapter 4</a></li>
-      <li><a href="/books/frankenstein/chapter-5/">Chapter 5</a></li>
-      <li><a href="/books/frankenstein/chapter-6/">Chapter 6</a></li>
-      <li><a href="/books/frankenstein/chapter-7/">Chapter 7</a></li>
-      <li><a href="/books/frankenstein/chapter-8/">Chapter 8</a></li>
-      <li><a href="/books/frankenstein/chapter-9/">Chapter 9</a></li>
-      <li><a href="/books/frankenstein/chapter-10/">Chapter 10</a></li>
-      <li><a href="/books/frankenstein/chapter-11/">Chapter 11</a></li>
-      <li><a href="/books/frankenstein/chapter-12/">Chapter 12</a></li>
-      <li><a href="/books/frankenstein/chapter-13/">Chapter 13</a></li>
-      <li><a href="/books/frankenstein/chapter-14/">Chapter 14</a></li>
-      <li><a href="/books/frankenstein/chapter-15/">Chapter 15</a></li>
-      <li><a href="/books/frankenstein/chapter-16/">Chapter 16</a></li>
-      <li><a href="/books/frankenstein/chapter-17/">Chapter 17</a></li>
-      <li><a href="/books/frankenstein/chapter-18/">Chapter 18</a></li>
-      <li><a href="/books/frankenstein/chapter-19/">Chapter 19</a></li>
-      <li><a href="/books/frankenstein/chapter-20/">Chapter 20</a></li>
-      <li><a href="/books/frankenstein/chapter-21/">Chapter 21</a></li>
-      <li><a href="/books/frankenstein/chapter-22/">Chapter 22</a></li>
-      <li><a href="/books/frankenstein/chapter-23/">Chapter 23</a></li>
-      <li><a href="/books/frankenstein/chapter-24/">Chapter 24</a></li>
-    </ul>
   </div>
 
-  <script>
-    (function() {
-
-      // Hide top/bottom bars on scroll down, show on scroll up
-      var siteNav = document.querySelector('.site-nav');
-      var bottomBar = document.querySelector('.bottom-bar');
-      var lastScrollY = 0;
-      if (siteNav) siteNav.style.transition = 'transform 0.3s ease';
-      if (bottomBar) bottomBar.style.transition += ', transform 0.3s ease';
-      window.addEventListener('scroll', function() {
-        var y = window.scrollY;
-        if (y > lastScrollY && y > 100) {
-          if (siteNav) siteNav.style.transform = 'translateY(-100%)';
-          if (bottomBar) bottomBar.style.transform = 'translateY(100%)';
-        } else {
-          if (siteNav) siteNav.style.transform = 'translateY(0)';
-          if (bottomBar) bottomBar.style.transform = 'translateY(0)';
-        }
-        lastScrollY = y;
-      }, { passive: true });
-
-      // Arrow buttons — show on mouse movement, fade after 3s idle
-      var arrows = document.querySelectorAll('.ch-prev:not([aria-disabled]), .ch-next:not([aria-disabled])');
-      var arrowTimer = null;
-      function showArrows() {
-        arrows.forEach(function(a) { a.style.background = 'rgba(194, 83, 53, 0.25)'; });
-        arrows.forEach(function(a) { var s = a.querySelector('svg'); if (s) s.style.stroke = '#C25335'; });
-        clearTimeout(arrowTimer);
-        arrowTimer = setTimeout(function() {
-          arrows.forEach(function(a) { a.style.background = ''; });
-          arrows.forEach(function(a) { var s = a.querySelector('svg'); if (s) s.style.stroke = ''; });
-        }, 3000);
-      }
-      document.addEventListener('mousemove', showArrows, { passive: true });
-
-      // TOC overlay
-      var tocOpen = document.getElementById('toc-open');
-      var tocClose = document.getElementById('toc-close');
-      var tocOverlay = document.getElementById('toc-overlay');
-      if (tocOpen && tocOverlay) {
-        tocOpen.addEventListener('click', function() { tocOverlay.classList.add('is-open'); });
-        tocClose.addEventListener('click', function() { tocOverlay.classList.remove('is-open'); });
-        tocOverlay.addEventListener('click', function(e) { if (e.target === tocOverlay) tocOverlay.classList.remove('is-open'); });
-      }
-      // Escape closes TOC + download menu
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          if (tocOverlay) tocOverlay.classList.remove('is-open');
-          var dlMenu = document.getElementById('download-menu');
-          if (dlMenu) dlMenu.classList.remove('is-open');
-        }
-      });
-
-      // Download dropdown
-      var dlToggle = document.getElementById('download-toggle');
-      var dlMenu = document.getElementById('download-menu');
-      if (dlToggle && dlMenu) {
-        dlToggle.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var open = dlMenu.classList.toggle('is-open');
-          dlToggle.setAttribute('aria-expanded', open);
-        });
-        document.addEventListener('click', function(e) {
-          if (!dlMenu.contains(e.target) && e.target !== dlToggle) {
-            dlMenu.classList.remove('is-open');
-            dlToggle.setAttribute('aria-expanded', 'false');
-          }
-        });
-      }
-    })();
-  </script>
-  <script>
-    (function() {
-      // Cover image slideshow
-      var imgs = document.querySelectorAll('.cover-hero-img img');
-      if (imgs.length > 1) {
-        var idx = 0;
-        setInterval(function() {
-          imgs[idx].classList.remove('is-active');
-          idx = (idx + 1) % imgs.length;
-          imgs[idx].classList.add('is-active');
-        }, 3000);
-      }
-      // Author headshot slideshow
-      var heads = document.querySelectorAll('.author-headshot img');
-      if (heads.length > 1) {
-        var hi = 0;
-        setInterval(function() {
-          heads[hi].classList.remove('is-active');
-          hi = (hi + 1) % heads.length;
-          heads[hi].classList.add('is-active');
-        }, 4000);
-      }
-    })();
-  </script>
+  <script src="/src/js/book-chrome.js"></script>
+  <script src="/src/js/reading-modal.js"></script>
+  <script src="/src/js/document-template.js"></script>
 
 </body>
 </html>
