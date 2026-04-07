@@ -46,16 +46,31 @@
   <script src="/src/js/site-nav.js"></script>
 
   <style>
-    /* ── Skeuomorphic Book Cover Hero ── */
+    /* ── Split Layout: Book Cover + About ── */
     .cover-hero {
       background: #1a1510;
-      padding: 60px 2rem 80px;
       display: flex;
+      min-height: calc(100vh - 64px);
+    }
+    .cover-hero-left {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .cover-hero-right {
+      flex: 1;
+      background: #ffffff;
+      padding: 48px 40px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
       justify-content: center;
     }
     .book-cover {
       position: relative;
-      width: 420px;
+      width: min(380px, 80%);
       aspect-ratio: 2 / 3;
       border-radius: 3px 6px 6px 3px;
       overflow: hidden;
@@ -154,11 +169,16 @@
       background: linear-gradient(90deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, transparent 100%);
       z-index: 10;
     }
+    @media (max-width: 900px) {
+      .cover-hero { flex-direction: column; min-height: auto; }
+      .cover-hero-left { padding: 32px 1rem; }
+      .cover-hero-right { padding: 32px 1.5rem; }
+      .book-cover { width: min(320px, 90%); }
+    }
     @media (max-width: 600px) {
-      .cover-hero { padding: 40px 1rem 60px; }
-      .book-cover { width: 280px; }
-      .book-cover-content { padding: 24px 20px; }
-      .book-cover-title { font-size: 1.4rem; }
+      .book-cover { width: min(260px, 85%); }
+      .book-cover-content { padding: 20px 16px; }
+      .book-cover-title { font-size: 1.3rem; }
     }
 
     .cover-cta {
@@ -174,6 +194,95 @@
       transition: background 0.2s, transform 0.2s;
     }
     .cover-cta:hover { background: #a8472e; transform: translateY(-1px); }
+
+    /* ── Right panel content ── */
+    .cover-right-section {
+      margin-bottom: 24px;
+    }
+    .cover-right-section:last-child { margin-bottom: 0; }
+    .cover-right-title {
+      font-family: 'IM Fell French Canon', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 400;
+      color: #2c2420;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .cover-right-author {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #5a4f42;
+      margin-bottom: 20px;
+    }
+    .cover-right-quote {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      font-style: italic;
+      color: #5a4f42;
+      line-height: 1.6;
+      margin: 0 0 4px;
+      padding: 12px 0 12px 16px;
+      border-left: 3px double #C25335;
+    }
+    .cover-right-quote-attr {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.7rem;
+      color: #8a7e6e;
+      margin-bottom: 16px;
+    }
+    .cover-right-summary {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #2c2420;
+      margin-bottom: 16px;
+    }
+
+    /* Accordion (details/summary) */
+    .cover-accordion {
+      border-top: 1px solid rgba(107, 58, 42, 0.1);
+      margin-top: 8px;
+    }
+    .cover-accordion summary {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #C25335;
+      cursor: pointer;
+      padding: 12px 0;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cover-accordion summary::-webkit-details-marker { display: none; }
+    .cover-accordion summary::after {
+      content: '+';
+      font-size: 1rem;
+      font-weight: 400;
+      color: #C25335;
+      transition: transform 0.2s;
+    }
+    .cover-accordion[open] summary::after {
+      content: '\2212';
+    }
+    .cover-accordion .accordion-body {
+      padding-bottom: 16px;
+    }
+    .cover-accordion .accordion-body p {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: #2c2420;
+      margin-bottom: 0.8em;
+    }
+    .cover-accordion .accordion-body p:last-child { margin-bottom: 0; }
 
     /* Content sections */
     .cover-section {
@@ -325,97 +434,72 @@
       vertical-align: middle;
     }
 
-    .cover-bottom-cta {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 48px 2rem 60px;
-      text-align: center;
-    }
-
-    .cover-content {
-      max-width: 760px;
-      margin: -30px auto 0;
-      border-radius: 12px 12px 0 0;
-      position: relative;
-      z-index: 3;
-      background: #fff;
-      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.08);
-    }
     @media (max-width: 600px) {
-      .cover-content { margin-top: 0; border-radius: 0; max-width: 100%; box-shadow: none; }
-      .cover-hero { padding: 40px 1rem 32px; }
-      .cover-hero-inner { flex-direction: column; gap: 24px; align-items: flex-start; }
-      .cover-hero-img { width: 140px; height: 210px; }
-      .cover-hero-img img { width: 140px; }
-      .cover-title { font-size: 2rem; }
-      .cover-section { padding: 32px 1rem; }
-      .cover-details { flex-direction: column; gap: 16px; }
+      .cover-tags { margin-top: 12px; }
     }
   </style>
 
   <div class="cover-hero">
-    <div class="book-cover">
-      <div class="book-cover-bg"></div>
-      <div class="book-cover-overlay"></div>
-      <div class="book-cover-content">
-        <div class="book-cover-top">
-          <div class="book-cover-label">A Gothic Novel</div>
-          <h1 class="book-cover-title">Frankenstein;<br>or, The Modern<br>Prometheus</h1>
-          <div class="book-cover-author">Mary Shelley &middot; 1818</div>
-        </div>
-        <div class="book-cover-bottom">
-          <a href="/books/frankenstein/letter-1/" class="book-cover-cta">Begin Reading &rarr;</a>
+    <div class="cover-hero-left">
+      <div class="book-cover">
+        <div class="book-cover-bg"></div>
+        <div class="book-cover-overlay"></div>
+        <div class="book-cover-content">
+          <div class="book-cover-top">
+            <div class="book-cover-label">A Gothic Novel</div>
+            <h1 class="book-cover-title">Frankenstein;<br>or, The Modern<br>Prometheus</h1>
+            <div class="book-cover-author">Mary Shelley &middot; 1818</div>
+          </div>
+          <div class="book-cover-bottom">
+            <a href="/books/frankenstein/letter-1/" class="book-cover-cta">Begin Reading &rarr;</a>
+          </div>
         </div>
       </div>
+    </div>
+    <div class="cover-hero-right" id="main-content">
+
+      <div class="cover-right-section">
+        <blockquote class="cover-right-quote">&ldquo;An extraordinary tale, in which the author seems to us to disclose uncommon powers of poetic imagination.&rdquo;</blockquote>
+        <div class="cover-right-quote-attr">&mdash; Sir Walter Scott, 1818</div>
+
+        <p class="cover-right-summary">A young scientist, consumed by ambition, pushes the boundaries of nature and creates something he never expected. Told through letters and confessions, Shelley&rsquo;s novel asks questions about responsibility, compassion, and what it means to be human that remain unsettling two centuries later.</p>
+
+        <div class="cover-tags">
+          <span class="cover-tag">Gothic Fiction</span>
+          <span class="cover-tag">Science Fiction</span>
+          <span class="cover-tag">Horror</span>
+          <span class="cover-tag">Romantic Literature</span>
+        </div>
+
+        <a href="/books/frankenstein/letter-1/" class="cover-cta" style="margin-top: 20px;">Begin Reading &rarr;</a>
+      </div>
+
+      <details class="cover-accordion">
+        <summary>About the Author</summary>
+        <div class="accordion-body">
+          <p><strong>Mary Wollstonecraft Shelley (1797&ndash;1851)</strong> &mdash; Daughter of the philosopher William Godwin and the pioneering feminist writer Mary Wollstonecraft. Mary began writing Frankenstein at the age of eighteen during a stay near Lake Geneva with Percy Bysshe Shelley, Lord Byron, and John Polidori. The novel was published anonymously two years later.</p>
+        </div>
+      </details>
+
+      <details class="cover-accordion">
+        <summary>This Edition</summary>
+        <div class="accordion-body">
+          <p><strong>Text:</strong> 1831 revised edition<br>
+          <strong>Source:</strong> <a href="https://www.gutenberg.org/ebooks/84" style="color: #C25335;">Project Gutenberg (#84)</a><br>
+          <strong>Popularity:</strong> 176,000+ monthly downloads<br>
+          <strong>Accuracy:</strong> Every word verified verbatim</p>
+        </div>
+      </details>
+
+      <details class="cover-accordion">
+        <summary>Sources</summary>
+        <div class="accordion-body">
+          <p>Summary <span class="cover-ai-label">AI Generated</span>. Quote from Walter Scott&rsquo;s review in <em>Blackwood&rsquo;s Edinburgh Magazine</em>, March 1818. Publication facts from <a href="https://en.wikipedia.org/wiki/Frankenstein" style="color: #C25335;">Wikipedia</a>. Biographical facts from <a href="https://en.wikipedia.org/wiki/Mary_Shelley" style="color: #C25335;">Wikipedia</a>. Genre categories from <a href="https://www.gutenberg.org/ebooks/84" style="color: #C25335;">Project Gutenberg</a>.</p>
+        </div>
+      </details>
+
     </div>
   </div>
-
-  <main id="main-content" class="cover-content">
-
-    <div class="cover-section">
-      <div class="cover-section-label">About</div>
-      <blockquote class="cover-quote">&ldquo;An extraordinary tale, in which the author seems to us to disclose uncommon powers of poetic imagination.&rdquo;</blockquote>
-      <div class="cover-quote-attr">&mdash; Sir Walter Scott, 1818</div>
-      <p style="margin-top: 20px;">A young scientist, consumed by ambition, pushes the boundaries of nature and creates something he never expected. Told through letters and confessions, Shelley&rsquo;s novel asks questions about responsibility, compassion, and what it means to be human that remain unsettling two centuries later. Widely considered one of the greatest Romantic and Gothic novels, and one of the first works of science fiction ever written. First published anonymously in January 1818. Mary Shelley&rsquo;s name appeared on the revised edition of 1831.</p>
-      <div class="cover-tags">
-        <span class="cover-tag">Gothic Fiction</span>
-        <span class="cover-tag">Science Fiction</span>
-        <span class="cover-tag">Horror</span>
-        <span class="cover-tag">Romantic Literature</span>
-      </div>
-      <div class="cover-source">Quote from Walter Scott&rsquo;s review in <em>Blackwood&rsquo;s Edinburgh Magazine</em>, March 1818. Summary <span class="cover-ai-label">AI Generated</span>. Publication facts from <a href="https://en.wikipedia.org/wiki/Frankenstein" target="_blank" rel="noopener">Wikipedia</a>. Genre categories from <a href="https://www.gutenberg.org/ebooks/84" target="_blank" rel="noopener">Project Gutenberg</a>.</div>
-    </div>
-
-    <div class="cover-section">
-      <div class="cover-section-label">About the Author</div>
-      <div class="cover-bio-layout">
-        <div class="cover-bio-text">
-          <h2 class="cover-bio-name">Mary Wollstonecraft Shelley (1797&ndash;1851)</h2>
-          <p>Daughter of the philosopher William Godwin and the pioneering feminist writer Mary Wollstonecraft, who died eleven days after her birth. Mary began writing Frankenstein at the age of eighteen during a stay near Lake Geneva with Percy Bysshe Shelley, Lord Byron, and John Polidori. The novel was published anonymously two years later, when she was just twenty years old. She married the poet Percy Bysshe Shelley and continued writing novels, short stories, and biographical works throughout her life.</p>
-          <div class="cover-source">Biographical facts from <a href="https://en.wikipedia.org/wiki/Mary_Shelley" target="_blank" rel="noopener">Wikipedia: Mary Shelley</a>.</div>
-        </div>
-        <div class="cover-bio-portrait">
-          <img src="/books/frankenstein/images/RothwellMaryShelley.jpg" alt="Portrait of Mary Shelley by Richard Rothwell, 1840">
-        </div>
-      </div>
-    </div>
-
-    <div class="cover-section">
-      <div class="cover-section-label">This Edition</div>
-      <div class="cover-details">
-        <div class="cover-detail"><strong>Text</strong>1831 revised edition</div>
-        <div class="cover-detail"><strong>Source</strong><a href="https://www.gutenberg.org/ebooks/84" style="color: #C25335; text-decoration: none;">Project Gutenberg (#84)</a></div>
-        <div class="cover-detail"><strong>Popularity</strong>176,000+ monthly downloads</div>
-        <div class="cover-detail"><strong>Accuracy</strong>Every word verified verbatim</div>
-      </div>
-      <div class="cover-source">Download statistics from <a href="https://www.gutenberg.org/ebooks/84" target="_blank" rel="noopener">Project Gutenberg</a> (as of March 2026). Text accuracy verified using word-level diff against the original Gutenberg source.</div>
-    </div>
-
-    <div class="cover-bottom-cta">
-      <a href="/books/frankenstein/letter-1/" class="cover-cta">Begin Reading &rarr;</a>
-    </div>
-
-  </main>
 
   <div class="bottom-bar">
     <div class="bottom-bar-inner">
