@@ -220,21 +220,21 @@
       margin-bottom: 20px;
     }
     .cover-right-quote {
-      font-family: 'IM Fell French Canon', serif;
-      font-size: 1.2rem;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.9rem;
       font-weight: 400;
       font-style: italic;
-      color: #2c2420;
-      line-height: 1.5;
-      margin: 0 0 8px;
-      padding: 16px 0 16px 20px;
-      border-left: 4px double #C25335;
+      color: #5a4f42;
+      line-height: 1.7;
+      margin: 0 0 4px;
+      padding: 0;
+      border: none;
     }
     .cover-right-quote-attr {
       font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #8a7e6e;
-      margin-bottom: 20px;
+      margin-bottom: 0;
     }
     .cover-right-summary {
       font-family: 'Libre Baskerville', serif;
@@ -319,14 +319,17 @@
     }
     .cover-tag {
       font-family: 'Libre Franklin', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
+      font-size: 0.6rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #5a4f42;
-      border: 1px solid rgba(107, 58, 42, 0.2);
-      border-radius: 3px;
-      padding: 4px 10px;
+      color: #8a7e6e;
+      border: none;
+      padding: 0;
+    }
+    .cover-tag + .cover-tag::before {
+      content: '\00b7';
+      margin: 0 6px;
     }
 
     /* Blockquote */
@@ -461,10 +464,10 @@
     <div class="cover-hero-right" id="main-content">
 
       <div class="cover-right-section">
+        <p class="cover-right-summary">A young scientist, consumed by ambition, pushes the boundaries of nature and creates something he never expected. Told through letters and confessions, Shelley&rsquo;s novel asks questions about responsibility, compassion, and what it means to be human that remain unsettling two centuries later.</p>
+
         <blockquote class="cover-right-quote">&ldquo;An extraordinary tale, in which the author seems to us to disclose uncommon powers of poetic imagination.&rdquo;</blockquote>
         <div class="cover-right-quote-attr">&mdash; Sir Walter Scott, 1818</div>
-
-        <p class="cover-right-summary">A young scientist, consumed by ambition, pushes the boundaries of nature and creates something he never expected. Told through letters and confessions, Shelley&rsquo;s novel asks questions about responsibility, compassion, and what it means to be human that remain unsettling two centuries later.</p>
 
         <div class="cover-tags">
           <span class="cover-tag">Gothic Fiction</span>
