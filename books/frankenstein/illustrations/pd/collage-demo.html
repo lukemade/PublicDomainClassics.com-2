@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frankenstein — Letter 1 · Collage Mode</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #faf8f4;
+    font-family: 'Georgia', serif;
+    color: #1a1208;
+  }
+
+  /* ── One scene = one viewport ── */
+  .scene {
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh;
+    padding: 5vh 5vw;
+    gap: 5vw;
+  }
+
+  /* ── Left: collage panel — images at natural proportions ── */
+  .collage {
+    flex: 0 0 46%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 88vh;
+    overflow: hidden;
+  }
+
+  /* A horizontal group of 2+ images sitting side by side */
+  .row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  /* Individual image slot — flex value controls relative width within a row */
+  .cimg {
+    min-width: 0;
+  }
+  .cimg img {
+    display: block;
+    width: 100%;
+    height: auto;          /* natural aspect ratio — never cropped */
+    opacity: 0;
+    transition: opacity 1.4s ease;
+    box-shadow: 0 3px 22px rgba(0,0,0,0.16);
+  }
+  .cimg img.loaded { opacity: 1; }
+
+  /* Width control: default = equal share of row */
+  .cimg        { flex: 1; }
+  .cimg.w-55   { flex: 1.4; }
+  .cimg.w-45   { flex: 0.9; }
+  .cimg.w-60   { flex: 1.6; }
+  .cimg.w-40   { flex: 0.8; }
+  .cimg.w-35   { flex: 0.7; }
+
+
+  /* ── Right: text panel ── */
+  .text-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
+  }
+  .text-panel.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .chapter-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #aaa;
+  }
+
+  .sentence {
+    font-size: clamp(14px, 1.45vw, 20px);
+    line-height: 2;
+    color: #1a1208;
+  }
+
+  .caption {
+    font-size: 10px;
+    color: #bbb;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── SCENE 1: Writing from St. Petersburg ── -->
+<div class="scene">
+  <div class="collage">
+    <div class="cimg"><img src="nevsky-1799.jpg" alt="Nevsky Prospect, St. Petersburg"></div>
+    <div class="row">
+      <div class="cimg w-40"><img src="pdia-writing-hand.jpg" alt="Hand writing a letter, cyanotype"></div>
+      <div class="cimg w-60"><img src="senate-square-1799.jpg" alt="Senate Square, St. Petersburg"></div>
+    </div>
+  </div>
+  <div class="text-panel">
+    <span class="chapter-label">Letter 1 &middot; To Mrs. Saville, England &middot; St. Petersburgh, Dec. 11th</span>
+    <p class="sentence">I arrived here yesterday, and my first task is to assure my dear sister of my welfare and increasing confidence in the success of my undertaking.</p>
+    <p class="caption">Benjamin Patersen, <em>Nevsky Prospect</em>, 1799 &nbsp;·&nbsp; <em>Hand writing a letter</em>, cyanotype, c. 1890s &nbsp;·&nbsp; Patersen, <em>Senate Square</em>, 1799</p>
+  </div>
+</div>
+
+<!-- ── SCENE 2: The romantic dream of the pole ── -->
+<div class="scene">
+  <div class="collage">
+    <div class="cimg"><img src="friedrich-wanderer.jpg" alt="Wanderer above the Sea of Fog"></div>
+  </div>
+  <div class="text-panel">
+    <span class="chapter-label">Letter 1 &middot; Walton to Margaret</span>
+    <p class="sentence">I try in vain to be persuaded that the pole is the seat of frost and desolation; it ever presents itself to my imagination as the region of beauty and delight.</p>
+    <p class="caption">Caspar David Friedrich, <em>Wanderer above the Sea of Fog</em>, 1818</p>
+  </div>
+</div>
+
+<!-- ── SCENE 3: Country of eternal light ── -->
+<div class="scene">
+  <div class="collage">
+    <div class="cimg"><img src="pdia-arctic-solar-halo.jpg" alt="Arctic explorers observe a solar halo"></div>
+    <div class="row">
+      <div class="cimg"><img src="bradford-arctic-melville.jpg" alt="Arctic Summer, Melville Bay"></div>
+      <div class="cimg"><img src="church-icebergs-1861.jpg" alt="The Icebergs"></div>
+    </div>
+  </div>
+  <div class="text-panel">
+    <span class="chapter-label">Letter 1 &middot; Walton to Margaret</span>
+    <p class="sentence">There, Margaret, the sun is for ever visible, its broad disk just skirting the horizon and diffusing a perpetual splendour. What may not be expected in a country of eternal light?</p>
+    <p class="caption"><em>Arctic explorers observe a solar halo</em>, colour plate, c. 1900 &nbsp;·&nbsp; William Bradford, <em>An Arctic Summer: Boring Through the Pack in Melville Bay</em>, 1871 &nbsp;·&nbsp; Frederic Church, <em>The Icebergs</em>, 1861</p>
+  </div>
+</div>
+
+<!-- ── SCENE 4: Reading voyage accounts ── -->
+<div class="scene">
+  <div class="collage">
+    <div class="cimg"><img src="map-arctic-1855.jpg" alt="Colton Map of the Arctic, 1855"></div>
+  </div>
+  <div class="text-panel">
+    <span class="chapter-label">Letter 1 &middot; Walton to Margaret</span>
+    <p class="sentence">I have read with ardour the accounts of the various voyages which have been made in the prospect of arriving at the North Pacific Ocean through the seas which surround the pole. These volumes were my study day and night.</p>
+    <p class="caption">J. H. Colton, <em>Map of the Arctic or North Pole</em>, 1855</p>
+  </div>
+</div>
+
+<!-- ── SCENE 5: Whale-fishing on the North Sea ── -->
+<div class="scene">
+  <div class="collage">
+    <div class="cimg"><img src="storck-spitsbergen.jpg" alt="Dutch Whalers near Spitsbergen"></div>
+    <div class="row">
+      <div class="cimg w-45"><img src="pdia-north-cape.jpg" alt="North Cape, Norway"></div>
+      <div class="cimg w-55"><img src="bradford-incident-whaling.jpg" alt="An Incident of Whaling"></div>
+    </div>
+  </div>
+  <div class="text-panel">
+    <span class="chapter-label">Letter 1 &middot; Walton to Margaret</span>
+    <p class="sentence">I accompanied the whale-fishers on several expeditions to the North Sea; I voluntarily endured cold, famine, thirst, and want of sleep; I often worked harder than the common sailors during the day.</p>
+    <p class="caption">Abraham Storck, <em>Dutch Whalers near Spitsbergen</em>, 1690 &nbsp;·&nbsp; <em>North Cape, Norway</em>, photochrome, c. 1890s &nbsp;·&nbsp; William Bradford, <em>An Incident of Whaling</em>, c. 1870</p>
+  </div>
+</div>
+
+<!-- ── SCENE 6: Under-mate in a Greenland whaler ── -->
+<div class="scene">
+  <div class="collage">
+    <div class="row">
+      <div class="cimg w-55"><img src="hurley-endurance-ice.jpg" alt="Endurance trapped in pack ice, 1915"></div>
+      <div class="cimg w-45"><img src="fram-in-ice-1896.jpg" alt="The Fram in Arctic ice, 1896"></div>
+    </div>
+    <div class="cimg"><img src="bradford-whaler-arctic.jpg" alt="American Whaler in Arctic Waters"></div>
+  </div>
+  <div class="text-panel">
+    <span class="chapter-label">Letter 1 &middot; Walton to Margaret</span>
+    <p class="sentence">Twice I actually hired myself as an under-mate in a Greenland whaler, and acquitted myself to admiration. I must own I felt a little proud when my captain offered me the second dignity in the vessel.</p>
+    <p class="caption">Frank Hurley, <em>Endurance trapped in pack ice</em>, 1915 &nbsp;·&nbsp; <em>The Fram in Arctic ice</em>, 1896 &nbsp;·&nbsp; William Bradford, <em>American Whaler in Arctic Waters</em>, c. 1880</p>
+  </div>
+</div>
+
+<!-- ── SCENE 7: Russian sledge to Archangel ── -->
+<div class="scene">
+  <div class="collage">
+    <div class="cimg"><img src="sverchkov-troika.jpg" alt="A Troika Sleigh in Russia"></div>
+  </div>
+  <div class="text-panel">
+    <span class="chapter-label">Letter 1 &middot; Walton to Margaret</span>
+    <p class="sentence">This is the most favourable period for travelling in Russia. They fly quickly over the snow in their sledges; the motion is pleasant. I have no ambition to lose my life on the post-road between St. Petersburgh and Archangel.</p>
+    <p class="caption">Nikolai Sverchkov, <em>A Troika Sleigh in Russia</em>, c. 1850s</p>
+  </div>
+</div>
+
+<!-- ── SCENE 8: Departure — when shall I return? ── -->
+<div class="scene">
+  <div class="collage">
+    <div class="row">
+      <div class="cimg w-45 tilt-l1"><img src="friedrich-sailing-ship.jpg" alt="On a Sailing Ship"></div>
+      <div class="cimg w-55 tilt-r1"><img src="bradford-waiting-thaw.jpg" alt="Waiting for the Thaw"></div>
+    </div>
+  </div>
+  <div class="text-panel">
+    <span class="chapter-label">Letter 1 &middot; Walton to Margaret</span>
+    <p class="sentence">I shall depart for the latter town in a fortnight or three weeks, and my intention is to hire a ship there. When shall I return? Ah, dear sister, how can I answer this question?</p>
+    <p class="caption">Caspar David Friedrich, <em>On a Sailing Ship</em>, 1818–20 &nbsp;·&nbsp; William Bradford, <em>Waiting for the Thaw (Arctic Whaling Scene)</em>, c. 1870</p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.cimg img').forEach(function(img) {
+    if (img.complete && img.naturalWidth > 0) { img.classList.add('loaded'); }
+    else { img.addEventListener('load', function() { img.classList.add('loaded'); }); }
+  });
+
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.querySelector('.text-panel').classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.scene').forEach(function(s) { obs.observe(s); });
+</script>
+</body>
+</html>

@@ -50,6 +50,10 @@
               '<span class="settings-option-name">Sentence Focus</span>' +
               '<span class="settings-option-desc">Focus on one sentence at a time</span>' +
             '</a>' +
+            '<a href="#" data-mode="illustrated" class="settings-option">' +
+              '<span class="settings-option-name">Picture Book</span>' +
+              '<span class="settings-option-desc">One sentence at a time with paintings</span>' +
+            '</a>' +
           '</div>' +
         '</div>';
       navActionsHtml =

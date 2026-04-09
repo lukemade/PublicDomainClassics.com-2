@@ -47,31 +47,46 @@
   <script src="/src/js/site-nav.js"></script>
 
   <style>
-    /* ── Split Layout: Book Cover + About ── */
+    /* ── Full-Bleed Hero with Centered Book Cover ── */
     .cover-hero {
-      background: #1a1510;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-hero-bg {
+      position: fixed;
+      inset: -20px;
+      background-image: url('/books/frankenstein/images/Frankenstein_engraved.jpg');
+      background-size: cover;
+      background-position: center bottom;
+      filter: blur(20px) brightness(3);
+      z-index: 0;
+    }
+    .cover-hero-inner {
+      position: relative;
+      z-index: 1;
       display: flex;
+      align-items: flex-start;
       min-height: calc(100vh - 64px);
+      padding: 40px 40px 40px;
+      gap: 40px;
     }
     .cover-hero-left {
-      flex: 1;
+      flex: 0 0 60%;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 40px;
+      align-items: flex-start;
     }
     .cover-hero-right {
-      flex: 1;
+      flex: 0 0 calc(40% - 40px);
       background: #ffffff;
-      padding: 48px 40px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      border-radius: 8px;
+      padding: 40px 40px 32px;
+      max-width: 560px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
     .book-cover {
       position: relative;
-      width: 400px;
+      width: 460px;
       aspect-ratio: 2 / 3;
       border-radius: 3px 6px 6px 3px;
       overflow: hidden;
@@ -92,11 +107,11 @@
       position: absolute;
       inset: 0;
       background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.15) 0%,
-        rgba(0, 0, 0, 0.05) 30%,
-        rgba(0, 0, 0, 0.2) 60%,
-        rgba(0, 0, 0, 0.7) 100%
+        135deg,
+        rgba(0, 0, 0, 0.65) 0%,
+        rgba(0, 0, 0, 0.35) 40%,
+        rgba(0, 0, 0, 0.05) 80%,
+        transparent 100%
       );
     }
     .book-cover-content {
@@ -108,7 +123,7 @@
       padding: 32px 28px;
     }
     .book-cover-top {
-      text-align: center;
+      text-align: left;
     }
     .book-cover-label {
       font-family: 'Libre Franklin', sans-serif;
@@ -117,16 +132,25 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: rgba(232, 223, 208, 0.7);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
     }
     .book-cover-title {
       font-family: 'Fraunces', serif;
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-size: clamp(2rem, 5vw, 3rem);
       font-weight: 700;
       color: #ffffff;
       line-height: 1.15;
-      text-align: center;
+      text-align: left;
       margin-top: 8px;
       text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+    }
+    .book-cover-title .arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+      margin-left: 4px;
+    }
+    .book-cover-link:hover .book-cover-title .arrow {
+      transform: translateX(6px);
     }
     .book-cover-author {
       font-family: 'Libre Franklin', sans-serif;
@@ -135,8 +159,25 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: rgba(232, 223, 208, 0.8);
-      text-align: center;
+      text-align: left;
       margin-top: 10px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    .book-cover-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .book-cover-link:hover {
+      transform: translateY(-4px);
+    }
+    .book-cover-link:hover .book-cover {
+      box-shadow:
+        -4px 0 0 0 #2a2018,
+        -6px 0 0 0 #1a1510,
+        0 24px 72px rgba(0, 0, 0, 0.6),
+        0 12px 32px rgba(0, 0, 0, 0.4);
     }
     .book-cover-bottom {
       display: flex;
@@ -173,12 +214,13 @@
       z-index: 10;
     }
     @media (max-width: 900px) {
-      .cover-hero { flex-direction: column; min-height: auto; }
-      .cover-hero-left { padding: 32px 1rem; }
-      .cover-hero-right { padding: 32px 1.5rem; }
+      .cover-hero-inner { flex-direction: column; padding: 40px 1.5rem 32px; min-height: auto; }
+      .cover-hero-right { padding: 32px 28px 24px; margin-top: 8px; }
       .book-cover { width: min(320px, 90%); }
     }
     @media (max-width: 600px) {
+      .cover-hero-inner { padding: 32px 1rem 24px; }
+      .cover-hero-right { padding: 24px 20px 20px; }
       .book-cover { width: min(260px, 85%); }
       .book-cover-content { padding: 20px 16px; }
       .book-cover-title { font-size: 1.3rem; }
@@ -446,26 +488,29 @@
   </style>
 
   <div class="cover-hero">
-    <div class="cover-hero-left">
+    <div class="cover-hero-bg"></div>
+    <div class="cover-hero-inner">
+      <div class="cover-hero-left">
+      <a href="/books/frankenstein/letter-1/" class="book-cover-link" aria-label="Begin reading Frankenstein">
       <div class="book-cover">
         <div class="book-cover-bg"></div>
         <div class="book-cover-overlay"></div>
         <div class="book-cover-content">
           <div class="book-cover-top">
             <div class="book-cover-label">A Gothic Novel</div>
-            <h1 class="book-cover-title">Frankenstein;<br>or, The Modern<br>Prometheus</h1>
+            <h1 class="book-cover-title">Frankenstein;<br>or, The Modern<br>Prometheus <span class="arrow">&rarr;</span></h1>
             <div class="book-cover-author">Mary Shelley &middot; 1818</div>
-          </div>
-          <div class="book-cover-bottom">
-            <a href="/books/frankenstein/letter-1/" class="book-cover-cta">Begin Reading &rarr;</a>
           </div>
         </div>
       </div>
-    </div>
-    <div class="cover-hero-right" id="main-content">
+      </a>
+      </div>
+      <div class="cover-hero-right" id="main-content">
 
       <div class="cover-right-section">
         <p class="cover-right-summary">A young scientist, consumed by ambition, pushes the boundaries of nature and creates something he never expected. Told through letters and confessions, Shelley&rsquo;s novel asks questions about responsibility, compassion, and what it means to be human that remain unsettling two centuries later.</p>
+
+        <a href="/books/frankenstein/letter-1/" class="cover-cta" style="margin: 0 24px 24px 0;">Begin Reading &rarr;</a>
 
         <blockquote class="cover-right-quote">&ldquo;An extraordinary tale, in which the author seems to us to disclose uncommon powers of poetic imagination.&rdquo;</blockquote>
         <div class="cover-right-quote-attr">&mdash; Sir Walter Scott, 1818</div>
@@ -503,6 +548,7 @@
         </div>
       </details>
 
+      </div>
     </div>
   </div>
 

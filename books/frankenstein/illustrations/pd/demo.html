@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illustrated Mode — Public Domain Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1510;
+    font-family: 'Georgia', serif;
+  }
+
+  .scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── Ken Burns keyframes — 4 subtle directions ── */
+  @keyframes kb1 { from { transform: scale(1)    translate(0,    0);    } to { transform: scale(1.09) translate(-1.5%, 1%);  } }
+  @keyframes kb2 { from { transform: scale(1)    translate(0,    0);    } to { transform: scale(1.09) translate(1.5%,  -1%); } }
+  @keyframes kb3 { from { transform: scale(1.07) translate(1.5%, -1%);  } to { transform: scale(1)    translate(-1%,   1%);  } }
+  @keyframes kb4 { from { transform: scale(1.07) translate(-1%,  1%);   } to { transform: scale(1)    translate(1.5%,  -1%); } }
+
+  /* ── Full-bleed background ── */
+  .scene-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 3s ease;
+    transform-origin: center center;
+  }
+  .scene-bg.visible { opacity: 1; }
+  /* Ken Burns applied by JS via animation-name on .visible */
+
+  /* ── PORTRAIT: image full-bleed in left 50%, warm bg on right ── */
+  .scene.portrait {
+    background: #faf8f4;
+  }
+  .scene.portrait .scene-bg {
+    inset: auto;
+    left: 0; top: 0;
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+  /* Soft feather at the image/bg boundary */
+  .scene.portrait::after {
+    content: '';
+    position: absolute;
+    left: calc(50% - 100px);
+    top: 0; bottom: 0;
+    width: 100px;
+    background: linear-gradient(to right, transparent 0%, rgba(250,248,244,0.96) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── SMALL IMAGE: low-res image sits naturally in left half, warm bg on right ── */
+  .scene.small-image {
+    background: #faf8f4;
+    display: flex;
+    align-items: center;
+  }
+  .scene.small-image .scene-bg {
+    inset: auto;
+    position: relative; /* flow naturally */
+    width: auto;
+    max-width: 50%;
+    height: auto;
+    max-height: 90vh;
+    object-fit: unset;
+    opacity: 0;
+    flex-shrink: 0;
+    margin-left: 3vw;
+    border-radius: 1px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+    transition: opacity 2s ease;
+  }
+  .scene.small-image::after {
+    content: '';
+    position: absolute;
+    left: calc(50% - 80px);
+    top: 0; bottom: 0;
+    width: 80px;
+    background: linear-gradient(to right, transparent 0%, rgba(250,248,244,0.9) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── Text box — positioned by JS for landscape full-bleed ── */
+  .scene-text {
+    position: absolute;
+    z-index: 2;
+    width: 58%;
+    background: rgba(253, 251, 248, 0.97);
+    border: 1px solid rgba(180, 165, 145, 0.3);
+    border-radius: 2px;
+    padding: 32px 44px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 1s ease 0.8s, transform 1s ease 0.8s;
+    top: 50%; left: 50%;
+    translate: -50% -50%;
+  }
+  .scene-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Portrait & small-image: text in right half on warm bg, no box */
+  .scene.portrait .scene-text,
+  .scene.small-image .scene-text {
+    position: absolute;
+    left: 54%;
+    top: 50%;
+    translate: 0 -50%;
+    width: 38%;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+  }
+
+  .scene-text p {
+    color: #1a1208;
+    font-size: clamp(17px, 1.8vw, 26px);
+    line-height: 1.85;
+  }
+  .scene-text p.epigraph {
+    font-style: italic;
+    font-size: clamp(15px, 1.5vw, 22px);
+    line-height: 2.1;
+  }
+  .scene-text .attribution {
+    display: block;
+    margin-top: 14px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-style: normal;
+    color: #aaa;
+  }
+
+  /* Info icon + caption tooltip */
+  .scene-info {
+    position: absolute;
+    bottom: 16px;
+    left: 18px;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.8s ease 1.4s;
+  }
+  .scene-info.visible { opacity: 1; }
+
+  .scene-info-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.45);
+    background: rgba(0,0,0,0.25);
+    color: rgba(255,255,255,0.7);
+    font-size: 11px;
+    font-style: italic;
+    font-family: Georgia, serif;
+    line-height: 22px;
+    text-align: center;
+    cursor: default;
+    display: block;
+    backdrop-filter: blur(2px);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .scene.portrait .scene-info-btn,
+  .scene.small-image .scene-info-btn {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(0,0,0,0.18);
+  }
+
+  .scene-info-text {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    font-size: 9.5px;
+    font-style: italic;
+    line-height: 1.6;
+    max-width: 280px;
+    white-space: nowrap;
+    color: rgba(255,255,255,0.75);
+    background: rgba(0,0,0,0.55);
+    padding: 6px 10px;
+    border-radius: 2px;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .scene-info:hover .scene-info-text { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- SCENE 1: Nevsky Prospect -->
+<div class="scene" id="scene1">
+  <img class="scene-bg" src="nevsky-1799.jpg" alt="" id="img1">
+  <div class="scene-text" id="text1">
+    <p>I arrived here yesterday, and my first task is to assure my dear sister of my welfare and increasing confidence in the success of my undertaking.</p>
+  </div>
+  <div class="scene-info" id="cap1">
+    <span class="scene-info-btn">i</span>
+    <span class="scene-info-text">Nevsky Prospect, St. Petersburg — Benjamin Patersen, 1799</span>
+  </div>
+</div>
+
+<!-- SCENE 2: Senate Square -->
+<div class="scene" id="scene2">
+  <img class="scene-bg" src="senate-square-1799.jpg" alt="" id="img2">
+  <div class="scene-text" id="text2">
+    <p>I am already far north of London, and as I walk in the streets of Petersburgh, I feel a cold northern breeze play upon my cheeks, which braces my nerves and fills me with delight.</p>
+  </div>
+  <div class="scene-info" id="cap2">
+    <span class="scene-info-btn">i</span>
+    <span class="scene-info-text">Senate Square with the Bronze Horseman — Benjamin Patersen, 1799</span>
+  </div>
+</div>
+
+<!-- SCENE 3: Paradise Lost -->
+<div class="scene" id="scene3">
+  <img class="scene-bg" src="john-martin-satan-1824.jpg" alt="" id="img3">
+  <div class="scene-text" id="text3">
+    <p class="epigraph">
+      Did I request thee, Maker, from my clay<br>
+      To mould me Man, did I solicit thee<br>
+      From darkness to promote me?
+      <span class="attribution">— John Milton, Paradise Lost (X. 743–45)</span>
+    </p>
+  </div>
+  <div class="scene-info" id="cap3">
+    <span class="scene-info-btn">i</span>
+    <span class="scene-info-text">Satan Arousing the Fallen Angels — John Martin, 1824. Illus. for Milton's Paradise Lost.</span>
+  </div>
+</div>
+
+<script>
+  var COLS = 3, ROWS = 3;
+  var KB_VARIANTS = ['kb1','kb2','kb3','kb4'];
+  var kbIndex = 0;
+
+  // Low-res threshold: if image needs >1.5x upscale to fill viewport, use small-image layout
+  var LOW_RES_SCALE = 1.5;
+
+  function isLowRes(img) {
+    var scaleW = window.innerWidth  / img.naturalWidth;
+    var scaleH = window.innerHeight / img.naturalHeight;
+    return Math.min(scaleW, scaleH) > LOW_RES_SCALE;
+  }
+
+  function applyKenBurns(img) {
+    var name = KB_VARIANTS[kbIndex % KB_VARIANTS.length];
+    kbIndex++;
+    img.style.animationName           = name;
+    img.style.animationDuration       = '28s';
+    img.style.animationTimingFunction = 'ease-in-out';
+    img.style.animationIterationCount = 'infinite';
+    img.style.animationDirection      = 'alternate';
+    img.style.animationFillMode       = 'both';
+  }
+
+  function findOpenRegion(img) {
+    try {
+      var SAMPLE = 120;
+      var canvas = document.createElement('canvas');
+      canvas.width  = COLS * SAMPLE;
+      canvas.height = ROWS * SAMPLE;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      var best = { variance: Infinity, col: 1, row: 1 };
+      for (var row = 0; row < ROWS; row++) {
+        for (var col = 0; col < COLS; col++) {
+          var data = ctx.getImageData(col * SAMPLE, row * SAMPLE, SAMPLE, SAMPLE).data;
+          var sum = 0, n = data.length / 4;
+          for (var i = 0; i < data.length; i += 4)
+            sum += data[i] * 0.299 + data[i+1] * 0.587 + data[i+2] * 0.114;
+          var mean = sum / n, vsum = 0;
+          for (var i = 0; i < data.length; i += 4) {
+            var b = data[i] * 0.299 + data[i+1] * 0.587 + data[i+2] * 0.114;
+            vsum += (b - mean) * (b - mean);
+          }
+          var variance = vsum / n;
+          if (variance < best.variance) best = { variance: variance, col: col, row: row };
+        }
+      }
+      return best;
+    } catch(e) { return null; }
+  }
+
+  function placeText(textEl, region) {
+    if (!region) return;
+    var cx = Math.max(32, Math.min(68, ((region.col + 0.5) / COLS) * 100));
+    var cy = Math.max(20, Math.min(80, ((region.row + 0.5) / ROWS) * 100));
+    textEl.style.left    = cx + '%';
+    textEl.style.top     = cy + '%';
+    textEl.style.translate = '-50% -50%';
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (!e.isIntersecting) return;
+      var s   = e.target;
+      var img = s.querySelector('.scene-bg');
+      var txt = s.querySelector('.scene-text');
+      var cap = s.querySelector('.scene-info');
+
+      function activate() {
+        var portrait  = img.naturalHeight > img.naturalWidth;
+        var smallImg  = !portrait && isLowRes(img);
+
+        if (portrait)       s.classList.add('portrait');
+        else if (smallImg)  s.classList.add('small-image');
+        else {
+          // Full-bleed landscape: find open space + ken burns
+          placeText(txt, findOpenRegion(img));
+          applyKenBurns(img);
+        }
+
+        // Ken burns on portrait/small too, but only within their constrained area
+        if (portrait || smallImg) applyKenBurns(img);
+
+        img.classList.add('visible');
+        txt.classList.add('visible');
+        cap.classList.add('visible');
+      }
+
+      if (img.complete && img.naturalWidth) {
+        activate();
+      } else {
+        img.addEventListener('load', activate, { once: true });
+        img.addEventListener('error', function() {
+          img.classList.add('visible');
+          txt.classList.add('visible');
+          cap.classList.add('visible');
+        }, { once: true });
+      }
+
+      observer.unobserve(s);
+    });
+  }, { threshold: 0.4 });
+
+  document.querySelectorAll('.scene').forEach(function(s) { observer.observe(s); });
+</script>
+</body>
+</html>

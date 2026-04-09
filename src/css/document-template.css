@@ -592,7 +592,7 @@ blockquote {
   font-weight: 300;
   font-style: italic;
   color: #5a4f42;
-  font-size: 0.95em;
+  font-size: 0.82em;
   line-height: 1.7;
 }
 .epigraph-attribution {
@@ -1298,4 +1298,392 @@ blockquote {
     padding: 22px 20px 20px;
     gap: 16px;
   }
+}
+
+/* ── ILLUSTRATED MODE ─────────────────────────────────────────────────── */
+
+@keyframes il-kb-a {
+  from { transform: scale(1)     translate(0,      0); }
+  to   { transform: scale(1.03)  translate(-0.5%,  0.3%); }
+}
+@keyframes il-kb-b {
+  from { transform: scale(1.03)  translate( 0.5%, -0.3%); }
+  to   { transform: scale(1)     translate(0,      0); }
+}
+
+.illustrated-reader {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.illustrated-reader.is-active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Title-only cover slide: hide left panel, center title full-width */
+.illustrated-reader.il-title-slide .il-left {
+  display: none;
+}
+.illustrated-reader.il-title-slide .il-right {
+  width: 100%;
+  padding: 5vh 4vw;
+  align-items: center;
+  justify-content: center;
+}
+.illustrated-reader.il-title-slide .il-text.il-heading {
+  font-size: clamp(2rem, 7vw, 5.5rem);
+  text-align: center;
+  max-width: 80vw;
+  line-height: 1.2;
+}
+
+/* ── Image panel: fills remaining 75% ── */
+.il-left {
+  flex: 1;
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #1a1510;
+  overflow: hidden;
+}
+
+/* ── Two-slot image wrapper for cross-fade / double exposure ── */
+.il-img-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg, #faf8f4);
+}
+
+.il-img-wrap img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  filter: contrast(1.4) sepia(0.3) grayscale(0.3);
+  transition: opacity 1.4s ease, transform 1.2s ease;
+  transform-origin: center center;
+}
+
+.il-img-wrap img.il-img-shrink {
+  transform: scale(0.44);
+  z-index: 2;
+}
+
+.il-img-wrap img.il-img-cover {
+  object-fit: cover;
+}
+
+/* Fallback images: use standard Ken Burns like matched images */
+.il-img-wrap img.il-img-panning {
+  object-fit: cover;
+  transform: none;
+}
+
+.il-img-wrap img.il-img-visible {
+  opacity: 1;
+  animation: il-kb-a 24s ease-in-out infinite alternate;
+}
+
+.il-img-wrap img.il-img-visible.il-kb-b {
+  animation-name: il-kb-b;
+}
+
+
+/* ── Text panel: left 25% of screen ── */
+.il-right {
+  order: -1;
+  width: 43%;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5vh 28px 76px;
+  background: var(--bg, #faf8f4);
+  z-index: 5;
+  gap: 16px;
+}
+.il-right .il-text {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.il-chapter-label {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted, #5a4f42);
+  opacity: 0.65;
+  margin-bottom: 1.2em;
+}
+
+.il-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(17px, 1.4vw, 22px);
+  line-height: 1.85;
+  color: #1a1208;
+  transition: opacity 0.15s ease;
+  text-align: left;
+}
+
+.il-text.il-fading { opacity: 0; }
+
+.il-text.il-heading {
+  font-family: 'IM Fell French Canon', serif;
+  font-size: clamp(20px, 2.2vw, 32px);
+  font-style: normal;
+  color: var(--accent, #6b3a2a);
+  line-height: 1.3;
+}
+
+.il-text.il-epigraph {
+  font-family: 'IM Fell English', serif;
+  font-size: clamp(15px, 1.3vw, 20px);
+  font-style: italic;
+  color: var(--muted, #5a4f42);
+  line-height: 1.8;
+}
+
+/* ── Caption: pinned to bottom of left panel ── */
+.il-caption {
+  flex-shrink: 0;
+  text-align: left;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 10px;
+  font-style: italic;
+  color: var(--muted, #5a4f42);
+  line-height: 1.4;
+  margin-top: auto;
+}
+.il-caption a {
+  color: var(--accent, #6b3a2a);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s;
+}
+.il-caption a:hover {
+  color: #4a2218;
+}
+
+/* ── Image grid: cover slide showing all chapter illustrations ── */
+.il-grid {
+  display: none;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(80px, 1fr);
+  gap: 3px;
+  padding: 3px;
+  background: var(--bg, #faf8f4);
+  align-content: start;
+}
+.il-grid.il-grid-visible {
+  display: grid;
+}
+.il-grid-cell {
+  background-size: cover;
+  background-position: center;
+  background-color: var(--surface, #f0ece4);
+}
+.il-grid-cell.il-grid-wide {
+  grid-column: span 2;
+}
+.il-grid-cell.il-grid-tall {
+  grid-row: span 2;
+}
+/* Chapter title cell in the grid */
+.il-grid-title {
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  font-family: 'IM Fell French Canon', serif;
+  font-size: clamp(16px, 1.8vw, 26px);
+  font-style: italic;
+  color: var(--accent, #6b3a2a);
+  background: var(--bg, #faf8f4);
+  border: 1px solid var(--surface, #f0ece4);
+}
+
+@media (max-width: 768px) {
+  .illustrated-reader { flex-direction: column; }
+  .il-left { width: 100%; height: 50%; flex-shrink: 0; }
+  .il-right { order: 0; width: 100%; flex: 1; height: auto; padding: 2.5vh 5vw 72px; }
+  .il-text { font-size: clamp(15px, 3.5vw, 20px); }
+}
+
+/* ── Reading Settings Modal ──────────────────────────────────── */
+.rdg-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 21, 16, 0.72);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.rdg-overlay.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+.rdg-modal {
+  background: var(--bg, #faf8f4);
+  border-radius: 12px;
+  padding: 36px 32px 28px;
+  width: min(460px, calc(100vw - 32px));
+  position: relative;
+  transform: translateY(10px);
+  transition: transform 0.22s ease;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.32);
+}
+.rdg-overlay.is-open .rdg-modal {
+  transform: translateY(0);
+}
+.rdg-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--muted, #5a4f42);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+.rdg-close:hover { color: var(--text, #2c2420); }
+.rdg-close svg { width: 16px; height: 16px; }
+.rdg-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text, #2c2420);
+  margin: 0 0 20px;
+  letter-spacing: 0.01em;
+}
+.rdg-section-label {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted, #5a4f42);
+  margin-bottom: 10px;
+}
+.rdg-modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.rdg-mode-card {
+  background: transparent;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  padding: 18px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font: inherit;
+}
+.rdg-mode-card:hover {
+  border-color: rgba(107, 58, 42, 0.35);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.rdg-mode-card.active {
+  border-color: var(--accent, #6b3a2a);
+  background: #fff;
+}
+.rdg-radio {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.2);
+  margin-bottom: 10px;
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+.rdg-radio::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.15s;
+}
+.rdg-mode-card.active .rdg-radio {
+  border-color: var(--accent, #6b3a2a);
+}
+.rdg-mode-card.active .rdg-radio::after {
+  background: var(--accent, #6b3a2a);
+}
+.rdg-mode-card--wide {
+  grid-column: 1 / -1;
+}
+.rdg-mode-name {
+  font-family: 'Fraunces', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text, #2c2420);
+}
+.rdg-mode-desc {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 0.775rem;
+  color: var(--muted, #5a4f42);
+  line-height: 1.5;
+}
+.rdg-cta {
+  width: 100%;
+  background: #C25335;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 13px 24px;
+  font-family: 'Fraunces', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.18s;
+  letter-spacing: 0.02em;
+}
+.rdg-cta:hover { background: #a8472e; }
+@media (max-width: 400px) {
+  .rdg-modes { grid-template-columns: 1fr; }
 }

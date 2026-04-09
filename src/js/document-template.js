@@ -161,71 +161,20 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   });
 });
 
-// ── BACK TO TOP + TOP NAV IDLE FADE ──
+// ── TOP NAV IDLE FADE ──
 (function () {
   var article = document.getElementById('main-content');
   if (!article) return;
 
-  // Create floating action buttons container
-  var actions = document.createElement('div');
-  actions.className = 'floating-actions';
-  actions.id = 'floating-actions';
-
-  // Fullscreen toggle
-  var btnFs = document.createElement('button');
-  btnFs.className = 'floating-btn';
-  btnFs.title = 'Toggle fullscreen';
-  btnFs.setAttribute('aria-label', 'Toggle fullscreen');
-  var fsExpandIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
-  var fsCollapseIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
-  btnFs.innerHTML = fsExpandIcon;
-  actions.appendChild(btnFs);
-
-  btnFs.addEventListener('click', function () {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(function () {});
-    } else {
-      document.exitFullscreen();
-    }
-  });
-
-  document.addEventListener('fullscreenchange', function () {
-    btnFs.innerHTML = document.fullscreenElement ? fsCollapseIcon : fsExpandIcon;
-    btnFs.title = document.fullscreenElement ? 'Exit fullscreen' : 'Toggle fullscreen';
-  });
-
-  // Back to top
-  var btn = document.createElement('button');
-  btn.className = 'floating-btn';
-  btn.title = 'Back to top';
-  btn.setAttribute('aria-label', 'Back to top');
-  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
-  actions.appendChild(btn);
-
-  document.body.appendChild(actions);
-
-  btn.addEventListener('click', function () {
-    window.scrollTo(0, 0);
-  });
-
-  // Scroll handler — show/hide button + top nav on scroll-up only
+  // Scroll handler — top nav on scroll-up only
   var lastScrollY = 0;
   var ticking = false;
 
   function onScroll() {
-    var scrolled = window.scrollY - article.offsetTop;
     var topNav = document.getElementById('top-nav');
     var scrollingUp = window.scrollY < lastScrollY;
     var nearTop = window.scrollY < 400;
 
-    // Show floating buttons when past the hero
-    if (scrolled > 200) {
-      actions.classList.add('is-visible');
-    } else {
-      actions.classList.remove('is-visible');
-    }
-
-    // Top nav: show on scroll up or near top, hide on scroll down
     if (topNav) {
       if (nearTop || scrollingUp) {
         topNav.classList.add('is-active');
@@ -268,10 +217,49 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   var modeLinks = modeDropdown.querySelectorAll('.mode-dropdown-list a');
   var currentMode = 'scroll';
 
-  // Toggle dropdown
+  // Toggle dropdown (or open reading modal if available)
   modeToggle.addEventListener('click', function (e) {
     e.stopPropagation();
-    modeDropdown.classList.toggle('is-open');
+    if (typeof window.openReadingModal === 'function') {
+      window.openReadingModal({
+        mode: currentMode,
+        isCover: false,
+        onConfirm: function (chosenMode) {
+          if (chosenMode === currentMode) return;
+          // On cover page (no .article-body), just save the preference and stay
+          var isOnCoverPage = !document.querySelector('.article-body');
+          if (isOnCoverPage) {
+            try {
+              if (chosenMode !== 'scroll') sessionStorage.setItem('pdc-mode', chosenMode);
+              else sessionStorage.removeItem('pdc-mode');
+            } catch (e) {}
+            currentMode = chosenMode;
+            return;
+          }
+          var prevMode = currentMode;
+          currentMode = chosenMode;
+          var matchingLink = null;
+          modeLinks.forEach(function (l) {
+            if (l.dataset.mode === chosenMode) matchingLink = l;
+            l.classList.toggle('active', l.dataset.mode === chosenMode);
+          });
+          if (matchingLink) modeCurrentLabel.textContent = matchingLink.querySelector('.settings-option-name') ? matchingLink.querySelector('.settings-option-name').textContent : matchingLink.textContent;
+          if (chosenMode === 'illustrated' && !window.PDC_ILLUSTRATED_ENABLED) chosenMode = 'scroll';
+          if (chosenMode === 'sentence') {
+            if (prevMode === 'illustrated') exitIllustratedMode();
+            enterSentenceMode();
+          } else if (chosenMode === 'illustrated') {
+            if (prevMode === 'sentence') exitSentenceMode();
+            enterIllustratedMode();
+          } else {
+            if (prevMode === 'sentence') exitSentenceMode();
+            if (prevMode === 'illustrated') exitIllustratedMode();
+          }
+        }
+      });
+    } else {
+      modeDropdown.classList.toggle('is-open');
+    }
   });
   document.addEventListener('click', function (e) {
     if (!modeDropdown.contains(e.target)) modeDropdown.classList.remove('is-open');
@@ -282,16 +270,23 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     a.addEventListener('click', function (e) {
       e.preventDefault();
       var mode = a.dataset.mode;
+      if (mode === 'illustrated' && !window.PDC_ILLUSTRATED_ENABLED) return;
       if (mode === currentMode) { modeDropdown.classList.remove('is-open'); return; }
+      var prevMode = currentMode;
       currentMode = mode;
       modeCurrentLabel.textContent = a.textContent;
       modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === mode); });
       modeDropdown.classList.remove('is-open');
 
       if (mode === 'sentence') {
+        if (prevMode === 'illustrated') exitIllustratedMode();
         enterSentenceMode();
+      } else if (mode === 'illustrated') {
+        if (prevMode === 'sentence') exitSentenceMode();
+        enterIllustratedMode();
       } else {
-        exitSentenceMode();
+        if (prevMode === 'sentence') exitSentenceMode();
+        if (prevMode === 'illustrated') exitIllustratedMode();
       }
     });
   });
@@ -332,7 +327,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       clone.querySelectorAll('br').forEach(function (br) { br.replaceWith(' '); });
       var epText = clone.textContent.trim().replace(/\s+/g, ' ');
       if (epText) {
-        result.push({ text: epText, type: 'sentence', chapterId: chapterId, chapterLabel: chapterTitle });
+        result.push({ text: epText, type: 'epigraph', chapterId: chapterId, chapterLabel: chapterTitle });
       }
     }
 
@@ -403,9 +398,11 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       }
     }
 
-    // Fallback: extract from current page only
+    // Derive chapter title from page <title> ("Letter 1 — Frankenstein — …" → "Letter 1")
     var chapterTitleEl = document.querySelector('.book-header-chapter');
-    var chTitle = chapterTitleEl ? chapterTitleEl.textContent.trim() : 'Chapter';
+    var chTitle = chapterTitleEl
+      ? chapterTitleEl.textContent.trim()
+      : (document.title.split('—')[0].trim() || 'Chapter');
     var chId = chTitle.toLowerCase().replace(/\s+/g, '-');
     sentences.push({ text: chTitle, type: 'heading', chapterId: chId, chapterLabel: chTitle });
 
@@ -413,6 +410,126 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     bodies.forEach(function (body) {
       extractFromBody(body, chId, chTitle, sentences);
     });
+
+    return sentences;
+  }
+
+  // Extract whole paragraphs (for picture book mode)
+  function extractParagraphsFromCurrentPage() {
+    var article = document.getElementById('main-content');
+    if (!article) return;
+
+    var epigraph = article.querySelector('.epigraph');
+    if (epigraph) {
+      var clone = epigraph.cloneNode(true);
+      clone.querySelectorAll('br').forEach(function (br) { br.replaceWith(' '); });
+      var epText = clone.textContent.trim().replace(/\s+/g, ' ');
+      if (epText) sentences.push({ text: epText, type: 'epigraph', chapterId: null });
+    }
+
+    var chapterTitleEl = document.querySelector('.book-header-chapter');
+    var chTitle = chapterTitleEl
+      ? chapterTitleEl.textContent.trim()
+      : (document.title.split('—')[0].trim() || 'Chapter');
+    var chId = chTitle.toLowerCase().replace(/\s+/g, '-');
+    sentences.push({ text: chTitle, type: 'heading', chapterId: chId, chapterLabel: chTitle });
+
+    var bodies = article.querySelectorAll('.section-body');
+    bodies.forEach(function (body) {
+      var children = body.children;
+      for (var c = 0; c < children.length; c++) {
+        var el = children[c];
+
+        if (el.classList.contains('letter-salutation') || el.classList.contains('letter-dateline')) {
+          var groupParts = [];
+          while (c < children.length &&
+            (children[c].classList.contains('letter-salutation') || children[c].classList.contains('letter-dateline'))) {
+            var t = children[c].textContent.trim();
+            if (t) groupParts.push(t);
+            c++;
+          }
+          c--;
+          if (groupParts.length) {
+            sentences.push({ text: groupParts.join('\n'), type: 'sentence', chapterId: chId, chapterLabel: chTitle });
+          }
+          continue;
+        }
+
+        if (el.classList.contains('poetry-block')) {
+          var lines = [];
+          el.querySelectorAll('.poetry-line').forEach(function (pl) {
+            var lt = pl.textContent.trim();
+            if (lt) lines.push(lt);
+          });
+          if (lines.length) {
+            sentences.push({ text: lines.join('\n'), type: 'sentence', chapterId: chId, chapterLabel: chTitle });
+          }
+          continue;
+        }
+
+        if (el.classList.contains('poetry-attribution')) continue;
+
+        if (el.tagName === 'P') {
+          var raw = el.textContent.trim();
+          if (raw) {
+            // Split long paragraphs at sentence boundaries (~300 chars per chunk)
+            if (raw.length > 300) {
+              var chunks = [];
+              var remaining = raw;
+              while (remaining.length > 300) {
+                // Find sentence ends in the first 350 chars, pick the one nearest 300
+                var bestSplit = -1, bestDist = remaining.length;
+                var re = /[.;!?]\s/g, m;
+                while ((m = re.exec(remaining)) !== null) {
+                  if (m.index < 50) continue; // don't split too early
+                  var dist = Math.abs(m.index - 280);
+                  if (dist < bestDist) { bestDist = dist; bestSplit = m.index + 1; }
+                }
+                if (bestSplit > 0 && bestSplit < remaining.length - 30) {
+                  chunks.push(remaining.substring(0, bestSplit).trim());
+                  remaining = remaining.substring(bestSplit).trim();
+                } else {
+                  break; // no good split point, keep as-is
+                }
+              }
+              chunks.push(remaining.trim());
+              for (var ci = 0; ci < chunks.length; ci++) {
+                if (chunks[ci]) sentences.push({ text: chunks[ci], type: 'sentence', chapterId: chId, chapterLabel: chTitle });
+              }
+            } else {
+              sentences.push({ text: raw, type: 'sentence', chapterId: chId, chapterLabel: chTitle });
+            }
+          }
+        }
+
+        if (el.classList.contains('letter-closing') || el.classList.contains('letter-signature')) {
+          var t = el.textContent.trim();
+          if (t) sentences.push({ text: t, type: 'sentence', chapterId: chId, chapterLabel: chTitle });
+        }
+      }
+    });
+
+    // Merge short consecutive paragraphs so two fit on one slide
+    var merged = [];
+    for (var i = 0; i < sentences.length; i++) {
+      var s = sentences[i];
+      if (s.type === 'sentence' && s.text.length < 150 &&
+          i + 1 < sentences.length && sentences[i + 1].type === 'sentence' &&
+          sentences[i + 1].text.length < 150 &&
+          s.text.length + sentences[i + 1].text.length < 300) {
+        merged.push({
+          text: s.text + '\n\n' + sentences[i + 1].text,
+          type: 'sentence',
+          chapterId: s.chapterId,
+          chapterLabel: s.chapterLabel
+        });
+        i++; // skip next
+      } else {
+        merged.push(s);
+      }
+    }
+    sentences.length = 0;
+    for (var i = 0; i < merged.length; i++) sentences.push(merged[i]);
 
     return sentences;
   }
@@ -611,7 +728,6 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     fragmentTimers.forEach(function (t) { clearTimeout(t); });
     fragmentTimers = [];
 
-    // No cover slide — go straight to sentences
     coverEl.style.display = 'none';
     bodyEl.style.display = '';
 
@@ -715,7 +831,14 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   function go(delta) {
     if (transitioning) return;
     var next = sentenceIndex + delta;
-    if (next < -1 || next >= sentences.length) return;
+    // Back from first sentence → go to cover page
+    if (next < 0 && delta < 0) {
+      var navMount = document.getElementById('site-nav-mount');
+      var coverUrl = navMount ? (navMount.getAttribute('data-book-url') || '/') : '/';
+      window.location.href = coverUrl;
+      return;
+    }
+    if (next >= sentences.length) return;
     transitioning = true;
     sentenceIndex = next;
     renderSentence(delta);
@@ -769,6 +892,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   }
 
   function enterSentenceMode() {
+    try { sessionStorage.setItem('pdc-mode', 'sentence'); } catch (e) {}
     buildReader();
     setupSentenceBottomBar();
 
@@ -793,6 +917,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     extractAllChapters(function () {
       if (!sentences.length) return;
 
+      // Start at first sentence unless deep-linking to a specific sentence
       sentenceIndex = 0;
 
       // Restore from URL hash
@@ -837,6 +962,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   });
 
   function exitSentenceMode() {
+    try { sessionStorage.removeItem('pdc-mode'); } catch (e) {}
     window._sentenceModeActive = false;
     window._sentenceGoToChapter = null;
     if (reader) {
@@ -875,7 +1001,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
   // Keyboard navigation
   document.addEventListener('keydown', function (e) {
-    if (currentMode !== 'sentence') return;
+    if (currentMode !== 'sentence' && currentMode !== 'illustrated') return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
       go(1);
@@ -883,11 +1009,11 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       e.preventDefault();
       go(-1);
     } else if (e.key === 'Escape') {
-      // Switch back to scroll mode
       currentMode = 'scroll';
       modeCurrentLabel.textContent = 'Scroll';
       modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === 'scroll'); });
       exitSentenceMode();
+      exitIllustratedMode();
     }
   });
 
@@ -897,22 +1023,604 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   var SWIPE_THRESHOLD = 50;
 
   document.addEventListener('touchstart', function (e) {
-    if (currentMode !== 'sentence') return;
+    if (currentMode !== 'sentence' && currentMode !== 'illustrated') return;
     touchStartX = e.changedTouches[0].clientX;
     touchStartY = e.changedTouches[0].clientY;
   }, { passive: true });
 
   document.addEventListener('touchend', function (e) {
-    if (currentMode !== 'sentence') return;
+    if (currentMode !== 'sentence' && currentMode !== 'illustrated') return;
     var dx = e.changedTouches[0].clientX - touchStartX;
     var dy = e.changedTouches[0].clientY - touchStartY;
-    // Only trigger if horizontal swipe is dominant
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      // Swipe: left swipe = next, right swipe = prev
       if (dx < 0) {
-        go(1);  // swipe left = next
+        go(1);
       } else {
-        go(-1); // swipe right = prev
+        go(-1);
+      }
+    } else if (Math.abs(dx) < 15 && Math.abs(dy) < 15) {
+      // Tap: right half = next, left half = prev
+      var tapX = e.changedTouches[0].clientX;
+      if (tapX > window.innerWidth * 0.35) {
+        go(1);
+      } else {
+        go(-1);
       }
     }
   }, { passive: true });
+
+  // ── ILLUSTRATED MODE ──────────────────────────────────────────────────────
+
+  var illustratedReader = null;
+  var ilSavedBottomBarHTML = null;
+  var ilManifest = null;          // loaded from pd/manifest.json
+  var ilFallback = null;          // per-chapter fallback: {src, caption, url, positions}
+  var ilCompletedSrcs = {};       // images that were shown then left — can never return
+  var ilCurrentSrc = null;        // the image currently being shown
+  var ilLastSrc = null;           // last successfully loaded image src
+  var ilLastPanPos = null;        // last pan position for fallback panning
+  var ilLastCaption = '';
+  var ilLastPosition = null;      // {left, top} from open-space detection
+  var ilKbIndex = 0;
+  var ilSlot = 'a';             // which img slot is currently active ('a' or 'b')
+  var ilLastMode = null;      // 'thought' | 'collage' | null
+  var ilChapterOffset = 0;    // sentences in chapters before this one
+  var ilGlobalTotal = 0;      // total sentences across all chapters
+  var ilNextChapterUrl = null;
+  var ilPrevChapterUrl = null;
+  var ilLastRowsKey = null;   // JSON key of last rendered rows (detects scene change)
+  var ilThoughtMode = false;  // true when manifest uses {bg, scenes} format
+  var IL_KB = ['il-kb1','il-kb2','il-kb3','il-kb4'];
+  var IL_LOW_RES_SCALE = 1.5;
+
+  function ilGetBookUrl() {
+    var navMount = document.getElementById('site-nav-mount');
+    return navMount ? (navMount.getAttribute('data-book-url') || '/') : '/';
+  }
+
+  // Load the manifest JSON once, then call cb(manifest)
+  // Supports flat array (single chapter) or keyed object {"chapter-slug": [...]}
+  function ilLoadManifest(cb) {
+    if (ilManifest) { cb(ilManifest); return; }
+    var url = ilGetBookUrl() + 'illustrations/pd/manifest.json';
+    fetch(url)
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (data) {
+        if (Array.isArray(data)) {
+          ilManifest = data;
+        } else {
+          // Extract chapter slug from URL path: /books/frankenstein/letter-1/ → 'letter-1'
+          var pathParts = location.pathname.replace(/\/$/, '').split('/');
+          var chapterSlug = pathParts[pathParts.length - 1];
+          var chapterData = data && data[chapterSlug];
+          if (Array.isArray(chapterData)) {
+            ilManifest = chapterData;
+          } else if (chapterData && Array.isArray(chapterData.images)) {
+            // New format: {fallback: {...}, images: [...]}
+            ilManifest = chapterData.images;
+            ilFallback = chapterData.fallback || null;
+          } else {
+            ilManifest = [];
+          }
+        }
+        cb(ilManifest);
+      })
+      .catch(function () { ilManifest = []; cb([]); });
+  }
+
+  // Match current sentence text against manifest, return entry or null
+  // Match sentence text against manifest. Once an image is shown then
+  // replaced by a different one, it can never return.
+  function ilFindImage(text) {
+    var found = null;
+    if (ilManifest && ilManifest.length) {
+      for (var i = 0; i < ilManifest.length; i++) {
+        var entry = ilManifest[i];
+        if (ilCompletedSrcs[entry.src]) continue;
+        for (var j = 0; j < entry.matches.length; j++) {
+          if (text.indexOf(entry.matches[j]) >= 0) {
+            found = entry;
+            break;
+          }
+        }
+        if (found) break;
+      }
+    }
+    // No specific match — use fallback
+    if (!found && ilFallback && ilFallback.src && !ilCompletedSrcs[ilFallback.src]) {
+      found = {
+        src: ilFallback.src,
+        caption: ilFallback.caption || '',
+        url: ilFallback.url || '',
+        cover: true
+      };
+    }
+    // If switching away from current image, mark it completed
+    if (found && found.src !== ilCurrentSrc && ilCurrentSrc) {
+      ilCompletedSrcs[ilCurrentSrc] = true;
+    }
+    if (found) ilCurrentSrc = found.src;
+    return found;
+  }
+
+  // Snap-to-zone positioning: sample 5 fixed anchor zones, pick the calmest
+  // Zones: top-centre, bottom-centre, left-mid, right-mid, centre
+  var IL_ZONES = [
+    { left: 50, top: 20 },   // top-centre
+    { left: 50, top: 80 },   // bottom-centre
+    { left: 22, top: 50 },   // left-mid
+    { left: 78, top: 50 },   // right-mid
+    { left: 50, top: 50 }    // centre
+  ];
+
+  function ilFindOpenRegion(img) {
+    try {
+      var SAMPLE = 120;
+      var canvas = document.createElement('canvas');
+      canvas.width = canvas.height = SAMPLE;
+      var ctx = canvas.getContext('2d');
+      var best = { variance: Infinity, zone: IL_ZONES[4] };
+
+      for (var z = 0; z < IL_ZONES.length; z++) {
+        var zone = IL_ZONES[z];
+        // Sample a 30%×25% region of the image centred on the zone
+        var rx = (zone.left / 100 - 0.15) * img.naturalWidth;
+        var ry = (zone.top  / 100 - 0.125) * img.naturalHeight;
+        var rw = 0.30 * img.naturalWidth;
+        var rh = 0.25 * img.naturalHeight;
+        ctx.drawImage(img, rx, ry, rw, rh, 0, 0, SAMPLE, SAMPLE);
+        var data = ctx.getImageData(0, 0, SAMPLE, SAMPLE).data;
+        var sum = 0, n = data.length / 4;
+        for (var i = 0; i < data.length; i += 4)
+          sum += data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+        var mean = sum / n, vsum = 0;
+        for (var i = 0; i < data.length; i += 4) {
+          var b = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+          vsum += (b - mean) * (b - mean);
+        }
+        if (vsum / n < best.variance) best = { variance: vsum / n, zone: zone };
+      }
+      return best.zone;
+    } catch (e) { return null; }
+  }
+
+  function ilApplyTextPosition() {
+    // CSS handles all positioning — nothing to do here
+  }
+
+  function ilApplyKenBurns(img) {
+    var name = IL_KB[ilKbIndex % IL_KB.length];
+    ilKbIndex++;
+    img.style.animationName           = name;
+    img.style.animationDuration       = '28s';
+    img.style.animationTimingFunction = 'ease-in-out';
+    img.style.animationIterationCount = 'infinite';
+    img.style.animationDirection      = 'alternate';
+    img.style.animationFillMode       = 'both';
+  }
+
+  function buildIllustratedReader() {
+    if (illustratedReader) return illustratedReader;
+
+    illustratedReader = document.createElement('div');
+    illustratedReader.className = 'illustrated-reader';
+    illustratedReader.id = 'illustrated-reader';
+    illustratedReader.innerHTML =
+      '<div class="il-left" id="il-left">' +
+        '<div class="il-img-wrap" id="il-img-wrap">' +
+          '<img id="il-img-a" alt="">' +
+          '<img id="il-img-b" alt="">' +
+        '</div>' +
+        '<div class="il-grid" id="il-grid"></div>' +
+      '</div>' +
+      '<div class="il-right" id="il-right">' +
+        '<div class="il-text" id="il-text"></div>' +
+        '<div class="il-caption" id="il-caption"></div>' +
+      '</div>';
+
+    document.body.appendChild(illustratedReader);
+    return illustratedReader;
+  }
+
+  // ── Thought mode renderer: fixed bg, floating thought images ──
+  function renderThoughtIllustrated(entry, s) {
+    if (ilLastMode !== 'thought') {
+      ilLastMode = 'thought';
+      illustratedReader.classList.add('il-thought');
+      illustratedReader.classList.remove('il-portrait','il-small','il-no-image','il-collage');
+
+      // Load persistent bg once
+      var bgSrc = ilGetBookUrl() + 'illustrations/' + ilManifest.bg;
+      var imgEl = document.getElementById('il-bg');
+      if (imgEl && imgEl.getAttribute('src') !== bgSrc) {
+        imgEl.src = bgSrc;
+        imgEl.onload = function() { imgEl.classList.add('il-bg-visible'); };
+        if (imgEl.complete && imgEl.naturalWidth > 0) imgEl.classList.add('il-bg-visible');
+      }
+    }
+
+    var textEl     = document.getElementById('il-text');
+    var bubbleEl   = document.getElementById('il-thought-bubble');
+    var bubbleImg  = document.getElementById('il-thought-img');
+    var captionEl  = document.getElementById('il-thought-caption');
+    var tooltipEl  = document.getElementById('il-info-tooltip');
+    var infoEl     = document.getElementById('il-info');
+
+    // Fade text
+    if (textEl) textEl.classList.add('il-fading');
+
+    // Handle thought image: new image, explicit clear, or carry-forward
+    var newThoughtSrc = (entry && entry.thought)
+      ? (ilGetBookUrl() + 'illustrations/' + entry.thought)
+      : null;
+    var explicitlyClear = entry && !entry.thought;
+
+    if (newThoughtSrc && newThoughtSrc !== ilLastSrc) {
+      if (bubbleEl) bubbleEl.classList.remove('il-thought-visible');
+      var thisSrc = newThoughtSrc;
+      var thisEntry = entry;
+      setTimeout(function () {
+        if (!bubbleImg) return;
+        bubbleImg.onload = function () {
+          if (bubbleEl) bubbleEl.classList.add('il-thought-visible');
+        };
+        bubbleImg.src = thisSrc;
+        ilLastSrc = thisSrc;
+        ilLastCaption = thisEntry.caption || '';
+        if (captionEl) captionEl.textContent = ilLastCaption;
+        if (tooltipEl) tooltipEl.textContent = ilLastCaption;
+        if (infoEl) {
+          if (ilLastCaption) infoEl.classList.add('il-info-visible');
+          else infoEl.classList.remove('il-info-visible');
+        }
+      }, 250);
+    } else if (explicitlyClear && ilLastSrc) {
+      if (bubbleEl) bubbleEl.classList.remove('il-thought-visible');
+      ilLastSrc = null;
+      ilLastCaption = '';
+      if (infoEl) infoEl.classList.remove('il-info-visible');
+    }
+    // else: carry forward — keep current thought visible
+
+    // Update text
+    setTimeout(function () {
+      if (!textEl) return;
+      if (s.type === 'heading') {
+        textEl.className = 'il-text il-heading';
+        textEl.textContent = s.text;
+      } else if (s.type === 'epigraph') {
+        textEl.className = 'il-text il-epigraph';
+        textEl.textContent = s.text;
+      } else {
+        textEl.className = 'il-text';
+        if (s.text.indexOf('\n\n') >= 0) {
+          textEl.innerHTML = s.text.split('\n\n').map(function(p) {
+            return '<p style="margin:0 0 1em">' + escHtml(p).replace(/\n/g, '<br>') + '</p>';
+          }).join('');
+        } else if (s.text.indexOf('\n') >= 0) {
+          textEl.innerHTML = escHtml(s.text).replace(/\n/g, '<br>');
+        } else {
+          textEl.textContent = s.text;
+        }
+      }
+      textEl.classList.remove('il-fading');
+    }, 200);
+  }
+
+  // Show title-only cover slide (no image grid)
+  function ilShowGrid() {
+    var imgA  = document.getElementById('il-img-a');
+    var imgB  = document.getElementById('il-img-b');
+    var capEl = document.getElementById('il-caption');
+    if (imgA) { imgA.classList.remove('il-img-visible', 'il-img-shrink'); imgA.src = ''; }
+    if (imgB) { imgB.classList.remove('il-img-visible', 'il-img-shrink'); imgB.src = ''; }
+    if (capEl) capEl.innerHTML = '';
+    // Reset so returning from the grid always reloads the image
+    ilLastSrc = null;
+    ilSlot = 'a';
+    if (illustratedReader) illustratedReader.classList.add('il-title-slide');
+  }
+
+  // Restore normal image-left / text-right layout
+  function ilHideGrid() {
+    if (illustratedReader) illustratedReader.classList.remove('il-title-slide');
+  }
+
+  // Fetch all chapters in the background to compute global sentence offset + total
+  function ilComputeGlobalCounts() {
+    var chapters = getChapterUrls();
+    if (!chapters.length) { ilGlobalTotal = sentences.length; return; }
+    var currentPath = location.pathname.replace(/\/$/, '');
+    var counts = new Array(chapters.length);
+    var pending = chapters.length;
+    chapters.forEach(function (ch, idx) {
+      fetch(ch.url)
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+          var article = doc.getElementById('main-content');
+          var chTitle = doc.title.split('—')[0].trim();
+          counts[idx] = { url: ch.url, count: extractSentencesFromElement(article, chTitle).length };
+        })
+        .catch(function () { counts[idx] = { url: ch.url, count: 0 }; })
+        .then(function () {
+          if (--pending > 0) return;
+          var offset = 0, total = 0, found = false;
+          for (var i = 0; i < counts.length; i++) {
+            if (!counts[i]) continue;
+            var chPath = counts[i].url.replace(/\/$/, '');
+            if (chPath === currentPath) found = true;
+            if (!found) offset += counts[i].count;
+            total += counts[i].count;
+          }
+          ilChapterOffset = offset;
+          ilGlobalTotal = total;
+          // Refresh counter with global numbers
+          var counterEl = document.getElementById('sr-bar-counter');
+          if (counterEl) {
+            var gpos = ilChapterOffset + sentenceIndex + 1;
+            var pct = Math.round((gpos / ilGlobalTotal) * 100);
+            counterEl.textContent = gpos + ' / ' + ilGlobalTotal + '  (' + pct + '%)';
+          }
+        });
+    });
+  }
+
+  // Update URL hash to reflect current picture book position (1-based, matching footer display)
+  function ilUpdateHash() {
+    try {
+      history.replaceState(null, '', location.pathname + '#pb=' + (sentenceIndex + 1));
+    } catch (e) {}
+  }
+
+  function renderIllustrated() {
+    var s = sentences[sentenceIndex];
+    if (!s) return;
+
+    // Update URL hash for deep-linking
+    ilUpdateHash();
+
+    // Update bottom bar
+    var counterEl = document.getElementById('sr-bar-counter');
+    var chLabelEl = document.getElementById('sr-bar-chapter-label');
+    var prevBtn   = document.getElementById('sr-bar-prev');
+    var nextBtn   = document.getElementById('sr-bar-next');
+    if (counterEl) {
+      var gpos = ilChapterOffset + sentenceIndex + 1;
+      var gtotal = ilGlobalTotal || sentences.length;
+      var pct = Math.round((gpos / gtotal) * 100);
+      counterEl.textContent = gpos + ' / ' + gtotal + '  (' + pct + '%)';
+    }
+    if (chLabelEl && s.chapterLabel) chLabelEl.textContent = s.chapterLabel;
+    if (prevBtn) prevBtn.setAttribute('aria-disabled', (sentenceIndex <= 0 && !ilPrevChapterUrl) ? 'true' : 'false');
+    if (nextBtn) nextBtn.setAttribute('aria-disabled', sentenceIndex === sentences.length - 1 ? 'true' : 'false');
+
+    var entry  = ilFindImage(s.text);
+    var textEl = document.getElementById('il-text');
+    var capEl  = document.getElementById('il-caption');
+
+    // Fade text
+    if (textEl) textEl.classList.add('il-fading');
+
+    // Always use image+text layout (no title slide grid)
+    ilHideGrid();
+
+    // Cross-fade to new image
+    var newSrc = entry ? (ilGetBookUrl() + 'illustrations/' + entry.src) : null;
+    if (newSrc && newSrc !== ilLastSrc) {
+      var thisSrc    = newSrc;
+      var thisCap    = entry.caption || '';
+      var thisUrl    = entry.url || '';
+      var thisCover  = !!(entry && entry.cover);
+      var nextSlot   = ilSlot === 'a' ? 'b' : 'a';
+      var nextEl     = document.getElementById('il-img-' + nextSlot);
+      var currEl     = document.getElementById('il-img-' + ilSlot);
+      var probe      = new Image();
+      probe.onload   = function () {
+        probe.onload = null;
+        ilLastSrc     = thisSrc;
+        ilLastCaption = thisCap;
+
+        nextEl.src = thisSrc;
+        nextEl.classList.remove('il-img-visible', 'il-img-cover', 'il-kb-b', 'il-img-shrink', 'il-img-panning');
+        nextEl.style.objectPosition = '';
+        void nextEl.offsetWidth;
+        if (thisCover) nextEl.classList.add('il-img-cover');
+        ilKbIndex++;
+        if (ilKbIndex % 2 === 0) nextEl.classList.add('il-kb-b');
+
+        nextEl.classList.add('il-img-visible');
+        if (currEl) currEl.classList.remove('il-img-visible');
+
+        if (capEl) {
+          if (thisUrl) {
+            capEl.innerHTML = '<a href="' + escHtml(thisUrl) + '" target="_blank" rel="noopener">' + escHtml(thisCap) + ' \u2197</a>';
+          } else {
+            capEl.textContent = thisCap;
+          }
+        }
+
+        setTimeout(function () {
+          ilSlot = nextSlot;
+        }, 1500);
+      };
+      probe.src = thisSrc;
+      if (probe.complete) probe.onload && probe.onload();
+    } else if (newSrc && capEl && entry) {
+      // Same image, still update caption
+      var c = entry.caption || '';
+      var u = entry.url || '';
+      if (u) {
+        capEl.innerHTML = '<a href="' + escHtml(u) + '" target="_blank" rel="noopener">' + escHtml(c) + ' \u2197</a>';
+      } else {
+        capEl.textContent = c;
+      }
+    }
+
+    // Update text after brief fade
+    setTimeout(function () {
+      if (!textEl) return;
+      if (s.type === 'heading') {
+        textEl.className = 'il-text il-heading';
+        textEl.textContent = s.text;
+      } else if (s.type === 'epigraph') {
+        textEl.className = 'il-text il-epigraph';
+        textEl.textContent = s.text;
+      } else {
+        textEl.className = 'il-text';
+        if (s.text.indexOf('\n\n') >= 0) {
+          textEl.innerHTML = s.text.split('\n\n').map(function(p) {
+            return '<p style="margin:0 0 1em">' + escHtml(p).replace(/\n/g, '<br>') + '</p>';
+          }).join('');
+        } else if (s.text.indexOf('\n') >= 0) {
+          textEl.innerHTML = escHtml(s.text).replace(/\n/g, '<br>');
+        } else {
+          textEl.textContent = s.text;
+        }
+      }
+      textEl.classList.remove('il-fading');
+    }, 200);
+  }
+
+  function enterIllustratedMode() {
+    try { sessionStorage.setItem('pdc-mode', 'illustrated'); } catch (e) {}
+    buildIllustratedReader();
+
+    // Capture prev/next chapter URLs before replacing the bottom bar
+    var bottomBar = document.querySelector('.bottom-bar');
+    ilNextChapterUrl = null;
+    ilPrevChapterUrl = null;
+    ilChapterOffset = 0;
+    ilGlobalTotal = 0;
+    ilCompletedSrcs = {};
+    ilCurrentSrc = null;
+    if (bottomBar) {
+      var chNextEl = bottomBar.querySelector('.ch-next');
+      var chPrevEl = bottomBar.querySelector('.ch-prev');
+      if (chNextEl) ilNextChapterUrl = chNextEl.getAttribute('href');
+      if (chPrevEl) ilPrevChapterUrl = chPrevEl.getAttribute('href');
+    }
+
+    // Reuse sentence bottom bar
+    if (bottomBar) {
+      var inner = bottomBar.querySelector('.bottom-bar-inner');
+      if (inner) {
+        ilSavedBottomBarHTML = inner.innerHTML;
+        inner.innerHTML =
+          '<a class="ch-prev" id="sr-bar-prev" role="button" aria-label="Previous sentence"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>' +
+          '<div class="bottom-bar-sentence-info">' +
+            '<span class="bottom-bar-chapter" id="sr-bar-chapter-label">Loading...</span>' +
+            '<span class="bottom-bar-sentence-sep">&middot;</span>' +
+            '<span class="bottom-bar-sentence-counter" id="sr-bar-counter">0 / 0</span>' +
+          '</div>' +
+          '<a class="ch-next" id="sr-bar-next" role="button" aria-label="Next sentence"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>';
+        document.getElementById('sr-bar-prev').addEventListener('click', function () { go(-1); });
+        document.getElementById('sr-bar-next').addEventListener('click', function () { go(1); });
+        bottomBar.classList.add('sentence-mode');
+        bottomBar.style.transform = 'translateY(0)';
+      }
+    }
+
+    ilLastSrc = null;
+    ilLastCaption = '';
+    ilSlot = 'a';
+    var imgA = document.getElementById('il-img-a');
+    var imgB = document.getElementById('il-img-b');
+    if (imgA) { imgA.src = ''; imgA.classList.remove('il-img-visible', 'il-img-cover', 'il-kb-b', 'il-img-shrink'); }
+    if (imgB) { imgB.src = ''; imgB.classList.remove('il-img-visible', 'il-img-cover', 'il-kb-b', 'il-img-shrink'); }
+    illustratedReader.classList.add('is-active');
+    document.body.style.overflow = 'hidden';
+    window._sentenceModeActive = true;
+
+    ilLoadManifest(function () {
+      // Picture book uses paragraphs, not sentences
+      sentences = [];
+      extractParagraphsFromCurrentPage();
+      if (!sentences.length) return;
+      // Deep-link: if URL has #pb=N (1-based), start at that sentence
+      var hashMatch = location.hash.match(/^#pb=(\d+)$/);
+      var startIdx = hashMatch ? Math.min(parseInt(hashMatch[1], 10) - 1, sentences.length - 1) : 0;
+      if (startIdx < 0) startIdx = 0;
+      sentenceIndex = startIdx;
+      renderIllustrated();
+      // Fetch all chapters in background to compute global count
+      ilComputeGlobalCounts();
+    });
+  }
+
+  function exitIllustratedMode() {
+    if (!illustratedReader) return;
+    try { sessionStorage.removeItem('pdc-mode'); } catch (e) {}
+    window._sentenceModeActive = false;
+    illustratedReader.classList.remove('is-active');
+    document.body.style.overflow = '';
+    // Clear picture book hash from URL
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+
+    var bottomBar = document.querySelector('.bottom-bar');
+    if (bottomBar) {
+      bottomBar.classList.remove('sentence-mode');
+      var inner = bottomBar.querySelector('.bottom-bar-inner');
+      if (inner && ilSavedBottomBarHTML) inner.innerHTML = ilSavedBottomBarHTML;
+    }
+
+    if (sentenceIndex >= 0 && sentences[sentenceIndex] && sentences[sentenceIndex].chapterId) {
+      var h = document.getElementById(sentences[sentenceIndex].chapterId);
+      if (h) window.scrollTo(0, h.getBoundingClientRect().top + window.scrollY - 60);
+    }
+  }
+
+  // go() illustrated override + #pb= auto-enter
+  var _originalGo = go;
+  go = function (delta) {
+    if (currentMode === 'illustrated') {
+      if (transitioning) return;
+      var next = sentenceIndex + delta;
+      if (next >= sentences.length && ilNextChapterUrl) { window.location.href = ilNextChapterUrl + '#pb=1'; return; }
+      if (next < 0 && ilPrevChapterUrl) { window.location.href = ilPrevChapterUrl + '#pb=99999'; return; }
+      if (next < 0 || next >= sentences.length) return;
+      transitioning = true;
+      sentenceIndex = next;
+      renderIllustrated();
+      setTimeout(function () { transitioning = false; }, 280);
+    } else {
+      _originalGo(delta);
+    }
+  };
+  if (window.PDC_ILLUSTRATED_ENABLED && /^#pb=\d+$/.test(location.hash) && document.querySelector('.article-body')) {
+    setTimeout(function () {
+      if (currentMode !== 'illustrated') {
+        currentMode = 'illustrated';
+        modeCurrentLabel.textContent = 'Picture Book';
+        modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === 'illustrated'); });
+        enterIllustratedMode();
+      }
+    }, 300);
+  }
+
+  // Auto-enter mode from sessionStorage when navigating between chapters
+  // (skip if a URL-based trigger already handles it)
+  if (!window._autoEnterSentenceMode && !/^#pb=\d+$/.test(location.hash)) {
+    var _storedMode = null;
+    try { _storedMode = sessionStorage.getItem('pdc-mode'); } catch (e) {}
+    var _hasChapterContent = !!document.querySelector('.article-body');
+    if (_storedMode === 'sentence' && _hasChapterContent) {
+      currentMode = 'sentence';
+      modeCurrentLabel.textContent = 'Sentence Focus';
+      modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === 'sentence'); });
+      enterSentenceMode();
+    } else if (window.PDC_ILLUSTRATED_ENABLED && _storedMode === 'illustrated' && _hasChapterContent) {
+      setTimeout(function () {
+        if (currentMode !== 'illustrated') {
+          currentMode = 'illustrated';
+          modeCurrentLabel.textContent = 'Picture Book';
+          modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === 'illustrated'); });
+          enterIllustratedMode();
+        }
+      }, 300);
+    }
+  }
+
 })();
