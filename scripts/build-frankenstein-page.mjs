@@ -15,6 +15,7 @@ const head = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="6ceq+keEC5qVdlDjREFVOA" async></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Frankenstein; or, The Modern Prometheus — Public Domain Classics</title>
   <meta name="description" content="Mary Shelley's Frankenstein (1831 edition), beautifully formatted with clean typography and structured navigation.">
