@@ -1114,25 +1114,30 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       .catch(function () { ilManifest = []; cb([]); });
   }
 
-  // Match current sentence text against manifest, return entry or null
-  // Once an image is switched away from, it can never return.
-  // The fallback is exempt — it always remains available as the default.
+  // Deterministic image selection: scan all sentences from start up to and
+  // including the current index to find the LAST matched image that has been
+  // triggered. This ensures the same text always maps to the same image
+  // regardless of navigation direction or page refresh.
   function ilFindImage(text) {
-    var found = null;
-    if (ilManifest && ilManifest.length) {
-      for (var i = 0; i < ilManifest.length; i++) {
-        var entry = ilManifest[i];
-        if (ilCompletedSrcs[entry.src]) continue;
-        for (var j = 0; j < entry.matches.length; j++) {
-          if (text.indexOf(entry.matches[j]) >= 0) {
-            found = entry;
-            break;
+    // Walk sentences 0..sentenceIndex, find the last manifest match triggered
+    var lastMatch = null;
+    if (ilManifest && ilManifest.length && sentences.length) {
+      for (var si = 0; si <= sentenceIndex; si++) {
+        var sText = sentences[si] ? sentences[si].text : '';
+        for (var i = 0; i < ilManifest.length; i++) {
+          var entry = ilManifest[i];
+          for (var j = 0; j < entry.matches.length; j++) {
+            if (sText.indexOf(entry.matches[j]) >= 0) {
+              lastMatch = entry;
+              break;
+            }
           }
+          if (lastMatch === entry) break;
         }
-        if (found) break;
       }
     }
-    // No specific match — use fallback (fallback never gets marked completed)
+    // Use the last triggered match, or fallback if none yet
+    var found = lastMatch;
     if (!found && ilFallback && ilFallback.src) {
       found = {
         src: ilFallback.src,
@@ -1140,13 +1145,6 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         url: ilFallback.url || '',
         cover: true
       };
-    }
-    // If switching away from current image, mark it completed
-    // (but never mark the fallback as completed)
-    if (found && found.src !== ilCurrentSrc && ilCurrentSrc) {
-      if (!ilFallback || ilCurrentSrc !== ilFallback.src) {
-        ilCompletedSrcs[ilCurrentSrc] = true;
-      }
     }
     if (found) ilCurrentSrc = found.src;
     return found;
