@@ -1,29 +1,11 @@
 {
   "letter-1": {
     "fallback": {
-      "src": "pd/senate-square-1799.jpg",
-      "caption": "Benjamin Patersen, Senate Square, St. Petersburg, 1799",
+      "src": "pd/walton-writing-ship.png",
+      "caption": "Walton writing his letter, St. Petersburg",
       "cover": true
     },
-    "images": [
-      {
-        "matches": ["To Mrs. Saville", "St. Petersburgh, Dec."],
-        "src": "pd/kersting-man-writing-1811.jpg",
-        "caption": "Georg Friedrich Kersting, Man Writing at a Desk, 1811"
-      },
-      {
-        "matches": ["walk in the streets of Petersburgh", "cold northern breeze play upon my cheeks", "braces my nerves"],
-        "src": "pd/nevsky-1799.jpg",
-        "cover": true,
-        "caption": "Benjamin Patersen, Nevsky Prospect, St. Petersburg, 1799"
-      },
-      {
-        "matches": ["travelling in Russia", "fly quickly over the snow in their sledges", "wrapped in furs"],
-        "src": "pd/sverchkov-troika.jpg",
-        "cover": true,
-        "caption": "Nikolai Sverchkov, Troika in Winter, 19th century"
-      }
-    ]
+    "images": []
   },
 
   "letter-2": {
