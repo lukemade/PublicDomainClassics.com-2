@@ -1114,30 +1114,23 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       .catch(function () { ilManifest = []; cb([]); });
   }
 
-  // Deterministic image selection: scan all sentences from start up to and
-  // including the current index to find the LAST matched image that has been
-  // triggered. This ensures the same text always maps to the same image
-  // regardless of navigation direction or page refresh.
+  // Deterministic image selection by sentence number.
+  // Manifest images use "from" (1-based, matching #pb=N) to specify
+  // which sentence an image starts at. The image persists until the
+  // next "from" threshold. Fallback shows for sentences before the
+  // first "from" value.
   function ilFindImage(text) {
-    // Walk sentences 0..sentenceIndex, find the last manifest match triggered
-    var lastMatch = null;
-    if (ilManifest && ilManifest.length && sentences.length) {
-      for (var si = 0; si <= sentenceIndex; si++) {
-        var sText = sentences[si] ? sentences[si].text : '';
-        for (var i = 0; i < ilManifest.length; i++) {
-          var entry = ilManifest[i];
-          for (var j = 0; j < entry.matches.length; j++) {
-            if (sText.indexOf(entry.matches[j]) >= 0) {
-              lastMatch = entry;
-              break;
-            }
-          }
-          if (lastMatch === entry) break;
+    var found = null;
+    var pbIndex = sentenceIndex + 1; // 1-based to match #pb=N
+    if (ilManifest && ilManifest.length) {
+      for (var i = 0; i < ilManifest.length; i++) {
+        var entry = ilManifest[i];
+        if (entry.from && pbIndex >= entry.from) {
+          found = entry;
         }
       }
     }
-    // Use the last triggered match, or fallback if none yet
-    var found = lastMatch;
+    // No image matched yet — use fallback
     if (!found && ilFallback && ilFallback.src) {
       found = {
         src: ilFallback.src,
