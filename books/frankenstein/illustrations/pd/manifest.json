@@ -3,30 +3,13 @@
     "fallback": {
       "src": "pd/senate-square-1799.jpg",
       "caption": "Benjamin Patersen, Senate Square, St. Petersburg, 1799",
-      "positions": [
-        "15% 55%", "25% 45%", "35% 50%", "48% 40%",
-        "55% 55%", "65% 45%", "75% 50%", "85% 55%",
-        "20% 60%", "40% 55%", "60% 50%", "80% 45%",
-        "30% 65%", "50% 60%", "70% 55%"
-      ]
+      "cover": true
     },
     "images": [
-      {
-        "matches": ["Did I request thee", "from my clay", "Paradise Lost"],
-        "src": "pd/john-martin-satan-1824.jpg",
-        "cover": true,
-        "caption": "John Martin, Satan Presiding at the Infernal Council, 1824"
-      },
       {
         "matches": ["To Mrs. Saville", "St. Petersburgh, Dec."],
         "src": "pd/kersting-man-writing-1811.jpg",
         "caption": "Georg Friedrich Kersting, Man Writing at a Desk, 1811"
-      },
-      {
-        "matches": ["no disaster has accompanied", "arrived here yesterday", "success of my undertaking"],
-        "src": "pd/senate-square-1799.jpg",
-        "cover": true,
-        "caption": "Benjamin Patersen, Senate Square, St. Petersburg, 1799"
       },
       {
         "matches": ["walk in the streets of Petersburgh", "cold northern breeze play upon my cheeks", "braces my nerves"],
@@ -35,84 +18,10 @@
         "caption": "Benjamin Patersen, Nevsky Prospect, St. Petersburg, 1799"
       },
       {
-        "matches": ["foretaste of those icy climes", "Inspirited by this wind of promise", "daydreams become more fervent"],
-        "src": "pd/turner-norham-sunrise.jpg",
-        "cover": true,
-        "caption": "J. M. W. Turner, Norham Castle, Sunrise, c. 1845"
-      },
-      {
-        "matches": ["pole is the seat of frost and desolation", "region of beauty and delight", "sun is for ever visible", "perpetual splendour"],
-        "src": "pd/church-aurora-1865.jpg",
-        "cover": true,
-        "caption": "Frederic Church, Aurora Borealis, 1865"
-      },
-      {
-        "matches": ["sailing over a calm sea", "wafted to a land surpassing in wonders", "country of eternal light"],
-        "src": "pd/aivazovsky-morning-sea.jpg",
-        "cover": true,
-        "caption": "Ivan Aivazovsky, Morning on the Sea, 19th century"
-      },
-      {
-        "matches": ["wondrous power which attracts the needle", "thousand celestial observations", "satiate my ardent curiosity"],
-        "src": "pd/friedrich-wanderer.jpg",
-        "caption": "Caspar David Friedrich, Wanderer above the Sea of Fog, 1818"
-      },
-      {
-        "matches": ["never before imprinted by the foot of man", "conquer all fear of danger or death", "discovering a passage near the pole"],
-        "src": "pd/friedrich-sea-of-ice-1824.jpg",
-        "cover": true,
-        "caption": "Caspar David Friedrich, The Sea of Ice, 1823\u201324"
-      },
-      {
-        "matches": ["reflections have dispelled the agitation", "heart glow with an enthusiasm", "steady purpose"],
-        "src": "pd/kersting-reading-lamplight.jpg",
-        "caption": "Georg Friedrich Kersting, Man Reading by Lamplight, c. 1814"
-      },
-      {
-        "matches": ["various voyages", "North Pacific Ocean", "seas which surround the pole", "Uncle Thomas"],
-        "src": "pd/map-arctic-1855.jpg",
-        "cover": true,
-        "caption": "Arctic Exploration Map, c. 1855"
-      },
-      {
-        "matches": ["poets whose effusions entranced my soul", "Homer and Shakespeare", "became a poet"],
-        "src": "pd/blake-ancient-of-days.jpg",
-        "caption": "William Blake, The Ancient of Days, 1794"
-      },
-      {
-        "matches": ["Six years have passed", "dedicated myself to this great enterprise", "inuring my body to hardship"],
-        "src": "pd/bradford-arctic-1871.jpg",
-        "cover": true,
-        "caption": "William Bradford, Arctic Scene, 1871"
-      },
-      {
-        "matches": ["whale-fishers on several expeditions", "Greenland whaler", "North Sea"],
-        "src": "pd/wheldon-whaling-arctic.jpg",
-        "cover": true,
-        "caption": "James H. Wheldon, Whaling Ships Diana and Anne in the Arctic, 19th century"
-      },
-      {
-        "matches": ["do I not deserve to accomplish some great purpose", "hopes fluctuate", "spirits are often depressed", "long and difficult voyage"],
-        "src": "pd/friedrich-monk-sea.jpg",
-        "cover": true,
-        "caption": "Caspar David Friedrich, The Monk by the Sea, 1808\u201310"
-      },
-      {
         "matches": ["travelling in Russia", "fly quickly over the snow in their sledges", "wrapped in furs"],
         "src": "pd/sverchkov-troika.jpg",
         "cover": true,
         "caption": "Nikolai Sverchkov, Troika in Winter, 19th century"
-      },
-      {
-        "matches": ["hire a ship there", "engage as many sailors", "sail until the month of June"],
-        "src": "pd/aivazovsky-harbor-1852.jpg",
-        "cover": true,
-        "caption": "Ivan Aivazovsky, A Harbor Scene, 1852"
-      },
-      {
-        "matches": ["If I succeed", "If I fail, you will see me again", "Farewell, my dear, excellent Margaret"],
-        "src": "pd/friedrich-sailing-ship.jpg",
-        "caption": "Caspar David Friedrich, On a Sailing Ship, 1818\u201320"
       }
     ]
   },
@@ -121,394 +30,238 @@
     "fallback": {
       "src": "pd/bradford-in-ice.jpg",
       "caption": "William Bradford, Abandoned in the Arctic Ice Fields, 1876",
-      "positions": [
-        "20% 50%", "30% 45%", "40% 50%", "50% 55%",
-        "60% 45%", "70% 50%", "80% 55%", "35% 60%",
-        "45% 50%", "55% 45%", "65% 55%", "75% 50%"
-      ]
+      "cover": true
     },
-    "images": [
-      {
-        "matches": ["To Mrs. Saville, England", "Archangel, 28th March"],
-        "src": "pd/cassatt-the-letter-1891.jpg",
-        "caption": "Mary Cassatt, The Letter, 1890\u201391"
-      },
-      {
-        "matches": ["How slowly the time passes here, encompassed as I am by frost and snow", "Yet a second step is taken towards my enterprise"],
-        "src": "pd/bradford-in-ice.jpg",
-        "cover": true,
-        "caption": "William Bradford, Abandoned in the Arctic Ice Fields, 1876"
-      },
-      {
-        "matches": ["I have hired a vessel", "occupied in collecting my sailors", "those whom I have already engaged", "dauntless courage"],
-        "src": "pd/friedrich-harbour-1815.jpg",
-        "cover": true,
-        "caption": "Caspar David Friedrich, View of a Harbour, c. 1815\u201316"
-      },
-      {
-        "matches": ["I have no friend, Margaret", "absence of the object", "I shall commit my thoughts to paper", "when I am glowing with the enthusiasm of success", "none to participate my joy"],
-        "src": "pd/fantin-latour-reading-1877.jpg",
-        "caption": "Henri Fantin-Latour, La Lecture (Reading), 1877"
-      },
-      {
-        "matches": ["I desire the company of a man who could sympathise with me", "You may deem me romantic", "I bitterly feel the want of a friend"],
-        "src": "pd/friedrich-two-men-moon-1819.jpg",
-        "caption": "Caspar David Friedrich, Two Men Contemplating the Moon, c. 1819\u201320"
-      },
-      {
-        "matches": ["I am too ardent in execution and too impatient of difficulties", "still greater evil to me that I am self-educated"],
-        "src": "pd/martin-the-bard-1817.jpg",
-        "cover": true,
-        "caption": "John Martin, The Bard, c. 1817"
-      },
-      {
-        "matches": ["ran wild on a common", "Uncle Thomas' books of voyages", "for the first fourteen years of my life"],
-        "src": "pd/constable-pastoral.jpg",
-        "cover": true,
-        "caption": "John Constable, The Hay Wain, 1821"
-      },
-      {
-        "matches": ["celebrated poets of our own country", "ceased to be in my power", "more illiterate than many schoolboys"],
-        "src": "pd/spitzweg-bookworm-1850.jpg",
-        "caption": "Carl Spitzweg, The Bookworm, c. 1850"
-      },
-      {
-        "matches": ["my daydreams are more extended and magnificent", "need a friend who would have sense enough not to despise me as romantic", "regulate my mind"],
-        "src": "pd/wright-alchemist-1771.jpg",
-        "caption": "Joseph Wright of Derby, The Alchymist, 1771"
-      },
-      {
-        "matches": ["I shall certainly find no friend on the wide ocean", "some feelings, unallied to the dross of human nature"],
-        "src": "pd/turner-slave-ship-1840.jpg",
-        "cover": true,
-        "caption": "J. M. W. Turner, The Slave Ship, 1840"
-      },
-      {
-        "matches": ["My lieutenant, for instance, is a man of wonderful courage", "madly desirous of glory", "I first became acquainted with him on board a whale vessel"],
-        "src": "pd/bradford-incident-whaling.jpg",
-        "cover": true,
-        "caption": "William Bradford, An Incident of Whaling, 19th century"
-      },
-      {
-        "matches": ["He is an Englishman", "noblest endowments of humanity", "national and professional prejudices"],
-        "src": "pd/turner-temeraire-1839.jpg",
-        "cover": true,
-        "caption": "J. M. W. Turner, The Fighting Temeraire, 1839"
-      },
-      {
-        "matches": ["The master is a person of an excellent disposition", "remarkable in the ship for his gentleness", "well-known integrity"],
-        "src": "pd/aivazovsky-harbor-1852.jpg",
-        "cover": true,
-        "caption": "Ivan Aivazovsky, A Harbor Scene, 1852"
-      },
-      {
-        "matches": ["I heard of him first in rather a romantic manner", "he loved a young Russian lady", "she was bathed in tears"],
-        "src": "pd/scheffer-marguerite-1838.jpg",
-        "caption": "Ary Scheffer, Marguerite Leaving Church, 1838"
-      },
-      {
-        "matches": ["she loved another, but that he was poor", "My generous friend reassured the suppliant", "already bought a farm with his money", "bestowed the whole on his rival"],
-        "src": "pd/constable-pastoral.jpg",
-        "cover": true,
-        "caption": "John Constable, The Hay Wain, 1821"
-      },
-      {
-        "matches": ["Yet do not suppose, because I complain a little", "I am wavering in my resolutions", "Those are as fixed as fate", "my voyage is only now delayed"],
-        "src": "pd/bradford-waiting-thaw.jpg",
-        "cover": true,
-        "caption": "William Bradford, Waiting for the Thaw (Arctic Whaling Scene), c. 1870"
-      },
-      {
-        "matches": ["The winter has been dreadfully severe", "spring promises well", "I may sail sooner than I expected"],
-        "src": "pd/church-icebergs-1861.jpg",
-        "cover": true,
-        "caption": "Frederic Church, The Icebergs, 1861"
-      },
-      {
-        "matches": ["I cannot describe to you my sensations", "trembling sensation, half pleasurable and half fearful", "preparing to depart", "the land of mist and snow"],
-        "src": "pd/turner-snow-storm.jpg",
-        "cover": true,
-        "caption": "J. M. W. Turner, Snow Storm \u2014 Steam-Boat off a Harbour's Mouth, 1842"
-      },
-      {
-        "matches": ["I shall kill no albatross", "Ancient Mariner", "will smile at my allusion"],
-        "src": "pd/dore-ancient-mariner.jpg",
-        "caption": "Gustave Dor\u00e9, The Rime of the Ancient Mariner \u2014 Albatross, 1876"
-      },
-      {
-        "matches": ["There is something at work in my soul", "dangerous mysteries of ocean", "love for the marvellous", "hurries me out of the common pathways of men"],
-        "src": "pd/pdia-north-cape.jpg",
-        "cover": true,
-        "caption": "North Cape, Norway, 19th century illustration"
-      },
-      {
-        "matches": ["But to return to dearer considerations", "Shall I meet you again", "traversed immense seas", "returned by the most southern cape"],
-        "src": "pd/homer-blue-boat.jpg",
-        "cover": true,
-        "caption": "Winslow Homer, The Blue Boat, 1892"
-      },
-      {
-        "matches": ["Continue for the present to write to me by every opportunity", "Remember me with affection", "should you never hear from me again"],
-        "src": "pd/cassatt-woman-reading-1878.jpg",
-        "caption": "Mary Cassatt, Woman Reading, 1878\u201379"
-      },
-      {
-        "matches": ["I love you very tenderly", "Your affectionate brother, Robert Walton"],
-        "src": "pd/friedrich-chalk-cliffs.jpg",
-        "caption": "Caspar David Friedrich, Chalk Cliffs on R\u00fcgen, c. 1818"
-      }
-    ]
+    "images": []
   },
 
   "letter-3": {
     "fallback": {
       "src": "pd/unsplash-ship-iceberg.jpg",
-      "caption": "Iceberg and mountains, Jökulsárlón, Iceland (Unsplash)",
-      "positions": [
-        "20% 50%", "35% 45%", "50% 50%", "65% 55%",
-        "80% 45%", "30% 60%", "60% 50%"
-      ]
+      "caption": "Sailing near icebergs, Arctic waters",
+      "cover": true
     },
-    "images": [
-      {
-        "matches": ["To Mrs. Saville, England", "July 7th"],
-        "src": "pd/pearce-the-letter.jpg",
-        "caption": "Charles Sprague Pearce, The Letter, 19th century"
-      },
-      {
-        "matches": ["I write a few lines in haste", "I am safe", "well advanced on my voyage", "This letter will reach England by a merchantman"],
-        "src": "pd/unsplash-tallship-sunset2.jpg",
-        "cover": true,
-        "caption": "Tall ship at sea (Unsplash)"
-      },
-      {
-        "matches": ["my men are bold and apparently firm of purpose", "floating sheets of ice that continually pass us", "dangers of the region"],
-        "src": "pd/bradford-whaler-arctic.jpg",
-        "cover": true,
-        "caption": "William Bradford, Whaler in the Arctic, 19th century"
-      },
-      {
-        "matches": ["we have already reached a very high latitude", "height of summer", "southern gales, which blow us speedily towards those shores"],
-        "src": "pd/unsplash-sailing-iceberg.jpg",
-        "cover": true,
-        "caption": "Sailing near icebergs, Arctic waters (Unsplash)"
-      },
-      {
-        "matches": ["not so warm as in England", "renovating warmth which I had not expected"],
-        "src": "pd/pdia-arctic-solar-halo.jpg",
-        "cover": true,
-        "caption": "Arctic Solar Halo, 19th century illustration"
-      },
-      {
-        "matches": ["No incidents have hitherto befallen us", "One or two stiff gales and the springing of a leak", "experienced navigators scarcely remember to record"],
-        "src": "pd/unsplash-dark-stormy-sea.jpg",
-        "cover": true,
-        "caption": "Storm at sea (Unsplash)"
-      },
-      {
-        "matches": ["Adieu, my dear Margaret", "for my own sake, as well as yours", "I will not rashly encounter danger", "I will be cool, persevering, and prudent"],
-        "src": "pd/unsplash-tallship-masts.jpg",
-        "cover": true,
-        "caption": "Tall ship masts and rigging (Unsplash)"
-      },
-      {
-        "matches": ["success shall crown my endeavours", "tracing a secure way over the pathless seas", "the very stars themselves being witnesses"],
-        "src": "pd/unsplash-aurora-green-snow.jpg",
-        "cover": true,
-        "caption": "Aurora borealis over snow (Unsplash)"
-      },
-      {
-        "matches": ["untamed yet obedient element", "What can stop the determined heart and resolved will of man"],
-        "src": "pd/unsplash-iceberg-moody-sky.jpg",
-        "cover": true,
-        "caption": "Iceberg under moody sky (Unsplash)"
-      },
-      {
-        "matches": ["My swelling heart involuntarily pours itself out", "Heaven bless my beloved sister"],
-        "src": "pd/unsplash-ocean-dramatic.jpg",
-        "cover": true,
-        "caption": "Dramatic ocean landscape (Unsplash)"
-      }
-    ]
+    "images": []
   },
 
   "letter-4": {
     "fallback": {
-      "src": "pd/unsplash-iceberg-cold-dark.jpg",
-      "caption": "Iceberg in cold dark waters (Unsplash)",
-      "positions": [
-        "20% 50%", "30% 45%", "40% 50%", "50% 55%",
-        "60% 45%", "70% 50%", "80% 55%", "35% 60%",
-        "45% 50%", "55% 45%", "65% 55%", "75% 50%",
-        "25% 55%", "50% 45%", "65% 50%"
-      ]
+      "src": "pd/hurley-endurance-ice.jpg",
+      "caption": "Frank Hurley, Endurance Trapped in Pack Ice, 1915",
+      "cover": true
     },
-    "images": [
-      {
-        "matches": ["To Mrs. Saville, England", "August 5th"],
-        "src": "pd/unsplash-old-letter.jpg",
-        "caption": "Old manuscript and pen (Unsplash)"
-      },
-      {
-        "matches": ["So strange an accident has happened to us", "cannot forbear recording it"],
-        "src": "pd/hurley-endurance-ice.jpg",
-        "cover": true,
-        "caption": "Frank Hurley, Endurance Trapped in Pack Ice, 1915"
-      },
-      {
-        "matches": ["Last Monday", "nearly surrounded by ice", "closed in the ship on all sides", "compassed round by a very thick fog"],
-        "src": "pd/fram-in-ice-1896.jpg",
-        "cover": true,
-        "caption": "The Fram Trapped in Ice, photograph, 1896"
-      },
-      {
-        "matches": ["the mist cleared away", "vast and irregular plains of ice", "seemed to have no end"],
-        "src": "pd/unsplash-icebergs-dark-ocean.jpg",
-        "cover": true,
-        "caption": "Icebergs in dark ocean waters (Unsplash)"
-      },
-      {
-        "matches": ["a strange sight suddenly attracted our attention"],
-        "src": "pd/unsplash-iceberg-dark-cloud2.jpg",
-        "cover": true,
-        "caption": "Iceberg under dark clouds (Unsplash)"
-      },
-      {
-        "matches": ["a low carriage, fixed on a sledge and drawn by dogs", "a being which had the shape of a man, but apparently of gigantic stature", "rapid progress of the traveller"],
-        "src": "pd/unsplash-snowy-forest-fog.jpg",
-        "cover": true,
-        "caption": "Snow-covered mountains in fog (Unsplash)"
-      },
-      {
-        "matches": ["This appearance excited our unqualified wonder", "many hundred miles from any land", "this apparition seemed to denote"],
-        "src": "pd/friedrich-sea-of-ice-1824.jpg",
-        "cover": true,
-        "caption": "Caspar David Friedrich, The Sea of Ice, 1823\u201324"
-      },
-      {
-        "matches": ["we heard the ground sea", "the ice broke and freed our ship", "large loose masses which float about"],
-        "src": "pd/unsplash-iceberg-blue.jpg",
-        "cover": true,
-        "caption": "Iceberg surrounded by water (Unsplash)"
-      },
-      {
-        "matches": ["I went upon deck", "sailors busy on one side of the vessel", "a sledge, like that we had seen before", "drifted towards us in the night on a large fragment of ice", "Only one dog remained alive", "a human being within it"],
-        "src": "pd/unsplash-ship-near-iceberg.jpg",
-        "cover": true,
-        "caption": "Ship near iceberg, Arctic (Unsplash)"
-      },
-      {
-        "matches": ["the stranger addressed me in English", "will you have the kindness to inform me whither you are bound"],
-        "src": "pd/unsplash-tallship-sunset2.jpg",
-        "cover": true,
-        "caption": "Tall ship at sunset (Unsplash)"
-      },
-      {
-        "matches": ["Good God! Margaret", "His limbs were nearly frozen", "body dreadfully emaciated", "We attempted to carry him into the cabin", "we wrapped him up in blankets"],
-        "src": "pd/dore-ancient-mariner.jpg",
-        "caption": "Gustave Dor\u00e9, The Rime of the Ancient Mariner, 1876"
-      },
-      {
-        "matches": ["Two days passed in this manner", "his eyes have generally an expression of wildness, and even madness", "a beam of benevolence and sweetness", "he is generally melancholy and despairing", "gnashes his teeth"],
-        "src": "pd/unsplash-candlelight-book.jpg",
-        "caption": "Book by candlelight (Unsplash)"
-      },
-      {
-        "matches": ["the lieutenant asked why he had come so far upon the ice", "His countenance instantly assumed an aspect of the deepest gloom", "To seek one who fled from me"],
-        "src": "pd/john-martin-satan-1824.jpg",
-        "cover": true,
-        "caption": "John Martin, Satan Presiding at the Infernal Council, 1824"
-      },
-      {
-        "matches": ["the route which the d\u00e6mon, as he called him, had pursued", "I have, doubtless, excited your curiosity", "you are too considerate to make inquiries"],
-        "src": "pd/unsplash-dramatic-stormy.jpg",
-        "cover": true,
-        "caption": "Dramatic stormy clouds over ocean (Unsplash)"
-      },
-      {
-        "matches": ["a new spirit of life animated the decaying frame", "greatest eagerness to be upon deck", "watch for the sledge"],
-        "src": "pd/bradford-waiting-thaw.jpg",
-        "cover": true,
-        "caption": "William Bradford, Waiting for the Thaw, c. 1870"
-      },
-      {
-        "matches": ["The stranger has gradually improved in health", "so conciliating and gentle", "I begin to love him as a brother", "He must have been a noble creature in his better days"],
-        "src": "pd/kersting-reading-lamplight.jpg",
-        "caption": "Georg Friedrich Kersting, Man Reading by Lamplight, c. 1814"
-      },
-      {
-        "matches": ["I should find no friend on the wide ocean", "yet I have found a man", "I should have been happy to have possessed as the brother of my heart"],
-        "src": "pd/friedrich-two-men-moon-1819.jpg",
-        "caption": "Caspar David Friedrich, Two Men Contemplating the Moon, c. 1819\u201320"
-      },
-      {
-        "matches": ["August 13th"],
-        "src": "pd/unsplash-misty-lake.jpg",
-        "cover": true,
-        "caption": "Misty lake (Unsplash)"
-      },
-      {
-        "matches": ["My affection for my guest increases every day", "How can I see so noble a creature destroyed by misery", "He is so gentle, yet so wise"],
-        "src": "pd/unsplash-foggy-mountain-moody.jpg",
-        "cover": true,
-        "caption": "Foggy mountain landscape (Unsplash)"
-      },
-      {
-        "matches": ["He has frequently conversed with me on mine", "how gladly I would sacrifice my fortune", "One man's life or death were but a small price", "a dark gloom spread over my listener's countenance", "Unhappy man! Do you share my madness"],
-        "src": "pd/wright-alchemist-1771.jpg",
-        "caption": "Joseph Wright of Derby, The Alchymist, 1771"
-      },
-      {
-        "matches": ["the paroxysm of grief", "he appeared to despise himself for being the slave of passion", "He asked me the history of my earlier years", "I spoke of my desire of finding a friend"],
-        "src": "pd/fantin-latour-reading-1877.jpg",
-        "caption": "Henri Fantin-Latour, La Lecture (Reading), 1877"
-      },
-      {
-        "matches": ["we are unfashioned creatures, but half made up", "I once had a friend, the most noble of human creatures", "You have hope, and the world before you", "I have lost everything"],
-        "src": "pd/friedrich-monk-sea.jpg",
-        "cover": true,
-        "caption": "Caspar David Friedrich, The Monk by the Sea, 1808\u201310"
-      },
-      {
-        "matches": ["the beauties of nature", "The starry sky, the sea", "elevating his soul from earth", "a celestial spirit that has a halo around him"],
-        "src": "pd/unsplash-aurora-dark-mountain.jpg",
-        "cover": true,
-        "caption": "Aurora borealis over mountain range (Unsplash)"
-      },
-      {
-        "matches": ["this divine wanderer", "an intuitive discernment", "a quick but never-failing power of judgment", "soul-subduing music"],
-        "src": "pd/unsplash-misty-iceland.jpg",
-        "cover": true,
-        "caption": "Dramatic mountains, Iceland (Unsplash)"
-      },
-      {
-        "matches": ["August 19th"],
-        "src": "pd/unsplash-aurora-iceland2.jpg",
-        "cover": true,
-        "caption": "Aurora borealis, Iceland (Unsplash)"
-      },
-      {
-        "matches": ["I have suffered great and unparalleled misfortunes", "You seek for knowledge and wisdom, as I once did", "a serpent to sting you", "Prepare to hear of occurrences which are usually deemed marvellous"],
-        "src": "pd/blake-ancient-of-days.jpg",
-        "caption": "William Blake, The Ancient of Days, 1794"
-      },
-      {
-        "matches": ["I was much gratified by the offered communication", "I felt the greatest eagerness to hear the promised narrative", "a strong desire to ameliorate his fate"],
-        "src": "pd/spitzweg-bookworm-1850.jpg",
-        "caption": "Carl Spitzweg, The Bookworm, c. 1850"
-      },
-      {
-        "matches": ["my fate is nearly fulfilled", "I wait but for one event", "nothing can alter my destiny", "listen to my history"],
-        "src": "pd/turner-slave-ship-1840.jpg",
-        "cover": true,
-        "caption": "J. M. W. Turner, The Slave Ship, 1840"
-      },
-      {
-        "matches": ["he would commence his narrative the next day", "I have resolved every night", "to record, as nearly as possible in his own words", "his lustrous eyes dwell on me", "Strange and harrowing must be his story"],
-        "src": "pd/unsplash-tallship-bw2.jpg",
-        "cover": true,
-        "caption": "Tall ship, vintage photograph (Unsplash)"
-      }
-    ]
+    "images": []
+  },
+
+  "chapter-1": {
+    "fallback": {
+      "src": "pd/turner-lake-geneva-montblanc.jpg",
+      "caption": "J. M. W. Turner, Lake Geneva and Mont Blanc, c. 1802–05",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-2": {
+    "fallback": {
+      "src": "pd/ridinger-lightning-storm.jpg",
+      "caption": "Johann Elias Ridinger, Lightning Striking a Tree in the Forest, 18th century",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-3": {
+    "fallback": {
+      "src": "pd/rembrandt-anatomy-lesson-1632.jpg",
+      "caption": "Rembrandt, The Anatomy Lesson of Dr. Nicolaes Tulp, 1632",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-4": {
+    "fallback": {
+      "src": "pd/wright-alchemist-1771.jpg",
+      "caption": "Joseph Wright of Derby, The Alchymist, 1771",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-5": {
+    "fallback": {
+      "src": "pd/frankenstein-frontispiece-1831.jpg",
+      "caption": "Theodor von Holst, Frontispiece to Frankenstein, 1831",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-6": {
+    "fallback": {
+      "src": "pd/vermeer-woman-reading-letter.jpg",
+      "caption": "Johannes Vermeer, Woman Reading a Letter, c. 1663"
+    },
+    "images": []
+  },
+
+  "chapter-7": {
+    "fallback": {
+      "src": "pd/friedrich-two-men-moon-1819.jpg",
+      "caption": "Caspar David Friedrich, Two Men Contemplating the Moon, c. 1819–20",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-8": {
+    "fallback": {
+      "src": "pd/martin-the-bard-1817.jpg",
+      "caption": "John Martin, The Bard, c. 1817",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-9": {
+    "fallback": {
+      "src": "pd/friedrich-wanderer.jpg",
+      "caption": "Caspar David Friedrich, Wanderer above the Sea of Fog, 1818",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-10": {
+    "fallback": {
+      "src": "pd/linck-glacier-1799.jpg",
+      "caption": "Jean-Antoine Linck, Glacier in the Mont Blanc Region, c. 1799",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-11": {
+    "fallback": {
+      "src": "pd/unsplash-snowy-forest-fog.jpg",
+      "caption": "Snow-covered forest in fog",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-12": {
+    "fallback": {
+      "src": "pd/van-ostade-cottage-interior.jpg",
+      "caption": "Adriaen van Ostade, Interior of a Cottage, c. 1670"
+    },
+    "images": []
+  },
+
+  "chapter-13": {
+    "fallback": {
+      "src": "pd/unsplash-candlelight-book.jpg",
+      "caption": "Reading by candlelight",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-14": {
+    "fallback": {
+      "src": "pd/scheffer-marguerite-1838.jpg",
+      "caption": "Ary Scheffer, Marguerite Leaving Church, 1838",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-15": {
+    "fallback": {
+      "src": "pd/dore-satan-paradise-lost.jpg",
+      "caption": "Gustave Doré, Satan (Paradise Lost illustration), 1866"
+    },
+    "images": []
+  },
+
+  "chapter-16": {
+    "fallback": {
+      "src": "pd/van-der-poel-fire-1659.jpg",
+      "caption": "Egbert van der Poel, A Fire in a Village at Night, 1659",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-17": {
+    "fallback": {
+      "src": "pd/frankenstein-1910-cincinnati.jpg",
+      "caption": "Frankenstein and the Monster, The Cincinnati Enquirer, 1910",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-18": {
+    "fallback": {
+      "src": "pd/constable-hay-wain-1821.jpg",
+      "caption": "John Constable, The Hay Wain, 1821",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-19": {
+    "fallback": {
+      "src": "pd/friedrich-monk-sea.jpg",
+      "caption": "Caspar David Friedrich, The Monk by the Sea, 1808–10",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-20": {
+    "fallback": {
+      "src": "pd/unsplash-dark-stormy-sea.jpg",
+      "caption": "Storm at sea",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-21": {
+    "fallback": {
+      "src": "pd/piranesi-gothic-arch.jpg",
+      "caption": "Giovanni Battista Piranesi, The Gothic Arch (Carceri, Plate XIV), 1761"
+    },
+    "images": []
+  },
+
+  "chapter-22": {
+    "fallback": {
+      "src": "pd/constable-pastoral.jpg",
+      "caption": "John Constable, Pastoral Landscape, 19th century",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-23": {
+    "fallback": {
+      "src": "pd/fuseli-nightmare-1781.jpg",
+      "caption": "Henry Fuseli, The Nightmare, 1781",
+      "cover": true
+    },
+    "images": []
+  },
+
+  "chapter-24": {
+    "fallback": {
+      "src": "pd/friedrich-sea-of-ice-1824.jpg",
+      "caption": "Caspar David Friedrich, The Sea of Ice, 1823–24",
+      "cover": true
+    },
+    "images": []
   }
 }

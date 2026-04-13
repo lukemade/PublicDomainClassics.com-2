@@ -1303,93 +1303,53 @@ blockquote {
 /* ── ILLUSTRATED MODE ─────────────────────────────────────────────────── */
 
 @keyframes il-kb-a {
-  from { transform: scale(1)     translate(0,      0); }
-  to   { transform: scale(1.03)  translate(-0.5%,  0.3%); }
+  from { transform: scale(1.02)  translate(0,     0); }
+  to   { transform: scale(1.12)  translate(-2%,   1.5%); }
 }
 @keyframes il-kb-b {
-  from { transform: scale(1.03)  translate( 0.5%, -0.3%); }
-  to   { transform: scale(1)     translate(0,      0); }
+  from { transform: scale(1.10)  translate(1.5%, -1%); }
+  to   { transform: scale(1.02)  translate(-0.5%, 0.5%); }
 }
 
+/* ── Full-bleed illustrated reader ── */
 .illustrated-reader {
   position: fixed;
   inset: 0;
   z-index: 190;
-  display: flex;
-  flex-direction: row;
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  background: #0a0806;
 }
 .illustrated-reader.is-active {
   opacity: 1;
   pointer-events: all;
 }
 
-/* Title-only cover slide: hide left panel, center title full-width */
-.illustrated-reader.il-title-slide .il-left {
-  display: none;
-}
-.illustrated-reader.il-title-slide .il-right {
-  width: 100%;
-  padding: 5vh 4vw;
-  align-items: center;
-  justify-content: center;
-}
-.illustrated-reader.il-title-slide .il-text.il-heading {
-  font-size: clamp(2rem, 7vw, 5.5rem);
-  text-align: center;
-  max-width: 80vw;
-  line-height: 1.2;
-}
-
-/* ── Image panel: fills remaining 75% ── */
-.il-left {
-  flex: 1;
-  height: 100%;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  background: #1a1510;
-  overflow: hidden;
-}
-
-/* ── Two-slot image wrapper for cross-fade / double exposure ── */
+/* ── Full-screen image wrapper ── */
 .il-img-wrap {
-  position: relative;
-  flex: 1;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  background: var(--bg, #faf8f4);
 }
 
 .il-img-wrap img {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  filter: contrast(1.4) sepia(0.3) grayscale(0.3);
+  filter: contrast(1.15) sepia(0.15) grayscale(0.15);
   transition: opacity 1.4s ease, transform 1.2s ease;
   transform-origin: center center;
-}
-
-.il-img-wrap img.il-img-shrink {
-  transform: scale(0.44);
-  z-index: 2;
 }
 
 .il-img-wrap img.il-img-cover {
   object-fit: cover;
 }
 
-/* Fallback images: use standard Ken Burns like matched images */
 .il-img-wrap img.il-img-panning {
   object-fit: cover;
   transform: none;
@@ -1397,50 +1357,41 @@ blockquote {
 
 .il-img-wrap img.il-img-visible {
   opacity: 1;
-  animation: il-kb-a 24s ease-in-out infinite alternate;
+  animation: il-kb-a 35s ease-in-out infinite alternate;
 }
 
 .il-img-wrap img.il-img-visible.il-kb-b {
   animation-name: il-kb-b;
 }
 
-
-/* ── Text panel: left 25% of screen ── */
-.il-right {
-  order: -1;
-  width: 43%;
-  height: 100%;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 5vh 28px 76px;
-  background: var(--bg, #faf8f4);
+/* ── Overlay layer: holds text box + caption over the image ── */
+.il-overlay {
+  position: absolute;
+  inset: 0;
   z-index: 5;
-  gap: 16px;
-}
-.il-right .il-text {
-  flex: 1;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 17vh 0 80px 6vw;
+  pointer-events: none;
 }
 
-.il-chapter-label {
-  font-family: 'Libre Franklin', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted, #5a4f42);
-  opacity: 0.65;
-  margin-bottom: 1.2em;
+/* ── Floating text box ── */
+.il-text-box {
+  max-width: 540px;
+  width: 90%;
+  padding: 2rem 2.2rem;
+  background: rgba(255, 253, 248, 0.92);
+  border-radius: 4px;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.35), 0 1px 6px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  transition: opacity 0.2s ease;
 }
 
 .il-text {
   font-family: 'Libre Baskerville', serif;
-  font-size: clamp(17px, 1.4vw, 22px);
+  font-size: clamp(16px, 1.5vw, 21px);
   line-height: 1.85;
   color: #1a1208;
   transition: opacity 0.15s ease;
@@ -1451,47 +1402,52 @@ blockquote {
 
 .il-text.il-heading {
   font-family: 'IM Fell French Canon', serif;
-  font-size: clamp(20px, 2.2vw, 32px);
+  font-size: clamp(22px, 2.5vw, 38px);
   font-style: normal;
   color: var(--accent, #6b3a2a);
   line-height: 1.3;
+  text-align: center;
 }
 
 .il-text.il-epigraph {
   font-family: 'IM Fell English', serif;
-  font-size: clamp(15px, 1.3vw, 20px);
+  font-size: clamp(14px, 1.3vw, 19px);
   font-style: italic;
   color: var(--muted, #5a4f42);
   line-height: 1.8;
 }
 
-/* ── Caption: pinned to bottom of left panel ── */
+/* ── Caption: bottom of screen ── */
 .il-caption {
-  flex-shrink: 0;
-  text-align: left;
+  position: absolute;
+  bottom: 56px;
+  right: 16px;
+  text-align: right;
   font-family: 'Libre Baskerville', serif;
   font-size: 10px;
   font-style: italic;
-  color: var(--muted, #5a4f42);
+  color: rgba(255, 255, 255, 0.55);
   line-height: 1.4;
-  margin-top: auto;
+  pointer-events: auto;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 .il-caption a {
-  color: var(--accent, #6b3a2a);
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
   transition: color 0.15s;
 }
 .il-caption a:hover {
-  color: #4a2218;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-/* ── Image grid: cover slide showing all chapter illustrations ── */
+/* ── Image grid (chapter overview) ── */
 .il-grid {
   display: none;
-  flex: 1;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   overflow-y: auto;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(80px, 1fr);
@@ -1508,13 +1464,8 @@ blockquote {
   background-position: center;
   background-color: var(--surface, #f0ece4);
 }
-.il-grid-cell.il-grid-wide {
-  grid-column: span 2;
-}
-.il-grid-cell.il-grid-tall {
-  grid-row: span 2;
-}
-/* Chapter title cell in the grid */
+.il-grid-cell.il-grid-wide { grid-column: span 2; }
+.il-grid-cell.il-grid-tall { grid-row: span 2; }
 .il-grid-title {
   grid-column: span 2;
   display: flex;
@@ -1530,11 +1481,36 @@ blockquote {
   border: 1px solid var(--surface, #f0ece4);
 }
 
+/* ── Title slide: full-screen heading over image ── */
+.illustrated-reader.il-title-slide .il-text-box {
+  background: rgba(255, 253, 248, 0.88);
+  padding: 2.5rem 3rem;
+}
+.illustrated-reader.il-title-slide .il-text.il-heading {
+  font-size: clamp(2rem, 7vw, 5.5rem);
+  text-align: center;
+  max-width: 80vw;
+  line-height: 1.2;
+}
+
 @media (max-width: 768px) {
-  .illustrated-reader { flex-direction: column; }
-  .il-left { width: 100%; height: 50%; flex-shrink: 0; }
-  .il-right { order: 0; width: 100%; flex: 1; height: auto; padding: 2.5vh 5vw 72px; }
-  .il-text { font-size: clamp(15px, 3.5vw, 20px); }
+  .il-overlay { padding: 55px 4vw 80px; }
+  .il-text-box { max-width: 540px; width: 100%; padding: 2rem 2.2rem; background: rgba(255, 253, 248, 0.92); border-radius: 4px; box-shadow: 0 4px 40px rgba(0, 0, 0, 0.35), 0 1px 6px rgba(0, 0, 0, 0.15); pointer-events: auto; transition: opacity 0.2s ease; }
+  .il-text { font-size: 16px; }
+  .il-caption { bottom: 56px; right: 12px; }
+
+  /* Slow cinematic pan across the full image on mobile */
+  @keyframes il-kb-a {
+    from { transform: scale(1.35) translate(-12%, -5%); }
+    to   { transform: scale(1.35) translate(12%,  5%); }
+  }
+  @keyframes il-kb-b {
+    from { transform: scale(1.35) translate(10%,  8%); }
+    to   { transform: scale(1.35) translate(-10%, -3%); }
+  }
+  .il-img-wrap img.il-img-visible {
+    animation-duration: 50s;
+  }
 }
 
 /* ── Reading Settings Modal ──────────────────────────────────── */

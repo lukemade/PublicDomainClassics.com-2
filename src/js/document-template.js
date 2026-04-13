@@ -3,6 +3,9 @@
    Breadcrumb chapter nav, scroll spy, back-to-top
    ============================================ */
 
+// Enable Picture Book (illustrated) mode for all book pages
+window.PDC_ILLUSTRATED_ENABLED = true;
+
 // ── SENTENCE MODE AUTO-ENTER (must run before anything else) ──
 (function () {
   if (window.location.hash.indexOf('#sentence/') === 0) {
@@ -1056,6 +1059,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   var ilSavedBottomBarHTML = null;
   var ilManifest = null;          // loaded from pd/manifest.json
   var ilFallback = null;          // per-chapter fallback: {src, caption, url, positions}
+  var ilPersistent = false;       // when true, images cycle instead of being consumed
   var ilCompletedSrcs = {};       // images that were shown then left — can never return
   var ilCurrentSrc = null;        // the image currently being shown
   var ilLastSrc = null;           // last successfully loaded image src
@@ -1100,6 +1104,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
             // New format: {fallback: {...}, images: [...]}
             ilManifest = chapterData.images;
             ilFallback = chapterData.fallback || null;
+            ilPersistent = !!chapterData.persistent;
           } else {
             ilManifest = [];
           }
@@ -1110,8 +1115,8 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   }
 
   // Match current sentence text against manifest, return entry or null
-  // Match sentence text against manifest. Once an image is shown then
-  // replaced by a different one, it can never return.
+  // Once an image is switched away from, it can never return.
+  // The fallback is exempt — it always remains available as the default.
   function ilFindImage(text) {
     var found = null;
     if (ilManifest && ilManifest.length) {
@@ -1127,8 +1132,8 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         if (found) break;
       }
     }
-    // No specific match — use fallback
-    if (!found && ilFallback && ilFallback.src && !ilCompletedSrcs[ilFallback.src]) {
+    // No specific match — use fallback (fallback never gets marked completed)
+    if (!found && ilFallback && ilFallback.src) {
       found = {
         src: ilFallback.src,
         caption: ilFallback.caption || '',
@@ -1137,8 +1142,11 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       };
     }
     // If switching away from current image, mark it completed
+    // (but never mark the fallback as completed)
     if (found && found.src !== ilCurrentSrc && ilCurrentSrc) {
-      ilCompletedSrcs[ilCurrentSrc] = true;
+      if (!ilFallback || ilCurrentSrc !== ilFallback.src) {
+        ilCompletedSrcs[ilCurrentSrc] = true;
+      }
     }
     if (found) ilCurrentSrc = found.src;
     return found;
@@ -1207,15 +1215,15 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     illustratedReader.className = 'illustrated-reader';
     illustratedReader.id = 'illustrated-reader';
     illustratedReader.innerHTML =
-      '<div class="il-left" id="il-left">' +
-        '<div class="il-img-wrap" id="il-img-wrap">' +
-          '<img id="il-img-a" alt="">' +
-          '<img id="il-img-b" alt="">' +
-        '</div>' +
-        '<div class="il-grid" id="il-grid"></div>' +
+      '<div class="il-img-wrap" id="il-img-wrap">' +
+        '<img id="il-img-a" alt="">' +
+        '<img id="il-img-b" alt="">' +
       '</div>' +
-      '<div class="il-right" id="il-right">' +
-        '<div class="il-text" id="il-text"></div>' +
+      '<div class="il-grid" id="il-grid"></div>' +
+      '<div class="il-overlay" id="il-overlay">' +
+        '<div class="il-text-box" id="il-text-box">' +
+          '<div class="il-text" id="il-text"></div>' +
+        '</div>' +
         '<div class="il-caption" id="il-caption"></div>' +
       '</div>';
 
@@ -1495,6 +1503,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     ilChapterOffset = 0;
     ilGlobalTotal = 0;
     ilCompletedSrcs = {};
+    ilPersistent = false;
     ilCurrentSrc = null;
     if (bottomBar) {
       var chNextEl = bottomBar.querySelector('.ch-next');
@@ -1535,9 +1544,9 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     window._sentenceModeActive = true;
 
     ilLoadManifest(function () {
-      // Picture book uses paragraphs, not sentences
+      // Picture book uses sentences (same as sentence mode)
       sentences = [];
-      extractParagraphsFromCurrentPage();
+      extractSentencesFromCurrentPage();
       if (!sentences.length) return;
       // Deep-link: if URL has #pb=N (1-based), start at that sentence
       var hashMatch = location.hash.match(/^#pb=(\d+)$/);
