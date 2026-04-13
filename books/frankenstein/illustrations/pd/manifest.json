@@ -5,7 +5,14 @@
       "caption": "Walton writing his letter, St. Petersburg",
       "cover": true
     },
-    "images": []
+    "images": [
+      {
+        "matches": ["I am already far north of London", "walk in the streets of Petersburgh", "cold northern breeze play upon my cheeks"],
+        "src": "pd/walton-streets-petersburg.png",
+        "cover": true,
+        "caption": "Walton in the streets of St. Petersburg"
+      }
+    ]
   },
 
   "letter-2": {
