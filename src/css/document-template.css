@@ -1553,25 +1553,7 @@ blockquote {
 
 /* ── Nav overlay (appears on tap) ── */
 .il-nav-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-}
-.il-nav-overlay.il-nav-visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+  display: none;
 }
 .il-nav-inner {
   display: flex;
