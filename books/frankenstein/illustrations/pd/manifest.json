@@ -6,7 +6,8 @@
     },
     "images": [
       { "from": 5, "src": "pd/walton-streets-petersburg.png", "cover": true },
-      { "from": 10, "src": "pd/walton-arctic-vision.png", "cover": true }
+      { "from": 10, "src": "pd/walton-arctic-vision.png", "cover": true },
+      { "from": 25, "src": "pd/walton-voyages-arctic.png", "cover": true }
     ]
   },
 
