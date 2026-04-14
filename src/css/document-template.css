@@ -1497,7 +1497,7 @@ blockquote {
 @media (max-width: 768px) {
   .il-overlay { padding: 0; justify-content: flex-end; align-items: stretch; }
   .il-text-box { max-width: 100%; width: 100%; padding: 1.2rem 1.4rem; background: var(--bg, #faf8f4); border-radius: 0; box-shadow: none; pointer-events: auto; transition: opacity 0.2s ease; }
-  .il-text { font-size: 14px; }
+  .il-text { font-size: 16px; }
   .il-caption { bottom: 56px; right: 12px; }
 
   /* Slow cinematic pan across the full image on mobile */
