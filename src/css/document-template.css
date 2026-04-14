@@ -1360,6 +1360,20 @@ blockquote {
   animation: il-kb-a 35s ease-in-out infinite alternate, il-flicker 8s ease-in-out infinite;
 }
 
+/* ── Video element in illustrated reader ── */
+#il-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+#il-video.il-img-visible {
+  opacity: 1;
+}
+
 .il-img-wrap img.il-img-cover {
   object-fit: cover;
 }

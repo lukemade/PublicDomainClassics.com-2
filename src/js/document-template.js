@@ -1278,6 +1278,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       '<div class="il-img-wrap" id="il-img-wrap">' +
         '<img id="il-img-a" alt="">' +
         '<img id="il-img-b" alt="">' +
+        '<video id="il-video" muted loop playsinline></video>' +
       '</div>' +
       '<div class="il-grid" id="il-grid"></div>' +
       '<div class="il-overlay" id="il-overlay">' +
@@ -1503,56 +1504,63 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     // Always use image+text layout (no title slide grid)
     ilHideGrid();
 
-    // Cross-fade to new image
+    // Cross-fade to new image or video
     var newSrc = entry ? (ilGetBookUrl() + 'illustrations/' + entry.src) : null;
+    var isVideo = newSrc && /\.(mp4|webm|mov)(\?|$)/i.test(newSrc);
+    var videoEl = document.getElementById('il-video');
+
     if (newSrc && newSrc !== ilLastSrc) {
       var thisSrc    = newSrc;
       var thisCap    = entry.caption || '';
       var thisUrl    = entry.url || '';
       var thisCover  = !!(entry && entry.cover);
       var thisPos    = entry.position || '';
-      var nextSlot   = ilSlot === 'a' ? 'b' : 'a';
-      var nextEl     = document.getElementById('il-img-' + nextSlot);
-      var currEl     = document.getElementById('il-img-' + ilSlot);
-      var probe      = new Image();
-      probe.onload   = function () {
-        probe.onload = null;
-        ilLastSrc     = thisSrc;
-        ilLastCaption = thisCap;
 
-        nextEl.src = thisSrc;
-        nextEl.classList.remove('il-img-visible', 'il-img-cover', 'il-kb-b', 'il-img-shrink', 'il-img-panning');
-        nextEl.style.objectPosition = thisPos;
-        void nextEl.offsetWidth;
-        if (thisCover) nextEl.classList.add('il-img-cover');
-        ilKbIndex++;
-        if (ilKbIndex % 2 === 0) nextEl.classList.add('il-kb-b');
-
-        nextEl.classList.add('il-img-visible');
-        if (currEl) currEl.classList.remove('il-img-visible');
-
-        if (capEl) {
-          if (thisUrl) {
-            capEl.innerHTML = '<a href="' + escHtml(thisUrl) + '" target="_blank" rel="noopener">' + escHtml(thisCap) + ' \u2197</a>';
-          } else {
-            capEl.textContent = thisCap;
-          }
+      if (isVideo) {
+        // Show video, hide image slots
+        var imgA = document.getElementById('il-img-a');
+        var imgB = document.getElementById('il-img-b');
+        if (imgA) imgA.classList.remove('il-img-visible');
+        if (imgB) imgB.classList.remove('il-img-visible');
+        if (videoEl) {
+          videoEl.src = thisSrc;
+          videoEl.style.objectPosition = thisPos;
+          videoEl.classList.add('il-img-visible');
+          videoEl.play().catch(function () {});
         }
-
-        setTimeout(function () {
-          ilSlot = nextSlot;
-        }, 1500);
-      };
-      probe.src = thisSrc;
-      if (probe.complete) probe.onload && probe.onload();
-    } else if (newSrc && capEl && entry) {
-      // Same image, still update caption
-      var c = entry.caption || '';
-      var u = entry.url || '';
-      if (u) {
-        capEl.innerHTML = '<a href="' + escHtml(u) + '" target="_blank" rel="noopener">' + escHtml(c) + ' \u2197</a>';
+        ilLastSrc = thisSrc;
       } else {
-        capEl.textContent = c;
+        // Hide video if it was playing
+        if (videoEl) {
+          videoEl.classList.remove('il-img-visible');
+          videoEl.pause();
+        }
+        var nextSlot   = ilSlot === 'a' ? 'b' : 'a';
+        var nextEl     = document.getElementById('il-img-' + nextSlot);
+        var currEl     = document.getElementById('il-img-' + ilSlot);
+        var probe      = new Image();
+        probe.onload   = function () {
+          probe.onload = null;
+          ilLastSrc     = thisSrc;
+          ilLastCaption = thisCap;
+
+          nextEl.src = thisSrc;
+          nextEl.classList.remove('il-img-visible', 'il-img-cover', 'il-kb-b', 'il-img-shrink', 'il-img-panning');
+          nextEl.style.objectPosition = thisPos;
+          void nextEl.offsetWidth;
+          if (thisCover) nextEl.classList.add('il-img-cover');
+          ilKbIndex++;
+          if (ilKbIndex % 2 === 0) nextEl.classList.add('il-kb-b');
+
+          nextEl.classList.add('il-img-visible');
+          if (currEl) currEl.classList.remove('il-img-visible');
+
+          setTimeout(function () {
+            ilSlot = nextSlot;
+          }, 1500);
+        };
+        probe.src = thisSrc;
+        if (probe.complete) probe.onload && probe.onload();
       }
     }
 
