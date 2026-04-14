@@ -1022,9 +1022,9 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     }
   });
 
-  // Desktop: mouse move shows nav, auto-hides after timeout
+  // Mouse move shows nav bars, auto-hides after timeout
   document.addEventListener('mousemove', function () {
-    if (currentMode !== 'illustrated' || ilIsMobile()) return;
+    if (currentMode !== 'illustrated') return;
     if (!ilNavVisible) ilShowNav();
     else {
       clearTimeout(ilNavTimeout);
