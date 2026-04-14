@@ -1007,9 +1007,11 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     if (currentMode !== 'sentence' && currentMode !== 'illustrated') return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
+      if (currentMode === 'illustrated') ilHideNav();
       go(1);
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault();
+      if (currentMode === 'illustrated') ilHideNav();
       go(-1);
     } else if (e.key === 'Escape') {
       currentMode = 'scroll';
@@ -1018,6 +1020,14 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       exitSentenceMode();
       exitIllustratedMode();
     }
+  });
+
+  // Desktop click: toggle nav overlay in illustrated mode
+  document.addEventListener('click', function (e) {
+    if (currentMode !== 'illustrated') return;
+    // Don't toggle if clicking nav overlay buttons or text box
+    if (e.target.closest('.il-nav-overlay') || e.target.closest('.il-text-box') || e.target.closest('#site-nav-mount')) return;
+    ilToggleNav();
   });
 
   // Swipe navigation (touch)
@@ -1035,23 +1045,88 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     if (currentMode !== 'sentence' && currentMode !== 'illustrated') return;
     var dx = e.changedTouches[0].clientX - touchStartX;
     var dy = e.changedTouches[0].clientY - touchStartY;
+
+    if (currentMode === 'illustrated') {
+      // TikTok-style: vertical swipe to navigate, tap to toggle UI
+      if (Math.abs(dy) > SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx) * 1.2) {
+        ilHideNav();
+        if (dy < 0) go(1);   // Swipe up = next
+        else go(-1);          // Swipe down = prev
+      } else if (Math.abs(dx) < 15 && Math.abs(dy) < 15) {
+        // Tap: toggle navigation overlay
+        ilToggleNav();
+      }
+      return;
+    }
+
+    // Sentence mode: original horizontal swipe + tap behavior
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      // Swipe: left swipe = next, right swipe = prev
-      if (dx < 0) {
-        go(1);
-      } else {
-        go(-1);
-      }
+      if (dx < 0) go(1);
+      else go(-1);
     } else if (Math.abs(dx) < 15 && Math.abs(dy) < 15) {
-      // Tap: right half = next, left half = prev
       var tapX = e.changedTouches[0].clientX;
-      if (tapX > window.innerWidth * 0.35) {
-        go(1);
-      } else {
-        go(-1);
-      }
+      if (tapX > window.innerWidth * 0.35) go(1);
+      else go(-1);
     }
   }, { passive: true });
+
+  // ── ILLUSTRATED MODE NAV OVERLAY & TOAST ─────────────────────────────────
+
+  var ilNavVisible = false;
+  var ilNavTimeout = null;
+
+  function ilToggleNav() {
+    if (ilNavVisible) ilHideNav();
+    else ilShowNav();
+  }
+
+  function ilShowNav() {
+    ilNavVisible = true;
+    var overlay = document.getElementById('il-nav-overlay');
+    var siteNav = document.getElementById('site-nav-mount');
+    if (overlay) overlay.classList.add('il-nav-visible');
+    if (siteNav) siteNav.classList.add('il-nav-show');
+    // Update overlay info
+    var labelEl = document.getElementById('il-nav-chapter');
+    var counterEl = document.getElementById('il-nav-counter');
+    if (labelEl && sentences[sentenceIndex]) {
+      labelEl.textContent = sentences[sentenceIndex].chapterLabel || document.title.split('—')[0].trim();
+    }
+    if (counterEl) {
+      var gpos = ilChapterOffset + sentenceIndex + 1;
+      var gtotal = ilGlobalTotal || sentences.length;
+      counterEl.textContent = gpos + ' / ' + gtotal;
+    }
+    clearTimeout(ilNavTimeout);
+    ilNavTimeout = setTimeout(ilHideNav, 4000);
+  }
+
+  function ilHideNav() {
+    ilNavVisible = false;
+    var overlay = document.getElementById('il-nav-overlay');
+    var siteNav = document.getElementById('site-nav-mount');
+    if (overlay) overlay.classList.remove('il-nav-visible');
+    if (siteNav) siteNav.classList.remove('il-nav-show');
+    clearTimeout(ilNavTimeout);
+  }
+
+  function ilShowToast() {
+    try {
+      if (sessionStorage.getItem('pdc-il-toast-shown')) return;
+      sessionStorage.setItem('pdc-il-toast-shown', '1');
+    } catch (e) {}
+    var toast = document.createElement('div');
+    toast.className = 'il-toast';
+    toast.textContent = 'Swipe up to continue reading. Tap to navigate or exit.';
+    document.body.appendChild(toast);
+    requestAnimationFrame(function () {
+      toast.classList.add('il-toast-visible');
+    });
+    setTimeout(function () {
+      toast.classList.remove('il-toast-visible');
+      setTimeout(function () { toast.remove(); }, 500);
+    }, 3500);
+  }
 
   // ── ILLUSTRATED MODE ──────────────────────────────────────────────────────
 
@@ -1216,9 +1291,37 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
           '<div class="il-text" id="il-text"></div>' +
         '</div>' +
         '<div class="il-caption" id="il-caption"></div>' +
+      '</div>' +
+      '<div class="il-nav-overlay" id="il-nav-overlay">' +
+        '<div class="il-nav-inner">' +
+          '<span class="il-nav-chapter" id="il-nav-chapter"></span>' +
+          '<span class="il-nav-counter" id="il-nav-counter"></span>' +
+        '</div>' +
+        '<div class="il-nav-actions">' +
+          '<button class="il-nav-btn" id="il-nav-prev" aria-label="Previous">' +
+            '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>' +
+          '</button>' +
+          '<button class="il-nav-btn il-nav-exit" id="il-nav-exit" aria-label="Exit Picture Book">Exit</button>' +
+          '<button class="il-nav-btn" id="il-nav-next" aria-label="Next">' +
+            '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
+          '</button>' +
+        '</div>' +
       '</div>';
 
     document.body.appendChild(illustratedReader);
+
+    // Wire nav overlay buttons
+    document.getElementById('il-nav-prev').addEventListener('click', function (e) { e.stopPropagation(); go(-1); ilHideNav(); });
+    document.getElementById('il-nav-next').addEventListener('click', function (e) { e.stopPropagation(); go(1); ilHideNav(); });
+    document.getElementById('il-nav-exit').addEventListener('click', function (e) {
+      e.stopPropagation();
+      ilHideNav();
+      currentMode = 'scroll';
+      modeCurrentLabel.textContent = 'Chapter';
+      modeLinks.forEach(function (l) { l.classList.toggle('active', l.dataset.mode === 'scroll'); });
+      exitIllustratedMode();
+    });
+
     return illustratedReader;
   }
 
@@ -1503,25 +1606,14 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       if (chPrevEl) ilPrevChapterUrl = chPrevEl.getAttribute('href');
     }
 
-    // Reuse sentence bottom bar
+    // Hide bottom bar entirely in TikTok mode
     if (bottomBar) {
-      var inner = bottomBar.querySelector('.bottom-bar-inner');
-      if (inner) {
-        ilSavedBottomBarHTML = inner.innerHTML;
-        inner.innerHTML =
-          '<a class="ch-prev" id="sr-bar-prev" role="button" aria-label="Previous sentence"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>' +
-          '<div class="bottom-bar-sentence-info">' +
-            '<span class="bottom-bar-chapter" id="sr-bar-chapter-label">Loading...</span>' +
-            '<span class="bottom-bar-sentence-sep">&middot;</span>' +
-            '<span class="bottom-bar-sentence-counter" id="sr-bar-counter">0 / 0</span>' +
-          '</div>' +
-          '<a class="ch-next" id="sr-bar-next" role="button" aria-label="Next sentence"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>';
-        document.getElementById('sr-bar-prev').addEventListener('click', function () { go(-1); });
-        document.getElementById('sr-bar-next').addEventListener('click', function () { go(1); });
-        bottomBar.classList.add('sentence-mode');
-        bottomBar.style.transform = 'translateY(0)';
-      }
+      ilSavedBottomBarHTML = bottomBar.querySelector('.bottom-bar-inner') ? bottomBar.querySelector('.bottom-bar-inner').innerHTML : '';
+      bottomBar.style.display = 'none';
     }
+    // Hide top nav for full immersion
+    var siteNav = document.getElementById('site-nav-mount');
+    if (siteNav) siteNav.classList.add('il-nav-hidden');
 
     ilLastSrc = null;
     ilLastCaption = '';
@@ -1545,6 +1637,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       if (startIdx < 0) startIdx = 0;
       sentenceIndex = startIdx;
       renderIllustrated();
+      ilShowToast();
       // Fetch all chapters in background to compute global count
       ilComputeGlobalCounts();
     });
@@ -1559,12 +1652,17 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     // Clear picture book hash from URL
     try { history.replaceState(null, '', location.pathname); } catch (e) {}
 
+    // Restore bottom bar and top nav
     var bottomBar = document.querySelector('.bottom-bar');
     if (bottomBar) {
+      bottomBar.style.display = '';
       bottomBar.classList.remove('sentence-mode');
       var inner = bottomBar.querySelector('.bottom-bar-inner');
       if (inner && ilSavedBottomBarHTML) inner.innerHTML = ilSavedBottomBarHTML;
     }
+    var siteNav = document.getElementById('site-nav-mount');
+    if (siteNav) { siteNav.classList.remove('il-nav-hidden'); siteNav.classList.remove('il-nav-show'); }
+    ilHideNav();
 
     if (sentenceIndex >= 0 && sentences[sentenceIndex] && sentences[sentenceIndex].chapterId) {
       var h = document.getElementById(sentences[sentenceIndex].chapterId);

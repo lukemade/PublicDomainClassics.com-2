@@ -1495,7 +1495,7 @@ blockquote {
 }
 
 @media (max-width: 768px) {
-  .il-overlay { padding: 55px 4vw 80px; }
+  .il-overlay { padding: 55px 4vw 20px; }
   .il-text-box { max-width: 540px; width: 100%; padding: 2rem 2.2rem; background: rgba(255, 253, 248, 0.92); border-radius: 4px; box-shadow: 0 4px 40px rgba(0, 0, 0, 0.35), 0 1px 6px rgba(0, 0, 0, 0.15); pointer-events: auto; transition: opacity 0.2s ease; }
   .il-text { font-size: 16px; }
   .il-caption { bottom: 56px; right: 12px; }
@@ -1513,6 +1513,101 @@ blockquote {
     animation-duration: 50s;
   }
 }
+
+/* ── Illustrated mode: hide site nav by default, show on tap ── */
+#site-nav-mount.il-nav-hidden {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+#site-nav-mount.il-nav-hidden.il-nav-show {
+  transform: translateY(0);
+}
+
+/* ── Toast ── */
+.il-toast {
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.75);
+  color: #e8e0d4;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 320px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.il-toast-visible {
+  opacity: 1;
+}
+
+/* ── Nav overlay (appears on tap) ── */
+.il-nav-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+.il-nav-overlay.il-nav-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.il-nav-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.il-nav-chapter {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+.il-nav-counter {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.il-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.il-nav-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.il-nav-btn:hover { background: rgba(255, 255, 255, 0.25); }
+.il-nav-exit { padding: 8px 16px; }
 
 /* ── Reading Settings Modal ──────────────────────────────────── */
 .rdg-overlay {
