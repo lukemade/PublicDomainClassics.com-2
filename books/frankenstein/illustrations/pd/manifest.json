@@ -9,7 +9,7 @@
       { "from": 10, "src": "pd/walton-arctic-vision.png", "cover": true },
       { "from": 25, "src": "pd/walton-voyages-arctic.png", "cover": true },
       { "from": 40, "src": "pd/walton-whaling-north.png", "cover": true },
-      { "from": 43, "src": "pd/walton-resolve.png", "cover": true }
+      { "from": 43, "src": "pd/walton-resolve.png", "cover": true, "position": "right center" }
     ]
   },
 

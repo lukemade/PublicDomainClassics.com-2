@@ -1510,6 +1510,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       var thisCap    = entry.caption || '';
       var thisUrl    = entry.url || '';
       var thisCover  = !!(entry && entry.cover);
+      var thisPos    = entry.position || '';
       var nextSlot   = ilSlot === 'a' ? 'b' : 'a';
       var nextEl     = document.getElementById('il-img-' + nextSlot);
       var currEl     = document.getElementById('il-img-' + ilSlot);
@@ -1521,7 +1522,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
         nextEl.src = thisSrc;
         nextEl.classList.remove('il-img-visible', 'il-img-cover', 'il-kb-b', 'il-img-shrink', 'il-img-panning');
-        nextEl.style.objectPosition = '';
+        nextEl.style.objectPosition = thisPos;
         void nextEl.offsetWidth;
         if (thisCover) nextEl.classList.add('il-img-cover');
         ilKbIndex++;
