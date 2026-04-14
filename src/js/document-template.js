@@ -1052,7 +1052,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         ilHideNav();
         if (dy < 0) go(1);   // Swipe up = next
         else go(-1);          // Swipe down = prev
-      } else if (Math.abs(dx) < 15 && Math.abs(dy) < 15) {
+      } else if (Math.abs(dx) < 30 && Math.abs(dy) < 30) {
         // Tap: toggle navigation overlay
         ilToggleNav();
       }

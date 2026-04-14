@@ -1516,6 +1516,11 @@ blockquote {
 
 /* ── Illustrated mode: hide site nav by default, show on tap ── */
 #site-nav-mount.il-nav-hidden {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 250;
   transform: translateY(-100%);
   transition: transform 0.3s ease;
 }
