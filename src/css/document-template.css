@@ -1335,13 +1335,13 @@ blockquote {
 }
 
 @keyframes il-flicker {
-  0%   { filter: contrast(1.15) sepia(0.15) grayscale(0.15) brightness(1); }
-  15%  { filter: contrast(1.25) sepia(0.10) grayscale(0.20) brightness(0.92); }
-  30%  { filter: contrast(1.10) sepia(0.20) grayscale(0.10) brightness(1.06); }
-  50%  { filter: contrast(1.20) sepia(0.08) grayscale(0.22) brightness(0.94); }
-  70%  { filter: contrast(1.08) sepia(0.22) grayscale(0.12) brightness(1.04); }
-  85%  { filter: contrast(1.22) sepia(0.12) grayscale(0.18) brightness(0.90); }
-  100% { filter: contrast(1.15) sepia(0.15) grayscale(0.15) brightness(1); }
+  0%   { filter: brightness(1)    contrast(1.15) sepia(0.15) grayscale(0.15); }
+  12%  { filter: brightness(0.88) contrast(1.25) sepia(0.10) grayscale(0.22); }
+  28%  { filter: brightness(1.08) contrast(1.08) sepia(0.20) grayscale(0.10); }
+  45%  { filter: brightness(0.85) contrast(1.22) sepia(0.08) grayscale(0.25); }
+  60%  { filter: brightness(1.05) contrast(1.10) sepia(0.18) grayscale(0.12); }
+  78%  { filter: brightness(0.90) contrast(1.28) sepia(0.12) grayscale(0.20); }
+  100% { filter: brightness(1)    contrast(1.15) sepia(0.15) grayscale(0.15); }
 }
 
 .il-img-wrap img {
@@ -1351,14 +1351,13 @@ blockquote {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  filter: contrast(1.15) sepia(0.15) grayscale(0.15);
   transition: opacity 1.4s ease, transform 1.2s ease;
   transform-origin: center center;
 }
 
 .il-img-wrap img.il-img-visible {
   opacity: 1;
-  animation: il-kb-a 35s ease-in-out infinite alternate, il-flicker 12s ease-in-out infinite;
+  animation: il-kb-a 35s ease-in-out infinite alternate, il-flicker 8s ease-in-out infinite;
 }
 
 .il-img-wrap img.il-img-cover {
@@ -1512,10 +1511,10 @@ blockquote {
 
   /* Mobile: no Ken Burns, flicker only */
   .il-img-wrap img.il-img-visible {
-    animation: il-flicker 12s ease-in-out infinite;
+    animation: il-flicker 8s ease-in-out infinite;
   }
   .il-img-wrap img.il-img-visible.il-kb-b {
-    animation: il-flicker 12s ease-in-out infinite;
+    animation: il-flicker 8s ease-in-out infinite;
   }
 }
 
