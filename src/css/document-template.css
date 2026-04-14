@@ -1495,9 +1495,9 @@ blockquote {
 }
 
 @media (max-width: 768px) {
-  .il-overlay { padding: 55px 4vw 20px; }
-  .il-text-box { max-width: 540px; width: 100%; padding: 2rem 2.2rem; background: rgba(255, 253, 248, 0.92); border-radius: 4px; box-shadow: 0 4px 40px rgba(0, 0, 0, 0.35), 0 1px 6px rgba(0, 0, 0, 0.15); pointer-events: auto; transition: opacity 0.2s ease; }
-  .il-text { font-size: 16px; }
+  .il-overlay { padding: 0 4vw 24px; justify-content: flex-end; align-items: flex-start; }
+  .il-text-box { max-width: 540px; width: 100%; padding: 1.2rem 1.4rem; background: rgba(255, 253, 248, 0.92); border-radius: 4px; box-shadow: 0 4px 40px rgba(0, 0, 0, 0.35), 0 1px 6px rgba(0, 0, 0, 0.15); pointer-events: auto; transition: opacity 0.2s ease; }
+  .il-text { font-size: 13px; }
   .il-caption { bottom: 56px; right: 12px; }
 
   /* Slow cinematic pan across the full image on mobile */
