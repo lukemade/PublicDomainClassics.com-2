@@ -1022,12 +1022,14 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     }
   });
 
-  // Desktop click: toggle nav overlay in illustrated mode
-  document.addEventListener('click', function (e) {
-    if (currentMode !== 'illustrated') return;
-    // Don't toggle if clicking nav overlay buttons or text box
-    if (e.target.closest('.il-nav-overlay') || e.target.closest('.il-text-box') || e.target.closest('#site-nav-mount')) return;
-    ilToggleNav();
+  // Desktop: mouse move shows nav, auto-hides after timeout
+  document.addEventListener('mousemove', function () {
+    if (currentMode !== 'illustrated' || ilIsMobile()) return;
+    if (!ilNavVisible) ilShowNav();
+    else {
+      clearTimeout(ilNavTimeout);
+      ilNavTimeout = setTimeout(ilHideNav, 3000);
+    }
   });
 
   // Swipe navigation (touch)
@@ -1082,31 +1084,20 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
   function ilShowNav() {
     ilNavVisible = true;
-    var overlay = document.getElementById('il-nav-overlay');
     var siteNav = document.getElementById('site-nav-mount');
-    if (overlay) overlay.classList.add('il-nav-visible');
+    var bottomBar = document.querySelector('.bottom-bar');
     if (siteNav) siteNav.classList.add('il-nav-show');
-    // Update overlay info
-    var labelEl = document.getElementById('il-nav-chapter');
-    var counterEl = document.getElementById('il-nav-counter');
-    if (labelEl && sentences[sentenceIndex]) {
-      labelEl.textContent = sentences[sentenceIndex].chapterLabel || document.title.split('—')[0].trim();
-    }
-    if (counterEl) {
-      var gpos = ilChapterOffset + sentenceIndex + 1;
-      var gtotal = ilGlobalTotal || sentences.length;
-      counterEl.textContent = gpos + ' / ' + gtotal;
-    }
+    if (bottomBar) bottomBar.classList.remove('il-bar-hidden');
     clearTimeout(ilNavTimeout);
     ilNavTimeout = setTimeout(ilHideNav, 4000);
   }
 
   function ilHideNav() {
     ilNavVisible = false;
-    var overlay = document.getElementById('il-nav-overlay');
     var siteNav = document.getElementById('site-nav-mount');
-    if (overlay) overlay.classList.remove('il-nav-visible');
+    var bottomBar = document.querySelector('.bottom-bar');
     if (siteNav) siteNav.classList.remove('il-nav-show');
+    if (bottomBar) bottomBar.classList.add('il-bar-hidden');
     clearTimeout(ilNavTimeout);
   }
 
@@ -1614,13 +1605,15 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       if (inner) ilSavedBottomBarHTML = inner.innerHTML;
     }
 
+    // Hide top nav on both mobile and desktop
+    var siteNav = document.getElementById('site-nav-mount');
+    if (siteNav) siteNav.classList.add('il-nav-hidden');
+
     if (ilIsMobile()) {
-      // Mobile: hide bottom bar and top nav for full immersion
+      // Mobile: hide bottom bar entirely
       if (bottomBar) bottomBar.style.display = 'none';
-      var siteNav = document.getElementById('site-nav-mount');
-      if (siteNav) siteNav.classList.add('il-nav-hidden');
     } else {
-      // Desktop: keep bottom bar with sentence navigation
+      // Desktop: keep bottom bar with sentence navigation, but hidden initially
       if (bottomBar && bottomBar.querySelector('.bottom-bar-inner')) {
         var inner = bottomBar.querySelector('.bottom-bar-inner');
         inner.innerHTML =
@@ -1634,6 +1627,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         document.getElementById('sr-bar-prev').addEventListener('click', function () { go(-1); });
         document.getElementById('sr-bar-next').addEventListener('click', function () { go(1); });
         bottomBar.classList.add('sentence-mode');
+        bottomBar.classList.add('il-bar-hidden');
         bottomBar.style.transform = 'translateY(0)';
       }
     }
@@ -1680,12 +1674,13 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     if (bottomBar) {
       bottomBar.style.display = '';
       bottomBar.classList.remove('sentence-mode');
+      bottomBar.classList.remove('il-bar-hidden');
       var inner = bottomBar.querySelector('.bottom-bar-inner');
       if (inner && ilSavedBottomBarHTML) inner.innerHTML = ilSavedBottomBarHTML;
     }
     var siteNav = document.getElementById('site-nav-mount');
     if (siteNav) { siteNav.classList.remove('il-nav-hidden'); siteNav.classList.remove('il-nav-show'); }
-    ilHideNav();
+    clearTimeout(ilNavTimeout);
 
     if (sentenceIndex >= 0 && sentences[sentenceIndex] && sentences[sentenceIndex].chapterId) {
       var h = document.getElementById(sentences[sentenceIndex].chapterId);

@@ -1528,6 +1528,15 @@ blockquote {
   transform: translateY(-100%);
   transition: transform 0.3s ease;
 }
+/* Bottom bar hidden state in illustrated mode */
+.bottom-bar.il-bar-hidden {
+  transform: translateY(100%) !important;
+  transition: transform 0.3s ease;
+}
+.bottom-bar.sentence-mode {
+  transition: transform 0.3s ease;
+}
+
 #site-nav-mount.il-nav-hidden.il-nav-show {
   transform: translateY(0);
 }
