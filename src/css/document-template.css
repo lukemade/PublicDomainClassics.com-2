@@ -1336,9 +1336,11 @@ blockquote {
 
 @keyframes il-flicker {
   0%   { filter: contrast(1.15) sepia(0.15) grayscale(0.15) brightness(1); }
-  25%  { filter: contrast(1.18) sepia(0.12) grayscale(0.18) brightness(0.97); }
-  50%  { filter: contrast(1.12) sepia(0.18) grayscale(0.12) brightness(1.02); }
-  75%  { filter: contrast(1.20) sepia(0.14) grayscale(0.16) brightness(0.98); }
+  15%  { filter: contrast(1.25) sepia(0.10) grayscale(0.20) brightness(0.92); }
+  30%  { filter: contrast(1.10) sepia(0.20) grayscale(0.10) brightness(1.06); }
+  50%  { filter: contrast(1.20) sepia(0.08) grayscale(0.22) brightness(0.94); }
+  70%  { filter: contrast(1.08) sepia(0.22) grayscale(0.12) brightness(1.04); }
+  85%  { filter: contrast(1.22) sepia(0.12) grayscale(0.18) brightness(0.90); }
   100% { filter: contrast(1.15) sepia(0.15) grayscale(0.15) brightness(1); }
 }
 
