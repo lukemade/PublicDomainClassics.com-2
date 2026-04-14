@@ -214,14 +214,16 @@
       z-index: 10;
     }
     @media (max-width: 900px) {
-      .cover-hero-inner { flex-direction: column; padding: 40px 1.5rem 32px; min-height: auto; }
+      .cover-hero-inner { flex-direction: column; align-items: center; padding: 40px 1.5rem 32px; min-height: auto; }
+      .cover-hero-left { flex: none; width: 100%; display: flex; justify-content: center; }
+      .book-cover-link { width: 100%; display: flex; justify-content: center; }
       .cover-hero-right { padding: 32px 28px 24px; margin-top: 8px; }
       .book-cover { width: min(320px, 90%); }
     }
     @media (max-width: 600px) {
       .cover-hero-inner { padding: 32px 1rem 24px; }
       .cover-hero-right { padding: 24px 20px 20px; }
-      .book-cover { width: min(260px, 85%); }
+      .book-cover { width: min(260px, 85vw); }
       .book-cover-content { padding: 20px 16px; }
       .book-cover-title { font-size: 1.3rem; }
     }
