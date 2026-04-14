@@ -1334,6 +1334,14 @@ blockquote {
   overflow: hidden;
 }
 
+@keyframes il-flicker {
+  0%   { filter: contrast(1.15) sepia(0.15) grayscale(0.15) brightness(1); }
+  25%  { filter: contrast(1.18) sepia(0.12) grayscale(0.18) brightness(0.97); }
+  50%  { filter: contrast(1.12) sepia(0.18) grayscale(0.12) brightness(1.02); }
+  75%  { filter: contrast(1.20) sepia(0.14) grayscale(0.16) brightness(0.98); }
+  100% { filter: contrast(1.15) sepia(0.15) grayscale(0.15) brightness(1); }
+}
+
 .il-img-wrap img {
   position: absolute;
   inset: 0;
@@ -1346,6 +1354,11 @@ blockquote {
   transform-origin: center center;
 }
 
+.il-img-wrap img.il-img-visible {
+  opacity: 1;
+  animation: il-kb-a 35s ease-in-out infinite alternate, il-flicker 12s ease-in-out infinite;
+}
+
 .il-img-wrap img.il-img-cover {
   object-fit: cover;
 }
@@ -1355,13 +1368,8 @@ blockquote {
   transform: none;
 }
 
-.il-img-wrap img.il-img-visible {
-  opacity: 1;
-  animation: il-kb-a 35s ease-in-out infinite alternate;
-}
-
 .il-img-wrap img.il-img-visible.il-kb-b {
-  animation-name: il-kb-b;
+  animation: il-kb-b 35s ease-in-out infinite alternate, il-flicker 12s ease-in-out infinite;
 }
 
 /* ── Overlay layer: holds text box + caption over the image ── */
@@ -1500,17 +1508,12 @@ blockquote {
   .il-text { font-size: 16px; }
   .il-caption { bottom: 56px; right: 12px; }
 
-  /* Gentle Ken Burns on mobile — show more of the image */
-  @keyframes il-kb-a {
-    from { transform: scale(1.05) translate(0, 0); }
-    to   { transform: scale(1.10) translate(-2%, 1.5%); }
-  }
-  @keyframes il-kb-b {
-    from { transform: scale(1.08) translate(1.5%, -1%); }
-    to   { transform: scale(1.05) translate(-1%, 0.5%); }
-  }
+  /* Mobile: no Ken Burns, flicker only */
   .il-img-wrap img.il-img-visible {
-    animation-duration: 40s;
+    animation: il-flicker 12s ease-in-out infinite;
+  }
+  .il-img-wrap img.il-img-visible.il-kb-b {
+    animation: il-flicker 12s ease-in-out infinite;
   }
 }
 
