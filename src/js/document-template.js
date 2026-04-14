@@ -1110,7 +1110,10 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     clearTimeout(ilNavTimeout);
   }
 
+  function ilIsMobile() { return window.innerWidth <= 768; }
+
   function ilShowToast() {
+    if (!ilIsMobile()) return; // Toast only on mobile
     try {
       if (sessionStorage.getItem('pdc-il-toast-shown')) return;
       sessionStorage.setItem('pdc-il-toast-shown', '1');
@@ -1606,14 +1609,34 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       if (chPrevEl) ilPrevChapterUrl = chPrevEl.getAttribute('href');
     }
 
-    // Hide bottom bar entirely in TikTok mode
     if (bottomBar) {
-      ilSavedBottomBarHTML = bottomBar.querySelector('.bottom-bar-inner') ? bottomBar.querySelector('.bottom-bar-inner').innerHTML : '';
-      bottomBar.style.display = 'none';
+      var inner = bottomBar.querySelector('.bottom-bar-inner');
+      if (inner) ilSavedBottomBarHTML = inner.innerHTML;
     }
-    // Hide top nav for full immersion
-    var siteNav = document.getElementById('site-nav-mount');
-    if (siteNav) siteNav.classList.add('il-nav-hidden');
+
+    if (ilIsMobile()) {
+      // Mobile: hide bottom bar and top nav for full immersion
+      if (bottomBar) bottomBar.style.display = 'none';
+      var siteNav = document.getElementById('site-nav-mount');
+      if (siteNav) siteNav.classList.add('il-nav-hidden');
+    } else {
+      // Desktop: keep bottom bar with sentence navigation
+      if (bottomBar && bottomBar.querySelector('.bottom-bar-inner')) {
+        var inner = bottomBar.querySelector('.bottom-bar-inner');
+        inner.innerHTML =
+          '<a class="ch-prev" id="sr-bar-prev" role="button" aria-label="Previous sentence"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></a>' +
+          '<div class="bottom-bar-sentence-info">' +
+            '<span class="bottom-bar-chapter" id="sr-bar-chapter-label">Loading...</span>' +
+            '<span class="bottom-bar-sentence-sep">&middot;</span>' +
+            '<span class="bottom-bar-sentence-counter" id="sr-bar-counter">0 / 0</span>' +
+          '</div>' +
+          '<a class="ch-next" id="sr-bar-next" role="button" aria-label="Next sentence"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>';
+        document.getElementById('sr-bar-prev').addEventListener('click', function () { go(-1); });
+        document.getElementById('sr-bar-next').addEventListener('click', function () { go(1); });
+        bottomBar.classList.add('sentence-mode');
+        bottomBar.style.transform = 'translateY(0)';
+      }
+    }
 
     ilLastSrc = null;
     ilLastCaption = '';
