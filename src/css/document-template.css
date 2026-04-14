@@ -1500,17 +1500,17 @@ blockquote {
   .il-text { font-size: 16px; }
   .il-caption { bottom: 56px; right: 12px; }
 
-  /* Slow cinematic pan across the full image on mobile */
+  /* Gentle Ken Burns on mobile — show more of the image */
   @keyframes il-kb-a {
-    from { transform: scale(1.35) translate(-12%, -5%); }
-    to   { transform: scale(1.35) translate(12%,  5%); }
+    from { transform: scale(1.05) translate(0, 0); }
+    to   { transform: scale(1.10) translate(-2%, 1.5%); }
   }
   @keyframes il-kb-b {
-    from { transform: scale(1.35) translate(10%,  8%); }
-    to   { transform: scale(1.35) translate(-10%, -3%); }
+    from { transform: scale(1.08) translate(1.5%, -1%); }
+    to   { transform: scale(1.05) translate(-1%, 0.5%); }
   }
   .il-img-wrap img.il-img-visible {
-    animation-duration: 50s;
+    animation-duration: 40s;
   }
 }
 
