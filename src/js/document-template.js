@@ -1060,24 +1060,27 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       var tb = document.getElementById('il-text-box');
       var nb = document.getElementById('il-text-next-box');
       var nt = document.getElementById('il-text-next');
-      var clamped = Math.max(-150, Math.min(150, dy));
-      var progress = Math.abs(clamped) / 150;
-      // Current text: just fade, no movement
+      var progress = Math.min(Math.abs(dy) / 150, 1);
+
+      // Current text follows finger 1:1 on Y axis, fading as it goes
       if (tb) {
+        tb.style.transform = 'translateY(' + dy + 'px)';
         tb.style.opacity = String(1 - progress * 0.8);
       }
 
-      // Show and position next text coming from below (swipe up) or above (swipe down)
+      // Next text: positioned one full box-height away, moves in with finger
       if (nb && nt) {
         var dir = dy < 0 ? 1 : -1;
         var nextIdx = sentenceIndex + dir;
         if (nextIdx >= 0 && nextIdx < sentences.length) {
           nt.textContent = sentences[nextIdx].text;
           nb.style.display = 'block';
-          // Next box starts off-screen and slides in with finger
-          var offset = dir > 0 ? (100 - progress * 100) : -(100 - progress * 100);
+          // Start from below (swipe up) or above (swipe down), slide in with finger
+          var tbHeight = tb ? tb.offsetHeight : 100;
+          var startOffset = dir > 0 ? tbHeight : -tbHeight;
+          var offset = startOffset + dy;
           nb.style.transform = 'translateY(' + offset + 'px)';
-          nb.style.opacity = String(progress * 0.9);
+          nb.style.opacity = String(Math.min(progress * 1.2, 1));
         } else {
           nb.style.display = 'none';
         }
@@ -1098,13 +1101,15 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         ilHideNav();
         var dir = dy < 0 ? 1 : -1;
 
-        // Animate current text off, next text to final position
+        // Animate from current finger position to final position
+        var tbHeight = tb ? tb.offsetHeight : 100;
         if (tb) {
-          tb.style.transition = 'opacity 0.2s ease-out';
+          tb.style.transition = 'transform 0.3s ease-out, opacity 0.25s ease-out';
+          tb.style.transform = 'translateY(' + (dir > 0 ? -(tbHeight + 20) : (tbHeight + 20)) + 'px)';
           tb.style.opacity = '0';
         }
         if (nb) {
-          nb.style.transition = 'transform 0.25s cubic-bezier(0, 0, 0.2, 1), opacity 0.25s ease-out';
+          nb.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
           nb.style.transform = 'translateY(0)';
           nb.style.opacity = '1';
         }
