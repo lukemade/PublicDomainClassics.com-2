@@ -1553,7 +1553,7 @@ blockquote {
     background: var(--bg, #faf8f4); border-radius: 0;
     box-shadow: none; pointer-events: auto;
   }
-  .il-text { font-size: 18px; }
+  .il-text { font-size: 16px; }
   .il-caption { display: none; }
 
   /* Mobile: no Ken Burns, flicker only */
