@@ -1545,8 +1545,8 @@ blockquote {
   .il-img-wrap::after {
     content: '';
     position: absolute;
-    bottom: 0; left: 0; right: 0; height: 30%;
-    background: linear-gradient(transparent, rgba(10, 8, 6, 0.6));
+    bottom: 0; left: 0; right: 0; height: 45%;
+    background: linear-gradient(transparent, rgba(10, 8, 6, 0.85));
     pointer-events: none;
     z-index: 1;
   }
