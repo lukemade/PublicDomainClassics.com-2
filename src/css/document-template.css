@@ -1556,12 +1556,17 @@ blockquote {
   .il-text { font-size: 16px; }
   .il-caption { display: none; }
 
-  /* Mobile: no Ken Burns, flicker only */
+  /* Mobile/tablet: subtle left-to-right pan + flicker */
+  @keyframes il-pan-lr {
+    from { object-position: 45% center; }
+    to   { object-position: 55% center; }
+  }
+  .il-img-wrap img { object-fit: cover; }
   .il-img-wrap img.il-img-visible {
-    animation: il-flicker 8s ease-in-out infinite;
+    animation: il-pan-lr 30s ease-in-out infinite alternate, il-flicker 8s ease-in-out infinite;
   }
   .il-img-wrap img.il-img-visible.il-kb-b {
-    animation: il-flicker 8s ease-in-out infinite;
+    animation: il-pan-lr 30s ease-in-out infinite alternate, il-flicker 8s ease-in-out infinite;
   }
 }
 
