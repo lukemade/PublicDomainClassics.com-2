@@ -1542,6 +1542,14 @@ blockquote {
   /* Image takes top 75%, shows full height with contain */
   .illustrated-reader { display: flex; flex-direction: column; background: #0a0806; }
   .il-img-wrap { position: relative; flex: none; height: 75vh; }
+  .il-img-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 30%;
+    background: linear-gradient(transparent, rgba(10, 8, 6, 0.6));
+    pointer-events: none;
+    z-index: 1;
+  }
   .il-img-wrap img { object-fit: contain; object-position: center center; }
   #il-video { object-fit: contain; object-position: center center; }
   .il-overlay {
