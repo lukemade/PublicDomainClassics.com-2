@@ -1062,12 +1062,13 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       var nt = document.getElementById('il-text-next');
       var clamped = Math.max(-150, Math.min(150, dy));
       var progress = Math.abs(clamped) / 150;
+      var dampened = clamped * 0.4;
 
-      // Move current text with finger
+      // Move current text with finger (dampened for smoothness)
       if (tb) {
-        var shrink = 1 - progress * 0.08;
-        tb.style.transform = 'translateY(' + clamped + 'px) scale(' + shrink + ')';
-        tb.style.opacity = String(1 - progress * 0.8);
+        var shrink = 1 - progress * 0.06;
+        tb.style.transform = 'translateY(' + dampened + 'px) scale(' + shrink + ')';
+        tb.style.opacity = String(1 - progress * 0.7);
       }
 
       // Show and position next text coming from below (swipe up) or above (swipe down)
