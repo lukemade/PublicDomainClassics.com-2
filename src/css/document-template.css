@@ -1551,7 +1551,7 @@ blockquote {
     z-index: 1;
   }
   .il-img-wrap img { object-fit: contain; object-position: center center; }
-  #il-video { object-fit: contain; object-position: center center; }
+  #il-video { object-fit: cover; object-position: center center; }
   .il-overlay {
     position: absolute; bottom: 0; left: 0; right: 0; padding: 0;
     justify-content: flex-end; align-items: stretch;
