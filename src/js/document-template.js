@@ -1037,55 +1037,10 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   var touchStartY = 0;
   var SWIPE_THRESHOLD = 50;
 
-  var ilDragging = false;
-
   document.addEventListener('touchstart', function (e) {
     if (currentMode !== 'sentence' && currentMode !== 'illustrated') return;
     touchStartX = e.changedTouches[0].clientX;
     touchStartY = e.changedTouches[0].clientY;
-    ilDragging = false;
-    // Reset text box transition for direct finger tracking
-    if (currentMode === 'illustrated' && ilIsMobile()) {
-      var tb = document.getElementById('il-text-box');
-      if (tb) { tb.style.transition = 'none'; tb.style.transform = ''; tb.style.opacity = ''; }
-    }
-  }, { passive: true });
-
-  document.addEventListener('touchmove', function (e) {
-    if (currentMode !== 'illustrated' || !ilIsMobile()) return;
-    var dy = e.changedTouches[0].clientY - touchStartY;
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
-      ilDragging = true;
-      var tb = document.getElementById('il-text-box');
-      var nb = document.getElementById('il-text-next-box');
-      var nt = document.getElementById('il-text-next');
-      var progress = Math.min(Math.abs(dy) / 150, 1);
-
-      // Current text follows finger 1:1 on Y axis, fading as it goes
-      if (tb) {
-        tb.style.transform = 'translateY(' + dy + 'px)';
-        tb.style.opacity = String(1 - progress * 0.8);
-      }
-
-      // Next text: positioned one full box-height away, moves in with finger
-      if (nb && nt) {
-        var dir = dy < 0 ? 1 : -1;
-        var nextIdx = sentenceIndex + dir;
-        if (nextIdx >= 0 && nextIdx < sentences.length) {
-          nt.textContent = sentences[nextIdx].text;
-          nb.style.display = 'block';
-          // Start from below (swipe up) or above (swipe down), slide in with finger
-          var tbHeight = tb ? tb.offsetHeight : 100;
-          var startOffset = dir > 0 ? tbHeight : -tbHeight;
-          var offset = startOffset + dy;
-          nb.style.transform = 'translateY(' + offset + 'px)';
-          nb.style.opacity = String(Math.min(progress * 1.2, 1));
-        } else {
-          nb.style.display = 'none';
-        }
-      }
-    }
   }, { passive: true });
 
   document.addEventListener('touchend', function (e) {
@@ -1093,63 +1048,16 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     var dx = e.changedTouches[0].clientX - touchStartX;
     var dy = e.changedTouches[0].clientY - touchStartY;
 
-    if (currentMode === 'illustrated') {
-      var tb = document.getElementById('il-text-box');
-      var nb = document.getElementById('il-text-next-box');
-      var textEl = document.getElementById('il-text');
-      if (ilIsMobile() && Math.abs(dy) > SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx) * 1.2) {
+    if (currentMode === 'illustrated' && ilIsMobile()) {
+      if (Math.abs(dy) > SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx) * 1.2) {
+        // Swipe detected — navigate
         ilHideNav();
         var dir = dy < 0 ? 1 : -1;
-
-        // Animate from current finger position to final position
-        var tbHeight = tb ? tb.offsetHeight : 100;
-        if (tb) {
-          tb.style.transition = 'transform 0.3s ease-out, opacity 0.25s ease-out';
-          tb.style.transform = 'translateY(' + (dir > 0 ? -(tbHeight + 20) : (tbHeight + 20)) + 'px)';
-          tb.style.opacity = '0';
-        }
-        if (nb) {
-          nb.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
-          nb.style.transform = 'translateY(0)';
-          nb.style.opacity = '1';
-        }
-
-        setTimeout(function () {
-          // Swap: copy next text into main box, hide next box
-          var nextIdx = sentenceIndex + dir;
-          if (nextIdx >= 0 && nextIdx < sentences.length && textEl) {
-            var s = sentences[nextIdx];
-            if (s.type === 'heading') textEl.className = 'il-text il-heading';
-            else if (s.type === 'epigraph') textEl.className = 'il-text il-epigraph';
-            else textEl.className = 'il-text';
-            textEl.textContent = s.text;
-          }
-          if (tb) { tb.style.transition = 'none'; tb.style.transform = ''; tb.style.opacity = '1'; }
-          if (nb) { nb.style.transition = 'none'; nb.style.display = 'none'; nb.style.transform = ''; nb.style.opacity = '0'; }
-
-          // Update image/state
-          go(dir);
-        }, 260);
-      } else if (Math.abs(dx) < 30 && Math.abs(dy) < 30 && !ilDragging) {
-        // Tap: toggle navigation overlay
-        if (tb) { tb.style.transition = ''; tb.style.transform = ''; tb.style.opacity = ''; }
-        if (nb) { nb.style.display = 'none'; }
+        go(dir);
+      } else if (Math.abs(dx) < 30 && Math.abs(dy) < 30) {
+        // Tap
         ilToggleNav();
-      } else {
-        // Snap back — didn't meet threshold
-        if (tb) {
-          tb.style.transition = 'transform 0.25s ease-out, opacity 0.25s ease-out';
-          tb.style.transform = 'translateY(0)';
-          tb.style.opacity = '1';
-        }
-        if (nb) {
-          nb.style.transition = 'transform 0.25s ease-out, opacity 0.25s ease-out';
-          nb.style.transform = '';
-          nb.style.opacity = '0';
-          setTimeout(function () { nb.style.display = 'none'; }, 250);
-        }
       }
-      ilDragging = false;
       return;
     }
 
@@ -1377,9 +1285,6 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         '<div class="il-text-box" id="il-text-box">' +
           '<div class="il-text" id="il-text"></div>' +
         '</div>' +
-        '<div class="il-text-box il-text-next" id="il-text-next-box">' +
-          '<div class="il-text" id="il-text-next"></div>' +
-        '</div>' +
         '<div class="il-caption" id="il-caption"></div>' +
       '</div>' +
       '<div class="il-nav-overlay" id="il-nav-overlay">' +
@@ -1594,8 +1499,14 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     var textBox = document.getElementById('il-text-box');
     var capEl  = document.getElementById('il-caption');
 
-    // Fade text on desktop (mobile slide handled by touch events)
-    if (!ilIsMobile() && textEl) {
+    // Animate text transition
+    if (ilIsMobile() && textBox && ilSwipeDir !== 0) {
+      // Mobile: slide out in swipe direction
+      textBox.style.transition = 'transform 0.25s ease-in, opacity 0.2s ease-in';
+      textBox.style.transform = 'translateY(' + (ilSwipeDir > 0 ? '-40px' : '40px') + ')';
+      textBox.style.opacity = '0';
+    } else if (textEl) {
+      // Desktop: simple fade
       textEl.classList.add('il-fading');
     }
 
@@ -1662,9 +1573,11 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       }
     }
 
-    // Update text after fade (mobile slide is handled by touch events)
+    // Update text content after slide-out/fade completes
+    var delay = (ilIsMobile() && ilSwipeDir !== 0) ? 250 : 200;
     setTimeout(function () {
       if (!textEl) return;
+      // Set new text content
       if (s.type === 'heading') {
         textEl.className = 'il-text il-heading';
         textEl.textContent = s.text;
@@ -1684,7 +1597,21 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         }
       }
       textEl.classList.remove('il-fading');
-    }, 200);
+
+      // Mobile: slide in from opposite direction
+      if (ilIsMobile() && textBox && ilSwipeDir !== 0) {
+        textBox.style.transition = 'none';
+        textBox.style.transform = 'translateY(' + (ilSwipeDir > 0 ? '40px' : '-40px') + ')';
+        textBox.style.opacity = '0';
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            textBox.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+            textBox.style.transform = 'translateY(0)';
+            textBox.style.opacity = '1';
+          });
+        });
+      }
+    }, delay);
   }
 
   function enterIllustratedMode() {
