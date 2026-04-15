@@ -1558,8 +1558,8 @@ blockquote {
 
   /* Mobile/tablet: subtle left-to-right pan + flicker */
   @keyframes il-pan-lr {
-    from { object-position: 45% center; }
-    to   { object-position: 55% center; }
+    from { object-position: 55% center; }
+    to   { object-position: 45% center; }
   }
   .il-img-wrap img { object-fit: cover; }
   .il-img-wrap img.il-img-visible {
