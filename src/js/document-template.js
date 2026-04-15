@@ -1055,14 +1055,34 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     if (currentMode !== 'illustrated' || !ilIsMobile()) return;
     var dy = e.changedTouches[0].clientY - touchStartY;
     var dx = e.changedTouches[0].clientX - touchStartX;
-    // Only track vertical movement
     if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
       ilDragging = true;
       var tb = document.getElementById('il-text-box');
+      var nb = document.getElementById('il-text-next-box');
+      var nt = document.getElementById('il-text-next');
+      var clamped = Math.max(-150, Math.min(150, dy));
+      var progress = Math.abs(clamped) / 150;
+
+      // Move current text with finger
       if (tb) {
-        var clamped = Math.max(-120, Math.min(120, dy));
         tb.style.transform = 'translateY(' + clamped + 'px)';
-        tb.style.opacity = String(1 - Math.abs(clamped) / 180);
+        tb.style.opacity = String(1 - progress * 0.8);
+      }
+
+      // Show and position next text coming from below (swipe up) or above (swipe down)
+      if (nb && nt) {
+        var dir = dy < 0 ? 1 : -1;
+        var nextIdx = sentenceIndex + dir;
+        if (nextIdx >= 0 && nextIdx < sentences.length) {
+          nt.textContent = sentences[nextIdx].text;
+          nb.style.display = 'block';
+          // Next box starts off-screen and slides in with finger
+          var offset = dir > 0 ? (100 - progress * 100) : -(100 - progress * 100);
+          nb.style.transform = 'translateY(' + offset + 'px)';
+          nb.style.opacity = String(progress * 0.9);
+        } else {
+          nb.style.display = 'none';
+        }
       }
     }
   }, { passive: true });
@@ -1074,64 +1094,44 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
     if (currentMode === 'illustrated') {
       var tb = document.getElementById('il-text-box');
+      var nb = document.getElementById('il-text-next-box');
       var textEl = document.getElementById('il-text');
       if (ilIsMobile() && Math.abs(dy) > SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx) * 1.2) {
         ilHideNav();
         var dir = dy < 0 ? 1 : -1;
 
-        // Preload next sentence text
-        var nextIdx = sentenceIndex + dir;
-        var nextText = '';
-        var nextType = '';
-        if (nextIdx >= 0 && nextIdx < sentences.length) {
-          nextText = sentences[nextIdx].text;
-          nextType = sentences[nextIdx].type || '';
-        }
-
-        // Slide current text off screen
+        // Animate current text off, next text to final position
         if (tb) {
-          tb.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 1, 1), opacity 0.15s ease-out';
-          tb.style.transform = 'translateY(' + (dy < 0 ? '-120' : '120') + 'px)';
+          tb.style.transition = 'transform 0.25s cubic-bezier(0.4, 0, 1, 1), opacity 0.2s ease-out';
+          tb.style.transform = 'translateY(' + (dir > 0 ? '-120' : '120') + 'px)';
           tb.style.opacity = '0';
+        }
+        if (nb) {
+          nb.style.transition = 'transform 0.25s cubic-bezier(0, 0, 0.2, 1), opacity 0.25s ease-out';
+          nb.style.transform = 'translateY(0)';
+          nb.style.opacity = '1';
         }
 
         setTimeout(function () {
-          // Update text content while box is invisible
-          if (textEl && nextText) {
-            if (nextType === 'heading') {
-              textEl.className = 'il-text il-heading';
-            } else if (nextType === 'epigraph') {
-              textEl.className = 'il-text il-epigraph';
-            } else {
-              textEl.className = 'il-text';
-            }
-            textEl.textContent = nextText;
+          // Swap: copy next text into main box, hide next box
+          var nextIdx = sentenceIndex + dir;
+          if (nextIdx >= 0 && nextIdx < sentences.length && textEl) {
+            var s = sentences[nextIdx];
+            if (s.type === 'heading') textEl.className = 'il-text il-heading';
+            else if (s.type === 'epigraph') textEl.className = 'il-text il-epigraph';
+            else textEl.className = 'il-text';
+            textEl.textContent = s.text;
           }
+          if (tb) { tb.style.transition = 'none'; tb.style.transform = ''; tb.style.opacity = '1'; }
+          if (nb) { nb.style.transition = 'none'; nb.style.display = 'none'; nb.style.transform = ''; nb.style.opacity = '0'; }
 
-          // Position box off-screen in entry direction
-          if (tb) {
-            tb.style.transition = 'none';
-            tb.style.transform = 'translateY(' + (dir > 0 ? '50' : '-50') + 'px)';
-            tb.style.opacity = '0';
-          }
-
-          // Force layout, then animate in
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              if (tb) {
-                tb.style.transition = 'transform 0.3s cubic-bezier(0, 0, 0.2, 1), opacity 0.3s ease-out';
-                tb.style.transform = 'translateY(0)';
-                tb.style.opacity = '1';
-              }
-            });
-          });
-
-          // Call go() to update image/state (text already set)
+          // Update image/state
           go(dir);
-        }, 180);
+        }, 260);
       } else if (Math.abs(dx) < 30 && Math.abs(dy) < 30 && !ilDragging) {
         // Tap: toggle navigation overlay
         if (tb) { tb.style.transition = ''; tb.style.transform = ''; tb.style.opacity = ''; }
+        if (nb) { nb.style.display = 'none'; }
         ilToggleNav();
       } else {
         // Snap back — didn't meet threshold
@@ -1139,6 +1139,12 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
           tb.style.transition = 'transform 0.25s ease-out, opacity 0.25s ease-out';
           tb.style.transform = 'translateY(0)';
           tb.style.opacity = '1';
+        }
+        if (nb) {
+          nb.style.transition = 'transform 0.25s ease-out, opacity 0.25s ease-out';
+          nb.style.transform = '';
+          nb.style.opacity = '0';
+          setTimeout(function () { nb.style.display = 'none'; }, 250);
         }
       }
       ilDragging = false;
@@ -1368,6 +1374,9 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       '<div class="il-overlay" id="il-overlay">' +
         '<div class="il-text-box" id="il-text-box">' +
           '<div class="il-text" id="il-text"></div>' +
+        '</div>' +
+        '<div class="il-text-box il-text-next" id="il-text-next-box">' +
+          '<div class="il-text" id="il-text-next"></div>' +
         '</div>' +
         '<div class="il-caption" id="il-caption"></div>' +
       '</div>' +
