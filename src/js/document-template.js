@@ -1066,8 +1066,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
       // Move current text with finger (dampened for smoothness)
       if (tb) {
-        var shrink = 1 - progress * 0.06;
-        tb.style.transform = 'translateY(' + dampened + 'px) scale(' + shrink + ')';
+        tb.style.transform = 'translateY(' + dampened + 'px)';
         tb.style.opacity = String(1 - progress * 0.7);
       }
 
@@ -1105,7 +1104,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         // Animate current text off, next text to final position
         if (tb) {
           tb.style.transition = 'transform 0.25s cubic-bezier(0.4, 0, 1, 1), opacity 0.2s ease-out';
-          tb.style.transform = 'translateY(' + (dir > 0 ? '-120' : '120') + 'px) scale(0.92)';
+          tb.style.transform = 'translateY(' + (dir > 0 ? '-120' : '120') + 'px)';
           tb.style.opacity = '0';
         }
         if (nb) {
