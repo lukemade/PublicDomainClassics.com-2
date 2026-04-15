@@ -1539,14 +1539,19 @@ blockquote {
 }
 
 @media (max-width: 768px) {
-  /* Image fills viewport, text overlaps bottom with white bg */
-  .il-img-wrap img { object-position: center center; }
-  .il-overlay { padding: 0; justify-content: flex-end; align-items: stretch; }
+  /* Image takes top 75%, shows full height with contain */
+  .illustrated-reader { display: flex; flex-direction: column; background: var(--bg, #faf8f4); }
+  .il-img-wrap { position: relative; flex: none; height: 75vh; }
+  .il-img-wrap img { object-fit: contain; object-position: center center; }
+  #il-video { object-fit: contain; object-position: center center; }
+  .il-overlay {
+    position: relative; flex: 1; padding: 0;
+    justify-content: flex-start; align-items: stretch;
+  }
   .il-text-box {
     max-width: 100%; width: 100%; padding: 1.4rem 1.4rem 1.6rem;
     background: var(--bg, #faf8f4); border-radius: 0;
-    box-shadow: 0 -20px 40px rgba(250, 248, 244, 0.6);
-    pointer-events: auto;
+    box-shadow: none; pointer-events: auto;
   }
   .il-text { font-size: 18px; }
   .il-caption { display: none; }
