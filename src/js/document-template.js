@@ -1074,28 +1074,61 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
     if (currentMode === 'illustrated') {
       var tb = document.getElementById('il-text-box');
+      var textEl = document.getElementById('il-text');
       if (ilIsMobile() && Math.abs(dy) > SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx) * 1.2) {
-        // Complete the swipe: animate text off screen
-        if (tb) {
-          tb.style.transition = 'transform 0.2s ease-out, opacity 0.2s ease-out';
-          tb.style.transform = 'translateY(' + (dy < 0 ? '-150' : '150') + 'px)';
-          tb.style.opacity = '0';
-        }
         ilHideNav();
         var dir = dy < 0 ? 1 : -1;
+
+        // Preload next sentence text
+        var nextIdx = sentenceIndex + dir;
+        var nextText = '';
+        var nextType = '';
+        if (nextIdx >= 0 && nextIdx < sentences.length) {
+          nextText = sentences[nextIdx].text;
+          nextType = sentences[nextIdx].type || '';
+        }
+
+        // Slide current text off screen
+        if (tb) {
+          tb.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 1, 1), opacity 0.15s ease-out';
+          tb.style.transform = 'translateY(' + (dy < 0 ? '-120' : '120') + 'px)';
+          tb.style.opacity = '0';
+        }
+
         setTimeout(function () {
-          go(dir);
-          // After go() updates text, slide new text in from opposite direction
+          // Update text content while box is invisible
+          if (textEl && nextText) {
+            if (nextType === 'heading') {
+              textEl.className = 'il-text il-heading';
+            } else if (nextType === 'epigraph') {
+              textEl.className = 'il-text il-epigraph';
+            } else {
+              textEl.className = 'il-text';
+            }
+            textEl.textContent = nextText;
+          }
+
+          // Position box off-screen in entry direction
           if (tb) {
             tb.style.transition = 'none';
-            tb.style.transform = 'translateY(' + (dir > 0 ? '60' : '-60') + 'px)';
+            tb.style.transform = 'translateY(' + (dir > 0 ? '50' : '-50') + 'px)';
             tb.style.opacity = '0';
-            void tb.offsetWidth;
-            tb.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
-            tb.style.transform = 'translateY(0)';
-            tb.style.opacity = '1';
           }
-        }, 200);
+
+          // Force layout, then animate in
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              if (tb) {
+                tb.style.transition = 'transform 0.3s cubic-bezier(0, 0, 0.2, 1), opacity 0.3s ease-out';
+                tb.style.transform = 'translateY(0)';
+                tb.style.opacity = '1';
+              }
+            });
+          });
+
+          // Call go() to update image/state (text already set)
+          go(dir);
+        }, 180);
       } else if (Math.abs(dx) < 30 && Math.abs(dy) < 30 && !ilDragging) {
         // Tap: toggle navigation overlay
         if (tb) { tb.style.transition = ''; tb.style.transform = ''; tb.style.opacity = ''; }

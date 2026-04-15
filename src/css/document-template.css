@@ -1560,6 +1560,9 @@ blockquote {
     max-width: 100%; width: 100%; padding: 1rem 1.2rem;
     background: rgba(255, 253, 248, 0.92); border-radius: 0;
     box-shadow: none; pointer-events: auto;
+    will-change: transform, opacity;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
   .il-text { font-size: 16px; }
   .il-caption { display: none; }
