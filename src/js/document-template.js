@@ -1496,10 +1496,16 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
     var entry  = ilFindImage(s.text);
     var textEl = document.getElementById('il-text');
+    var textBox = document.getElementById('il-text-box');
     var capEl  = document.getElementById('il-caption');
 
-    // Fade text
-    if (textEl) textEl.classList.add('il-fading');
+    // Slide text out on mobile, fade on desktop
+    if (textBox && ilIsMobile() && ilSwipeDir !== 0) {
+      textBox.classList.remove('il-slide-up', 'il-slide-down', 'il-slide-enter-up', 'il-slide-enter-down');
+      textBox.classList.add(ilSwipeDir > 0 ? 'il-slide-up' : 'il-slide-down');
+    } else if (textEl) {
+      textEl.classList.add('il-fading');
+    }
 
     // Always use image+text layout (no title slide grid)
     ilHideGrid();
@@ -1564,7 +1570,8 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       }
     }
 
-    // Update text after brief fade
+    // Update text after slide-out / fade
+    var slideDelay = (textBox && ilIsMobile() && ilSwipeDir !== 0) ? 250 : 200;
     setTimeout(function () {
       if (!textEl) return;
       if (s.type === 'heading') {
@@ -1586,7 +1593,14 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         }
       }
       textEl.classList.remove('il-fading');
-    }, 200);
+      // Slide new text in from opposite direction
+      if (textBox && ilIsMobile() && ilSwipeDir !== 0) {
+        textBox.classList.remove('il-slide-up', 'il-slide-down');
+        textBox.classList.add(ilSwipeDir > 0 ? 'il-slide-enter-up' : 'il-slide-enter-down');
+        void textBox.offsetWidth; // force reflow
+        textBox.classList.remove('il-slide-enter-up', 'il-slide-enter-down');
+      }
+    }, slideDelay);
   }
 
   function enterIllustratedMode() {
@@ -1698,10 +1712,12 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   }
 
   // go() illustrated override + #pb= auto-enter
+  var ilSwipeDir = 0; // +1 = next (swipe up), -1 = prev (swipe down)
   var _originalGo = go;
   go = function (delta) {
     if (currentMode === 'illustrated') {
       if (transitioning) return;
+      ilSwipeDir = delta;
       var next = sentenceIndex + delta;
       if (next >= sentences.length && ilNextChapterUrl) { window.location.href = ilNextChapterUrl + '#pb=1'; return; }
       if (next < 0 && ilPrevChapterUrl) { window.location.href = ilPrevChapterUrl + '#pb=99999'; return; }

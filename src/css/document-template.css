@@ -1409,9 +1409,30 @@ blockquote {
   border-radius: 4px;
   box-shadow: 0 4px 40px rgba(0, 0, 0, 0.35), 0 1px 6px rgba(0, 0, 0, 0.15);
   pointer-events: auto;
-  transition: opacity 0.2s ease;
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.25s ease-out, opacity 0.25s ease-out;
 }
 
+/* ── Mobile slide transitions ── */
+.il-text-box.il-slide-up {
+  transform: translateY(-30px);
+  opacity: 0;
+  transition: transform 0.22s ease-in, opacity 0.18s ease-in;
+}
+.il-text-box.il-slide-down {
+  transform: translateY(30px);
+  opacity: 0;
+  transition: transform 0.22s ease-in, opacity 0.18s ease-in;
+}
+.il-text-box.il-slide-enter-up {
+  transform: translateY(20px);
+  opacity: 0;
+}
+.il-text-box.il-slide-enter-down {
+  transform: translateY(-20px);
+  opacity: 0;
+}
 .il-text {
   font-family: 'Libre Baskerville', serif;
   font-size: clamp(16px, 1.5vw, 21px);
