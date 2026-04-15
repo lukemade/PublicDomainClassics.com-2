@@ -1037,10 +1037,34 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
   var touchStartY = 0;
   var SWIPE_THRESHOLD = 50;
 
+  var ilDragging = false;
+
   document.addEventListener('touchstart', function (e) {
     if (currentMode !== 'sentence' && currentMode !== 'illustrated') return;
     touchStartX = e.changedTouches[0].clientX;
     touchStartY = e.changedTouches[0].clientY;
+    ilDragging = false;
+    // Reset text box transition for direct finger tracking
+    if (currentMode === 'illustrated' && ilIsMobile()) {
+      var tb = document.getElementById('il-text-box');
+      if (tb) { tb.style.transition = 'none'; tb.style.transform = ''; tb.style.opacity = ''; }
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchmove', function (e) {
+    if (currentMode !== 'illustrated' || !ilIsMobile()) return;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    // Only track vertical movement
+    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
+      ilDragging = true;
+      var tb = document.getElementById('il-text-box');
+      if (tb) {
+        var clamped = Math.max(-120, Math.min(120, dy));
+        tb.style.transform = 'translateY(' + clamped + 'px)';
+        tb.style.opacity = String(1 - Math.abs(clamped) / 180);
+      }
+    }
   }, { passive: true });
 
   document.addEventListener('touchend', function (e) {
@@ -1049,15 +1073,42 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     var dy = e.changedTouches[0].clientY - touchStartY;
 
     if (currentMode === 'illustrated') {
-      // TikTok-style: vertical swipe to navigate, tap to toggle UI
-      if (Math.abs(dy) > SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx) * 1.2) {
+      var tb = document.getElementById('il-text-box');
+      if (ilIsMobile() && Math.abs(dy) > SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx) * 1.2) {
+        // Complete the swipe: animate text off screen
+        if (tb) {
+          tb.style.transition = 'transform 0.2s ease-out, opacity 0.2s ease-out';
+          tb.style.transform = 'translateY(' + (dy < 0 ? '-150' : '150') + 'px)';
+          tb.style.opacity = '0';
+        }
         ilHideNav();
-        if (dy < 0) go(1);   // Swipe up = next
-        else go(-1);          // Swipe down = prev
-      } else if (Math.abs(dx) < 30 && Math.abs(dy) < 30) {
+        var dir = dy < 0 ? 1 : -1;
+        setTimeout(function () {
+          go(dir);
+          // After go() updates text, slide new text in from opposite direction
+          if (tb) {
+            tb.style.transition = 'none';
+            tb.style.transform = 'translateY(' + (dir > 0 ? '60' : '-60') + 'px)';
+            tb.style.opacity = '0';
+            void tb.offsetWidth;
+            tb.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+            tb.style.transform = 'translateY(0)';
+            tb.style.opacity = '1';
+          }
+        }, 200);
+      } else if (Math.abs(dx) < 30 && Math.abs(dy) < 30 && !ilDragging) {
         // Tap: toggle navigation overlay
+        if (tb) { tb.style.transition = ''; tb.style.transform = ''; tb.style.opacity = ''; }
         ilToggleNav();
+      } else {
+        // Snap back — didn't meet threshold
+        if (tb) {
+          tb.style.transition = 'transform 0.25s ease-out, opacity 0.25s ease-out';
+          tb.style.transform = 'translateY(0)';
+          tb.style.opacity = '1';
+        }
       }
+      ilDragging = false;
       return;
     }
 
@@ -1499,11 +1550,8 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
     var textBox = document.getElementById('il-text-box');
     var capEl  = document.getElementById('il-caption');
 
-    // Slide text out on mobile, fade on desktop
-    if (textBox && ilIsMobile() && ilSwipeDir !== 0) {
-      textBox.classList.remove('il-slide-up', 'il-slide-down', 'il-slide-enter-up', 'il-slide-enter-down');
-      textBox.classList.add(ilSwipeDir > 0 ? 'il-slide-up' : 'il-slide-down');
-    } else if (textEl) {
+    // Fade text on desktop (mobile slide handled by touch events)
+    if (!ilIsMobile() && textEl) {
       textEl.classList.add('il-fading');
     }
 
@@ -1570,8 +1618,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       }
     }
 
-    // Update text after slide-out / fade
-    var slideDelay = (textBox && ilIsMobile() && ilSwipeDir !== 0) ? 250 : 200;
+    // Update text after fade (mobile slide is handled by touch events)
     setTimeout(function () {
       if (!textEl) return;
       if (s.type === 'heading') {
@@ -1593,14 +1640,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
         }
       }
       textEl.classList.remove('il-fading');
-      // Slide new text in from opposite direction
-      if (textBox && ilIsMobile() && ilSwipeDir !== 0) {
-        textBox.classList.remove('il-slide-up', 'il-slide-down');
-        textBox.classList.add(ilSwipeDir > 0 ? 'il-slide-enter-up' : 'il-slide-enter-down');
-        void textBox.offsetWidth; // force reflow
-        textBox.classList.remove('il-slide-enter-up', 'il-slide-enter-down');
-      }
-    }, slideDelay);
+    }, 200);
   }
 
   function enterIllustratedMode() {
