@@ -1540,18 +1540,19 @@ blockquote {
 
 @media (max-width: 768px) {
   /* Image takes top 75%, shows full height with contain */
-  .illustrated-reader { display: flex; flex-direction: column; background: var(--bg, #faf8f4); }
+  .illustrated-reader { display: flex; flex-direction: column; background: #0a0806; }
   .il-img-wrap { position: relative; flex: none; height: 75vh; }
   .il-img-wrap img { object-fit: contain; object-position: center center; }
   #il-video { object-fit: contain; object-position: center center; }
   .il-overlay {
-    position: absolute; bottom: 0; left: 0; right: 0; padding: 0;
-    justify-content: flex-end; align-items: stretch;
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 0 4vw 16px;
+    justify-content: flex-end; align-items: flex-start;
   }
   .il-text-box {
-    max-width: 100%; width: 100%; padding: 1.4rem 1.4rem 1.6rem;
-    background: var(--bg, #faf8f4); border-radius: 0;
-    box-shadow: none; pointer-events: auto;
+    max-width: 100%; padding: 1rem 1.2rem;
+    background: rgba(255, 253, 248, 0.92); border-radius: 6px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+    pointer-events: auto;
   }
   .il-text { font-size: 16px; }
   .il-caption { display: none; }
