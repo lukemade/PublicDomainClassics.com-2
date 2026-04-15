@@ -1062,12 +1062,9 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
       var nt = document.getElementById('il-text-next');
       var clamped = Math.max(-150, Math.min(150, dy));
       var progress = Math.abs(clamped) / 150;
-      var dampened = clamped * 0.4;
-
-      // Move current text with finger (dampened for smoothness)
+      // Current text: just fade, no movement
       if (tb) {
-        tb.style.transform = 'translateY(' + dampened + 'px)';
-        tb.style.opacity = String(1 - progress * 0.7);
+        tb.style.opacity = String(1 - progress * 0.8);
       }
 
       // Show and position next text coming from below (swipe up) or above (swipe down)
@@ -1103,8 +1100,7 @@ document.querySelectorAll('.footnote-ref').forEach(function (ref) {
 
         // Animate current text off, next text to final position
         if (tb) {
-          tb.style.transition = 'transform 0.25s cubic-bezier(0.4, 0, 1, 1), opacity 0.2s ease-out';
-          tb.style.transform = 'translateY(' + (dir > 0 ? '-120' : '120') + 'px)';
+          tb.style.transition = 'opacity 0.2s ease-out';
           tb.style.opacity = '0';
         }
         if (nb) {
